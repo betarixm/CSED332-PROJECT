@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>org.example.team2_project</id>
-    <name>Plugin display name here</name>
+    <name>Metrics Tool Window</name>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
@@ -14,6 +14,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <toolWindow id="Metrics" anchor="right" factoryClass="org.csed332.project.team2.MyToolWindowFactory"/>
     </extensions>
 
     <actions>
