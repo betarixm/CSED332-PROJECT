@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'org.csed332.project.team2'
 version '1.0-SNAPSHOT'
 
 repositories {
