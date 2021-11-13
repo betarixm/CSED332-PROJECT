@@ -5,16 +5,39 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.ui.JButtonAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
+    private final JButton buttonCalcMetric;
+    int width, hieght;
 
-    public ProjectToolWindow(ToolWindow toolWindow) {
+
+    public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
+
+        buttonCalcMetric = new JButton("Calc Metrics");
+        projectToolWindowContent.add(buttonCalcMetric);
+
+        this.width = _width;
+        this.hieght = _height;
+
+        ActionListener listener = e -> {
+            {
+                // calc Metrics
+                MetricWindow window = MetricWindow.getInstance(width, hieght);
+                window.setMetrics();
+                window.openWindow();
+            }
+        };
+
+        buttonCalcMetric.addActionListener(listener);
     }
 
     public JPanel getContent() {
