@@ -5,16 +5,28 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.JBScrollPane;
+import com.sun.jna.platform.win32.WinBase;
+import org.csed332.project.team2.metrics.FileCoverageMetric;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
+    public FileCoverageMetric fileCoverageMetric;
 
     public ProjectToolWindow(ToolWindow toolWindow) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
+        fileCoverageMetric = new FileCoverageMetric(System.out);
+        try {
+            System.out.println("read: " + project.getBasePath());
+            fileCoverageMetric.execute(new String[]{project.getBasePath()});
+            // TODO: add a new way to detect testing directories automatically
+            // fileCoverageMetric.runTest(project.getBasePath() + "/src/test/...");
+        } catch(Throwable e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public JPanel getContent() {

@@ -13,6 +13,9 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    // https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core
+    implementation group: 'org.jacoco', name: 'org.jacoco.core', version: '0.8.7'
+    implementation gradleApi()
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
