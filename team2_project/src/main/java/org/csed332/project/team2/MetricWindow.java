@@ -27,58 +27,58 @@ public class MetricWindow {
 
     enum Metric {HALSTED, CYCLO, INDEX, COVERAGE}
 
-        public MetricWindow(int width, int height) {
-            window = new JFrame();
-            window.setSize(width, height);
+    public MetricWindow(int width, int height) {
+        window = new JFrame();
+        window.setSize(width, height);
 
-            JPanel container = new JPanel();
-            container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-            metricPanel = new JPanel[4];
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
+        metricPanel = new JPanel[Metric.values().length];
 
-            // Make window scrollable
-            JScrollPane scrollPane = new JBScrollPane(container);
-            scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            window.getContentPane().add(scrollPane);
+        // Make window scrollable
+        JScrollPane scrollPane = new JBScrollPane(container);
+        scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        window.getContentPane().add(scrollPane);
 
-            for(Metric metric : Metric.values()) {
-                JPanel panel = new JPanel();
-                panel.setBorder(BorderFactory.createTitledBorder(metric.toString()));
-                metricPanel[metric.ordinal()] = panel;
-                container.add(panel);
-            }
+        for (Metric metric : Metric.values()) {
+            JPanel panel = new JPanel();
+            panel.setBorder(BorderFactory.createTitledBorder(metric.toString()));
+            metricPanel[metric.ordinal()] = panel;
+            container.add(panel);
         }
+    }
 
-        public static MetricWindow getInstance(int width, int height) {
-            if(instance == null) {
-                instance = new MetricWindow(width, height);
-            }
-            return instance;
+    public static MetricWindow getInstance(int width, int height) {
+        if (instance == null) {
+            instance = new MetricWindow(width, height);
         }
+        return instance;
+    }
 
-        public void setMetrics() {
-            //TODO:calc metrics here? or get some data by argument?
+    public void setMetrics() {
+        //TODO:calc metrics here? or get some data by argument?
 
-            // example of code coverage
-            JFreeChart coverageChart = BarChart.getChart(80);
-            JPanel coveragePanel = metricPanel[Metric.COVERAGE.ordinal()];
-            ChartPanel chartPanel = new ChartPanel(coverageChart);
-            chartPanel.setSize(200, 200);
-            coveragePanel.add(chartPanel, BorderLayout.CENTER);
-            chartPanel.validate();
+        // example of code coverage
+        JFreeChart coverageChart = BarChart.getChart(80);
+        JPanel coveragePanel = metricPanel[Metric.COVERAGE.ordinal()];
+        ChartPanel chartPanel = new ChartPanel(coverageChart);
+        chartPanel.setSize(200, 200);
+        coveragePanel.add(chartPanel, BorderLayout.CENTER);
+        chartPanel.validate();
 
 
-            //Example of Index code coverage
-            JFreeChart coverageChart2 = BarChart.getChart(80);
-            JPanel coveragePanel2 = metricPanel[Metric.INDEX.ordinal()];
-            ChartPanel chartPanel2 = new ChartPanel(coverageChart2);
-            chartPanel2.setSize(200, 200);
-            coveragePanel2.add(chartPanel2, BorderLayout.CENTER);
-            chartPanel2.validate();
-        }
+        //Example of Index code coverage
+        JFreeChart coverageChart2 = BarChart.getChart(80);
+        JPanel coveragePanel2 = metricPanel[Metric.INDEX.ordinal()];
+        ChartPanel chartPanel2 = new ChartPanel(coverageChart2);
+        chartPanel2.setSize(200, 200);
+        coveragePanel2.add(chartPanel2, BorderLayout.CENTER);
+        chartPanel2.validate();
+    }
 
-        public void openWindow() {
-            window.setVisible(true);
-        }
+    public void openWindow() {
+        window.setVisible(true);
+    }
 
 }

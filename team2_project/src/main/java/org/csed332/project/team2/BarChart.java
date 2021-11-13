@@ -8,7 +8,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 
-public class BarChart{
+public class BarChart {
 
     // It could be changed to use given value from Backend
     // I just use Variable num, it could be replaced by other Values..
@@ -18,10 +18,10 @@ public class BarChart{
                 "CODE-COVERAGE",
                 "CATEGORY",
                 "COVERAGE",
-                createDataset(num) ,
+                createDataset(num),
                 PlotOrientation.VERTICAL,
                 true, true, false
-            );
+        );
     }
 
     static CategoryDataset createDataset(int num) {
@@ -30,17 +30,18 @@ public class BarChart{
         String c = "Condition";
         String m = "Method";
 
-        dataset.addValue( num, m, "Tree");
-        dataset.addValue( 90, b, "Tree");
-        dataset.addValue( 90, c, "Tree");
+        dataset.addValue(num, m, "Tree");
+        dataset.addValue(90, b, "Tree");
+        dataset.addValue(90, c, "Tree");
 
-        dataset.addValue( 100, m, "Graph");
-        dataset.addValue( 40, b, "Graph");
-        dataset.addValue( 40, c, "Graph");
+        dataset.addValue(100, m, "Graph");
+        dataset.addValue(40, b, "Graph");
+        dataset.addValue(40, c, "Graph");
 
-        dataset.addValue( 70, m, "MutableGraph");
-        dataset.addValue( 20, b, "MutableGraph");
-        dataset.addValue( 60, c, "MutableGraph");
+        dataset.addValue(70, m, "MutableGraph");
+        dataset.addValue(20, b, "MutableGraph");
+        dataset.addValue(60, c, "MutableGraph");
+
 
         return dataset;
     }

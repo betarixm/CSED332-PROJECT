@@ -15,25 +15,29 @@ import java.awt.event.ActionListener;
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
     private final JButton buttonCalcMetric;
+    int width, hieght;
 
 
-    public ProjectToolWindow(ToolWindow toolWindow) {
+    public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
 
         buttonCalcMetric = new JButton("Calc Metrics");
         projectToolWindowContent.add(buttonCalcMetric);
 
-        ActionListener listner = e -> {
+        this.width = _width;
+        this.hieght = _height;
+
+        ActionListener listener = e -> {
             {
                 // calc Metrics
-                MetricWindow window = MetricWindow.getInstance(800, 800);
+                MetricWindow window = MetricWindow.getInstance(width, hieght);
                 window.setMetrics();
                 window.openWindow();
             }
         };
 
-       buttonCalcMetric.addActionListener(listner);
+        buttonCalcMetric.addActionListener(listener);
     }
 
     public JPanel getContent() {
