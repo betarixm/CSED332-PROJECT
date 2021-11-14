@@ -12,12 +12,22 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The plugin tool window.
+ */
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
     private final JButton buttonCalcMetric;
-    int width, hieght;
+    int width, height;
 
-
+    /**
+     * The ProjectToolWindow constructor.
+     * Set up the window by:
+     * - adding a button to calculate the metrics.
+     * @param toolWindow not used
+     * @param _width the width
+     * @param _height the height
+     */
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
@@ -26,12 +36,12 @@ public class ProjectToolWindow {
         projectToolWindowContent.add(buttonCalcMetric);
 
         this.width = _width;
-        this.hieght = _height;
+        this.height = _height;
 
         ActionListener listener = e -> {
             {
                 // calc Metrics
-                MetricWindow window = MetricWindow.getInstance(width, hieght);
+                MetricWindow window = MetricWindow.getInstance(width, height);
                 window.setMetrics();
                 window.openWindow();
             }
@@ -40,10 +50,18 @@ public class ProjectToolWindow {
         buttonCalcMetric.addActionListener(listener);
     }
 
+    /**
+     * Used in MyToolWindowFactory to display this window in intellij
+     * @return this window JPanel
+     */
     public JPanel getContent() {
         return projectToolWindowContent;
     }
 
+    /**
+     * This function returns the user's active project (or an arbitrary project if none is open)
+     * @return the active project
+     */
     @NotNull
     private Project getActiveProject() {
         for (var project : ProjectManager.getInstance().getOpenProjects()) {
