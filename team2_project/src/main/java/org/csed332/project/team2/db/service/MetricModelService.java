@@ -15,10 +15,10 @@ public class MetricModelService {
         return m;
     }
 
-    public static void save(MetricModel car) {
+    public static void save(MetricModel m) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(car);
+            session.save(m);
             session.getTransaction().commit();
         }
     }
