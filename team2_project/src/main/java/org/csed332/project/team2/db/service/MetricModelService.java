@@ -22,4 +22,12 @@ public class MetricModelService {
             session.getTransaction().commit();
         }
     }
+
+    public static void remove(MetricModel m) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.remove(m);
+            session.getTransaction().commit();
+        }
+    }
 }
