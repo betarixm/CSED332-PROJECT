@@ -16,7 +16,7 @@ public class DBTest {
         MetricModelService.save(m);
 
         MetricModel mNew = MetricModelService.getMetricById(m.getId());
-        Assertions.assertTrue(System.currentTimeMillis() - mNew.getCreated().getTime() < 10000);
+        Assertions.assertEquals(m.getCreated().getTime(), mNew.getCreated().getTime());
         Assertions.assertEquals("ClassA", mNew.getClassName());
         Assertions.assertEquals("MetricA", mNew.getMetric());
         Assertions.assertEquals(1.0, mNew.getFigure());
