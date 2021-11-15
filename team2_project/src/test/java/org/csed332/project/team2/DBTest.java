@@ -15,7 +15,7 @@ public class DBTest {
 
         MetricModelService.save(m);
 
-        MetricModel mNew = MetricModelService.getMetricById(1L);
+        MetricModel mNew = MetricModelService.getMetricById(m.getId());
         Assertions.assertEquals("ClassA", mNew.getClassName());
         Assertions.assertEquals("MetricA", mNew.getMetric());
         Assertions.assertEquals(1.0, mNew.getFigure());
