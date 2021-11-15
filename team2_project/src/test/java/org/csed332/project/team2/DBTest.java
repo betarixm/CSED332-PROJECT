@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
 public class DBTest {
-    //Make sure that there is no db before running this test!
     @Test
     void testDBSaveAndGet() {
         MetricModel m = new MetricModel();
@@ -20,5 +19,7 @@ public class DBTest {
         Assertions.assertEquals("ClassA", mNew.getClassName());
         Assertions.assertEquals("MetricA", mNew.getMetric());
         Assertions.assertEquals(1.0, mNew.getFigure());
+
+        MetricModelService.remove(mNew);
     }
 }
