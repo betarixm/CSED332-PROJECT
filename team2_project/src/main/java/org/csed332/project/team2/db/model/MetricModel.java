@@ -1,5 +1,6 @@
 package org.csed332.project.team2.db.model;
 
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
 
@@ -10,6 +11,13 @@ public class MetricModel {
     private String metric;
     private String className;
     private Double figure;
+    private Date created = new Date();
+    private Date updated = new Date();
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updated = new Date();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +51,22 @@ public class MetricModel {
 
     public void setFigure(Double figure) {
         this.figure = figure;
+    }
+
+    public Date getCreated() {
+        return this.created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return this.updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     @Override
