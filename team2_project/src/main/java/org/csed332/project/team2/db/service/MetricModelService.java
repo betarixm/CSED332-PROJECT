@@ -5,6 +5,9 @@ import org.csed332.project.team2.db.util.HibernateUtil;
 
 import org.hibernate.Session;
 
+import java.util.Date;
+import java.util.List;
+
 public class MetricModelService {
     public static MetricModel getMetricById(Long id) {
         MetricModel m;
@@ -24,6 +27,10 @@ public class MetricModelService {
         MetricModelService.save(m);
 
         return m;
+    }
+
+    public static List<MetricModel> query(String metric, String className, Date start, Date end, Integer limit) {
+        return List.of();
     }
 
     public static void save(MetricModel m) {
