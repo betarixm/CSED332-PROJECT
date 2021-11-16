@@ -7,9 +7,28 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DBTest {
+    static List<MetricModel> metricModelList;
+
+    static {
+        metricModelList = new ArrayList<>();
+    }
+
+    @AfterEach
+    void afterEach() {
+        metricModelList.forEach(MetricModelService::remove);
+    }
+
+    private MetricModel generateMetricModel() {
+        MetricModel m = MetricModelService.saveMetric(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Math.random());
+        metricModelList.add(m);
+        return m;
+    }
+
     private MetricModel getExampleMetricModel() {
         MetricModel m = new MetricModel();
         m.setClassName("ClassA");
