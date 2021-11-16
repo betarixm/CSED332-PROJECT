@@ -19,18 +19,32 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+/**
+ * The window displaying the metrics.
+ */
 public class MetricWindow {
     // Single-tone pattern
     static private MetricWindow instance;
     final private JFrame window;
     final private JPanel[] metricPanel;
 
+    // The types of metrics displayed on the window
     enum Metric {HALSTED, CYCLO, INDEX, COVERAGE}
 
+    /**
+     * Constructor for MetricWindow
+     * The created window is
+     * - Scrollable
+     * - Contains a panel with a title for each metric
+     *
+     * @param width  the width of the window
+     * @param height the height of the window
+     */
     public MetricWindow(int width, int height) {
         window = new JFrame();
         window.setSize(width, height);
 
+        // We use a container to allow scrolling
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
         metricPanel = new JPanel[Metric.values().length];
@@ -41,6 +55,7 @@ public class MetricWindow {
         scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         window.getContentPane().add(scrollPane);
 
+        // Add the metric panels to the window
         for (Metric metric : Metric.values()) {
             JPanel panel = new JPanel();
             panel.setBorder(BorderFactory.createTitledBorder(metric.toString()));
@@ -49,6 +64,13 @@ public class MetricWindow {
         }
     }
 
+    /**
+     * Get the single-toned instance of this class.
+     *
+     * @param width  the width of the instance
+     * @param height the height of the instance
+     * @return the single-toned instance
+     */
     public static MetricWindow getInstance(int width, int height) {
         if (instance == null) {
             instance = new MetricWindow(width, height);
@@ -56,6 +78,10 @@ public class MetricWindow {
         return instance;
     }
 
+    /**
+     * Calculate the metric values by calling backend functions (will be done in latter updates)
+     * Display them in the metric panels.
+     */
     public void setMetrics() {
         //TODO:calc metrics here? or get some data by argument?
 
@@ -77,6 +103,9 @@ public class MetricWindow {
         chartPanel2.validate();
     }
 
+    /**
+     * Set the metric window to visible.
+     */
     public void openWindow() {
         window.setVisible(true);
     }

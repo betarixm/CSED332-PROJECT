@@ -8,11 +8,21 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 
+/**
+ * This class represents a BarChart.
+ * This uses JFreeChart class to create the Chart.
+ */
 public class BarChart {
 
     // It could be changed to use given value from Backend
     // I just use Variable num, it could be replaced by other Values..
 
+    /**
+     * Constructor function for BarChart.
+     *
+     * @param num for testing purpose. Will be changed to use values from the Backend.
+     * @return the created BarChart.
+     */
     public static JFreeChart getChart(int num) {
         return ChartFactory.createBarChart(
                 "CODE-COVERAGE",
@@ -24,6 +34,13 @@ public class BarChart {
         );
     }
 
+    /**
+     * Create a dataset using the inputs.
+     * Right now always return the same dataset. Will be changed.
+     *
+     * @param num will be replaced by values from the Backend.
+     * @return the created dataset.
+     */
     static CategoryDataset createDataset(int num) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String b = "Branch";
