@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class DBTest {
     static List<MetricModel> metricModelList;
 
@@ -106,5 +109,13 @@ public class DBTest {
 
         List l = getExampleDB();
         Assertions.assertTrue(l.isEmpty());
+    }
+
+    @Test
+    public void testQuery() {
+        List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
+        MetricModel m = MetricModelService.query(testMetricModels.get(0).getMetric(), null, null, null, null).get(0);
+
+        Assertions.assertEquals(testMetricModels.get(0), m);
     }
 }
