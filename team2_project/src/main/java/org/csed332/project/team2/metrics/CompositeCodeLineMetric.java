@@ -29,11 +29,7 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
     }
 
     public double calculate() {
-        int totalLines = 0;
-        for (CodeLineMetric metric : codeLineMetrics) {
-            totalLines += metric.calculate();
-        }
-        return totalLines;
+        return codeLineMetrics.stream().mapToDouble(m -> m.calculate()).sum();
     }
 
     public List<CodeLineMetric> getCodeLineMetrics() {
