@@ -36,7 +36,8 @@ public class MetricWindow {
      * The created window is
      * - Scrollable
      * - Contains a panel with a title for each metric
-     * @param width the width of the window
+     *
+     * @param width  the width of the window
      * @param height the height of the window
      */
     public MetricWindow(int width, int height) {
@@ -65,7 +66,8 @@ public class MetricWindow {
 
     /**
      * Get the single-toned instance of this class.
-     * @param width the width of the instance
+     *
+     * @param width  the width of the instance
      * @param height the height of the instance
      * @return the single-toned instance
      */

@@ -19,6 +19,7 @@ public class BarChart {
 
     /**
      * Constructor function for BarChart.
+     *
      * @param num for testing purpose. Will be changed to use values from the Backend.
      * @return the created BarChart.
      */
@@ -36,6 +37,7 @@ public class BarChart {
     /**
      * Create a dataset using the inputs.
      * Right now always return the same dataset. Will be changed.
+     *
      * @param num will be replaced by values from the Backend.
      * @return the created dataset.
      */

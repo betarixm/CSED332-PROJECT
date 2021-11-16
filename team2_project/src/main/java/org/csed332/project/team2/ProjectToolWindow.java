@@ -24,9 +24,10 @@ public class ProjectToolWindow {
      * The ProjectToolWindow constructor.
      * Set up the window by:
      * - adding a button to calculate the metrics.
+     *
      * @param toolWindow not used
-     * @param _width the width
-     * @param _height the height
+     * @param _width     the width
+     * @param _height    the height
      */
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
@@ -52,6 +53,7 @@ public class ProjectToolWindow {
 
     /**
      * Used in MyToolWindowFactory to display this window in intellij
+     *
      * @return this window JPanel
      */
     public JPanel getContent() {
@@ -60,6 +62,7 @@ public class ProjectToolWindow {
 
     /**
      * This function returns the user's active project (or an arbitrary project if none is open)
+     *
      * @return the active project
      */
     @NotNull
