@@ -15,13 +15,15 @@ public class MetricModelService {
         return m;
     }
 
-    public static void saveMetric(String metric, String className, double figure) {
+    public static MetricModel saveMetric(String metric, String className, double figure) {
         MetricModel m = new MetricModel();
         m.setMetric(metric);
         m.setClassName(className);
         m.setFigure(figure);
 
         MetricModelService.save(m);
+
+        return m;
     }
 
     public static void save(MetricModel m) {
