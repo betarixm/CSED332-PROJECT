@@ -1,5 +1,9 @@
 package org.csed332.project.team2;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -17,6 +21,7 @@ import java.awt.event.ActionListener;
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
     private final JButton buttonCalcMetric;
+    private final JButton buttonWarning;
     int width, height;
 
     /**
@@ -35,6 +40,11 @@ public class ProjectToolWindow {
 
         buttonCalcMetric = new JButton("Calc Metrics");
         projectToolWindowContent.add(buttonCalcMetric);
+
+        // TODO: this action then needs to be triggered from backend without a button
+        buttonWarning = new JButton("Pls warn me");
+        projectToolWindowContent.add(buttonWarning);
+
         MetricWindow window = MetricWindow.getInstance(width, height);
         projectToolWindowContent.add(window.getMetricContainer());
 
@@ -49,6 +59,19 @@ public class ProjectToolWindow {
         };
 
         buttonCalcMetric.addActionListener(listener);
+
+        JLabel label = new JLabel("THIS IS A WARNING!");
+        JPanel panel = new JPanel();
+        panel.add(label);
+        ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(panel, projectToolWindowContent);
+        ActionListener listenerWarning = e -> {
+            {
+                JBPopup popup = popupBuilder.createPopup();
+                popup.showInFocusCenter();
+
+            }
+        };
+        buttonWarning.addActionListener(listenerWarning);
     }
 
     /**
