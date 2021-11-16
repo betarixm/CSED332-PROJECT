@@ -4,12 +4,11 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.ui.JButtonAction;
+import com.intellij.ui.components.panels.VerticalBox;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
@@ -32,19 +31,20 @@ public class ProjectToolWindow {
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
+        projectToolWindowContent.setLayout(new BoxLayout(projectToolWindowContent, BoxLayout.PAGE_AXIS));
 
         buttonCalcMetric = new JButton("Calc Metrics");
         projectToolWindowContent.add(buttonCalcMetric);
+        MetricWindow window = MetricWindow.getInstance(width, height);
+        projectToolWindowContent.add(window.getMetricContainer());
 
         this.width = _width;
         this.height = _height;
 
         ActionListener listener = e -> {
             {
-                // calc Metrics
-                MetricWindow window = MetricWindow.getInstance(width, height);
+                // calc Metrics TODO: this actually needs to update metrics, not add charts all the time
                 window.setMetrics();
-                window.openWindow();
             }
         };
 
