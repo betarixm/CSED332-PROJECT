@@ -1,10 +1,10 @@
 package org.csed332.project.team2.metrics;
 
-public abstract class CodeLineMetric implements Metric{
+public abstract class CodeLineMetric implements Metric {
     private int codeLine;
     protected String path;
 
-    public CodeLineMetric(String path){
+    public CodeLineMetric(String path) {
         setPath(path);
     }
 

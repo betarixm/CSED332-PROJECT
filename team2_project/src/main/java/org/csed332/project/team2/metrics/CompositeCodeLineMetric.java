@@ -7,7 +7,8 @@ import java.util.List;
 
 public abstract class CompositeCodeLineMetric extends CodeLineMetric {
     private List<CodeLineMetric> codeLineMetrics;
-    public void addMetric(CodeLineMetric codeLineMetric){
+
+    public void addMetric(CodeLineMetric codeLineMetric) {
         codeLineMetrics.add(codeLineMetric);
     }
 
@@ -17,6 +18,7 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
 
         String absolutePath = new File(path).getAbsolutePath();
         String[] subPathList = new File(absolutePath).list();
+
         for (String subPath : subPathList) {
             String absoluteSubPath = path + "/" + subPath;
             File sub = new File(absoluteSubPath);
@@ -26,9 +28,9 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         }
     }
 
-    public double calculate(){
+    public double calculate() {
         int totalLines = 0;
-        for(CodeLineMetric metric : codeLineMetrics){
+        for (CodeLineMetric metric : codeLineMetrics) {
             totalLines += metric.calculate();
         }
         return totalLines;
