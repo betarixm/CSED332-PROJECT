@@ -4,6 +4,7 @@ import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.db.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -17,14 +18,25 @@ public class DBTest {
         return m;
     }
 
-    @BeforeAll
-    public static void emptyDBBefore() {
+    private List getExampleDB() {
+        List list;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            List l = session.createQuery("from MetricModel ").list();
-            if (!l.isEmpty()) {
-                session.createQuery("delete from MetricModel ").executeUpdate();
-            }
+            String hql = "from MetricModel where className = :className";
+            Query query = session.createQuery(hql).setParameter("className", "ClassA");
+            list = query.list();
+            session.getTransaction().commit();
+        }
+        return list;
+    }
+
+    @AfterEach
+    public void deleteExampleDB() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "delete from MetricModel where className = :className";
+            Query query = session.createQuery(hql).setParameter("className", "ClassA");
+            query.executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -40,16 +52,12 @@ public class DBTest {
         MetricModel m = getExampleMetricModel();
         MetricModelService.save(m);
 
-        List l;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            l = session.createQuery("from MetricModel ").list();
-            session.getTransaction().commit();
-        }
+        Query query;
 
+        List l = getExampleDB();
         Assertions.assertEquals(1, l.size());
 
-        MetricModel mNew = (MetricModel)l.get(0);
+        MetricModel mNew = (MetricModel) l.get(0);
         Assertions.assertEquals(m.getCreated().getTime(), mNew.getCreated().getTime());
         Assertions.assertEquals("ClassA", mNew.getClassName());
         Assertions.assertEquals("MetricA", mNew.getMetric());
@@ -77,21 +85,7 @@ public class DBTest {
 
         MetricModelService.remove(m);
 
-        List l;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            l = session.createQuery("from MetricModel ").list();
-            session.getTransaction().commit();
-        }
+        List l = getExampleDB();
         Assertions.assertTrue(l.isEmpty());
-    }
-
-    @AfterEach
-    public void emptyDBAfter() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.createQuery("delete from MetricModel ").executeUpdate();
-            session.getTransaction().commit();
-        }
     }
 }
