@@ -1,10 +1,13 @@
 package org.csed332.project.team2;
 
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 
 /**
@@ -16,6 +19,9 @@ public class MetricWindow {
     //    final private JFrame window;
     final private JPanel metricContainer;
     final private JPanel[] metricPanel;
+
+    final private TitledBorder[] basicTitle;
+    final private TitledBorder[] warnTitle;
 
     // The types of metrics displayed on the window
     enum Metric {HALSTED, CYCLO, INDEX, COVERAGE}
@@ -36,15 +42,25 @@ public class MetricWindow {
         metricPanel = new JPanel[Metric.values().length];
 
         // Make window scrollable
-//        JScrollPane scrollPane = new JBScrollPane(metricContainer);
-//        scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        window.getContentPane().add(scrollPane);
+        /*JScrollPane scrollPane = new JBScrollPane(metricContainer);
+        scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        window.getContentPane().add(scrollPane);*/
+
+        basicTitle = new TitledBorder[Metric.values().length];
+        warnTitle = new TitledBorder[Metric.values().length];
 
         // Add the metric panels to the window
         for (Metric metric : Metric.values()) {
             JPanel panel = new JPanel();
-            panel.setBorder(BorderFactory.createTitledBorder(metric.toString()));
+            int idx = metric.ordinal();
+
+            TitledBorder warnTitleBorder = BorderFactory.createTitledBorder("\u26A0" + metric.toString());
+            warnTitleBorder.setTitleColor(Color.YELLOW);
+            warnTitle[idx] = warnTitleBorder;
+            basicTitle[idx] = BorderFactory.createTitledBorder(metric.toString());
+
+            panel.setBorder(basicTitle[idx]);
             metricPanel[metric.ordinal()] = panel;
             metricContainer.add(panel);
         }
@@ -91,5 +107,26 @@ public class MetricWindow {
         chartPanel2.setSize(200, 200);
         coveragePanel2.add(chartPanel2, BorderLayout.CENTER);
         chartPanel2.validate();
+    }
+
+    /**
+     * change the title to warning title
+     * (include Warning unicode and change the color to yellow)
+     *
+     * @param warnMetrics The Metrics with degrading quality
+     */
+    public void showWarnMetric(Metric[] warnMetrics) {
+
+        for (Metric metric : warnMetrics) {
+            int idx = metric.ordinal();
+
+            JPanel panel = metricPanel[idx];
+            panel.setBorder(warnTitle[idx]);
+        }
+
+
+        //TODO : show the how much the metric has worsen
+
+
     }
 }
