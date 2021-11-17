@@ -65,7 +65,7 @@ public class DBTest {
 
     @Test
     public void testDBGetNull() {
-        MetricModel m = MetricModelService.getMetricById(1234L);
+        MetricModel m = MetricModelService.getMetricById(-1L);
         Assertions.assertNull(m);
     }
 
@@ -73,8 +73,6 @@ public class DBTest {
     public void testDBSave() {
         MetricModel m = getExampleMetricModel();
         MetricModelService.save(m);
-
-        Query query;
 
         List l = getExampleDB();
         Assertions.assertEquals(1, l.size());
