@@ -32,35 +32,17 @@ public class DBTest {
         return m;
     }
 
-    private MetricModel getExampleMetricModel() {
-        MetricModel m = new MetricModel();
-        m.setClassName("ClassA");
-        m.setMetric("MetricA");
-        m.setFigure(1.0);
-        return m;
-    }
-
-    private List getExampleDB() {
+    private List getMetricModelFromDB(MetricModel m) {
         List list;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            String hql = "from MetricModel where className = :className";
-            Query query = session.createQuery(hql).setParameter("className", "ClassA");
+            String hql = "from MetricModel where className = :className and metric = :metric";
+            Query query = session.createQuery(hql);
+            query.setParameter("className", m.getClassName()).setParameter("metric", m.getMetric());
             list = query.list();
             session.getTransaction().commit();
         }
         return list;
-    }
-
-    @AfterEach
-    public void deleteExampleDB() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            String hql = "delete from MetricModel where className = :className";
-            Query query = session.createQuery(hql).setParameter("className", "ClassA");
-            query.executeUpdate();
-            session.getTransaction().commit();
-        }
     }
 
     @Test
@@ -71,41 +53,37 @@ public class DBTest {
 
     @Test
     public void testDBSave() {
-        MetricModel m = getExampleMetricModel();
-        MetricModelService.save(m);
+        MetricModel m = generateMetricModel();
 
-        List l = getExampleDB();
+        List l = getMetricModelFromDB(m);
         Assertions.assertEquals(1, l.size());
 
         MetricModel mNew = (MetricModel) l.get(0);
         Assertions.assertEquals(m.getCreated().getTime(), mNew.getCreated().getTime());
-        Assertions.assertEquals("ClassA", mNew.getClassName());
-        Assertions.assertEquals("MetricA", mNew.getMetric());
-        Assertions.assertEquals(1.0, mNew.getFigure());
+        Assertions.assertEquals(m.getClassName(), mNew.getClassName());
+        Assertions.assertEquals(m.getMetric(), mNew.getMetric());
+        Assertions.assertEquals(m.getFigure(), mNew.getFigure());
     }
 
     @Test
     public void testDBSaveAndGet() {
-        MetricModel m = getExampleMetricModel();
-
-        MetricModelService.save(m);
+        MetricModel m = generateMetricModel();
 
         MetricModel mNew = MetricModelService.getMetricById(m.getId());
         Assertions.assertEquals(m.getCreated().getTime(), mNew.getCreated().getTime());
-        Assertions.assertEquals("ClassA", mNew.getClassName());
-        Assertions.assertEquals("MetricA", mNew.getMetric());
-        Assertions.assertEquals(1.0, mNew.getFigure());
+        Assertions.assertEquals(m.getClassName(), mNew.getClassName());
+        Assertions.assertEquals(m.getMetric(), mNew.getMetric());
+        Assertions.assertEquals(m.getFigure(), mNew.getFigure());
     }
 
     @Test
     public void testDBSaveAndRemove() {
-        MetricModel m = getExampleMetricModel();
-
-        MetricModelService.save(m);
+        MetricModel m = generateMetricModel();
 
         MetricModelService.remove(m);
+        metricModelList.remove(m);
 
-        List l = getExampleDB();
+        List l = getMetricModelFromDB(m);
         Assertions.assertTrue(l.isEmpty());
     }
 
