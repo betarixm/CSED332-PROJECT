@@ -1,5 +1,6 @@
 package org.csed332.project.team2;
 
+import com.google.common.util.concurrent.CycleDetectingLockFactory;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -11,9 +12,12 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.panels.VerticalBox;
 import org.jetbrains.annotations.NotNull;
 
+import org.csed332.project.team2.MetricWindow.Metric;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 /**
  * The plugin tool window.
@@ -59,15 +63,17 @@ public class ProjectToolWindow {
         };
 
         buttonCalcMetric.addActionListener(listener);
+        JPanel warnPanel = getWarning();
 
-        JLabel label = new JLabel("THIS IS A WARNING!");
-        JPanel panel = new JPanel();
-        panel.add(label);
-        ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(panel, projectToolWindowContent);
+        ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
         ActionListener listenerWarning = e -> {
             {
                 JBPopup popup = popupBuilder.createPopup();
                 popup.showInFocusCenter();
+
+                // what metrics makes degrading? it should be passed from backend
+                Metric[] warnMetric = {Metric.CYCLO, Metric.COVERAGE};
+                window.showWarnMetric(warnMetric);
 
             }
         };
@@ -97,5 +103,35 @@ public class ProjectToolWindow {
         }
         // if there is no active project, return an arbitrary project (the first)
         return ProjectManager.getInstance().getOpenProjects()[0];
+    }
+
+    /**
+     * This function make the warning message panel with some icons
+     *
+     * @return warning popup
+     */
+
+    private JPanel getWarning() {
+
+        JPanel warnPanel = new JPanel();
+
+        // message
+        JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded");
+
+        // icon
+        URL warnImg = ProjectToolWindow.class.getClassLoader().getResource("exclamation-mark.png");
+        ImageIcon warnIcon = new ImageIcon(warnImg);
+        Image tempImg = warnIcon.getImage();
+
+        int iconSize = warnMessage.getFont().getSize() * 2;
+        Image warnImg2 = tempImg.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH);
+
+        JLabel warnIconLabel = new JLabel(new ImageIcon(warnImg2));
+
+        warnPanel.add(warnIconLabel);
+        warnPanel.add(warnMessage);
+
+
+        return warnPanel;
     }
 }
