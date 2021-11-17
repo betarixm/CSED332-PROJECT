@@ -21,8 +21,8 @@ public class DBTest {
         metricModelList = new ArrayList<>();
     }
 
-    @AfterEach
-    void afterEach() {
+    @AfterAll
+    public static void afterAll() {
         metricModelList.forEach(MetricModelService::remove);
     }
 
