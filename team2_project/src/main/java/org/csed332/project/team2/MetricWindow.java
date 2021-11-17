@@ -41,12 +41,6 @@ public class MetricWindow {
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
         metricPanel = new JPanel[Metric.values().length];
 
-        // Make window scrollable
-        /*JScrollPane scrollPane = new JBScrollPane(metricContainer);
-        scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        window.getContentPane().add(scrollPane);*/
-
         basicTitle = new TitledBorder[Metric.values().length];
         warnTitle = new TitledBorder[Metric.values().length];
 
