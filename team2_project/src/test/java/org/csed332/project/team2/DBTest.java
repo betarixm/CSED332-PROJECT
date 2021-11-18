@@ -22,9 +22,19 @@ public class DBTest {
         metricModelList = new ArrayList<>();
     }
 
-    @AfterAll
-    public static void afterAll() {
-        metricModelList.forEach(MetricModelService::remove);
+    @AfterEach
+    public void afterEach() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            String hql = "delete from MetricModel where className = :className and metric = :metric";
+            Query query = session.createQuery(hql);
+            for (MetricModel m : metricModelList) {
+                query.setParameter("className", m.getClassName()).setParameter("metric", m.getMetric());
+                query.executeUpdate();
+            }
+            session.getTransaction().commit();
+        }
+        metricModelList.clear();
     }
 
     private MetricModel generateMetricModel() {
