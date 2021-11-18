@@ -23,6 +23,14 @@ public class MetricModelService {
         return m;
     }
 
+    public static List<MetricModel> getMetricsByClassName(String metric, String className) {
+        return List.of();
+    }
+
+    public static List<MetricModel> getMetricsByClassName(String metric, String className, int limit) {
+        return List.of();
+    }
+
     public static MetricModel saveMetric(String metric, String className, double figure) {
         MetricModel m = new MetricModel();
         m.setMetric(metric);
