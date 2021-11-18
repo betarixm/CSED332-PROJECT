@@ -24,11 +24,11 @@ public class MetricModelService {
     }
 
     public static List<MetricModel> getMetrics(String metric, String className) {
-        return List.of();
+        return query(metric, className, null, null, null);
     }
 
     public static List<MetricModel> getMetrics(String metric, String className, int limit) {
-        return List.of();
+        return query(metric, className, null, null, limit);
     }
 
     public static MetricModel saveMetric(String metric, String className, double figure) {
