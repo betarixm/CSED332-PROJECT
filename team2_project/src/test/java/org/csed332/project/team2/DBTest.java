@@ -100,4 +100,28 @@ public class DBTest {
 
         Assertions.assertEquals(testMetricModels.get(0), m);
     }
+
+    @Test
+    public void testGetMetrics() {
+        String testMetric = "#testMetric";
+        String testClass = "#testClass";
+
+        List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
+        List<MetricModel> sameMetricModels = IntStream.range(0, 10).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
+        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass);
+
+        Assertions.assertEquals(sameMetricModels, result);
+    }
+
+    @Test
+    public void testGetMetricsByClassNameWithLimit() {
+        String testMetric = "#testMetric";
+        String testClass = "#testClass";
+
+        List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
+        List<MetricModel> sameMetricModels = IntStream.range(0, 10).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
+        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, 5);
+
+        Assertions.assertEquals(sameMetricModels.subList(0, 5), result);
+    }
 }
