@@ -32,6 +32,12 @@ public class DBTest {
         return m;
     }
 
+    private MetricModel generateMetricModel(String metric, String className) {
+        MetricModel m = MetricModelService.saveMetric(metric, className, Math.random());
+        metricModelList.add(m);
+        return m;
+    }
+
     private List getMetricModelFromDB(MetricModel m) {
         List list;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
