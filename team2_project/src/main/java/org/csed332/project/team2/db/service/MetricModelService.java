@@ -23,11 +23,11 @@ public class MetricModelService {
         return m;
     }
 
-    public static List<MetricModel> getMetricsByClassName(String metric, String className) {
+    public static List<MetricModel> getMetrics(String metric, String className) {
         return List.of();
     }
 
-    public static List<MetricModel> getMetricsByClassName(String metric, String className, int limit) {
+    public static List<MetricModel> getMetrics(String metric, String className, int limit) {
         return List.of();
     }
 
