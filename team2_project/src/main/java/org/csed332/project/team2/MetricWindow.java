@@ -1,22 +1,13 @@
 package org.csed332.project.team2;
 
-import com.google.api.Metric;
-import com.google.zxing.oned.OneDimensionalCodeWriter;
-import com.intellij.coverage.CoverageEditorAnnotator;
-import com.intellij.openapi.wm.ex.ToolWindowEx;
-import com.intellij.ui.components.JBList;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
-import com.sun.jna.platform.win32.COM.IEnumIDList;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultValueDataset;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 
 /**
@@ -25,8 +16,12 @@ import java.awt.*;
 public class MetricWindow {
     // Single-tone pattern
     static private MetricWindow instance;
-    final private JFrame window;
+    //    final private JFrame window;
+    final private JPanel metricContainer;
     final private JPanel[] metricPanel;
+
+    final private TitledBorder[] basicTitle;
+    final private TitledBorder[] warnTitle;
 
     // The types of metrics displayed on the window
     enum Metric {HALSTED, CYCLO, INDEX, COVERAGE}
@@ -41,27 +36,32 @@ public class MetricWindow {
      * @param height the height of the window
      */
     public MetricWindow(int width, int height) {
-        window = new JFrame();
-        window.setSize(width, height);
-
         // We use a container to allow scrolling
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
+        metricContainer = new JPanel();
+        metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
         metricPanel = new JPanel[Metric.values().length];
 
-        // Make window scrollable
-        JScrollPane scrollPane = new JBScrollPane(container);
-        scrollPane.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        window.getContentPane().add(scrollPane);
+        basicTitle = new TitledBorder[Metric.values().length];
+        warnTitle = new TitledBorder[Metric.values().length];
 
         // Add the metric panels to the window
         for (Metric metric : Metric.values()) {
             JPanel panel = new JPanel();
-            panel.setBorder(BorderFactory.createTitledBorder(metric.toString()));
+            int idx = metric.ordinal();
+
+            TitledBorder warnTitleBorder = BorderFactory.createTitledBorder("\u26A0" + metric.toString());
+            warnTitleBorder.setTitleColor(Color.YELLOW);
+            warnTitle[idx] = warnTitleBorder;
+            basicTitle[idx] = BorderFactory.createTitledBorder(metric.toString());
+
+            panel.setBorder(basicTitle[idx]);
             metricPanel[metric.ordinal()] = panel;
-            container.add(panel);
+            metricContainer.add(panel);
         }
+    }
+
+    public JPanel getMetricContainer() {
+        return metricContainer;
     }
 
     /**
@@ -104,10 +104,23 @@ public class MetricWindow {
     }
 
     /**
-     * Set the metric window to visible.
+     * change the title to warning title
+     * (include Warning unicode and change the color to yellow)
+     *
+     * @param warnMetrics The Metrics with degrading quality
      */
-    public void openWindow() {
-        window.setVisible(true);
-    }
+    public void showWarnMetric(Metric[] warnMetrics) {
 
+        for (Metric metric : warnMetrics) {
+            int idx = metric.ordinal();
+
+            JPanel panel = metricPanel[idx];
+            panel.setBorder(warnTitle[idx]);
+        }
+
+
+        //TODO : show the how much the metric has worsen
+
+
+    }
 }
