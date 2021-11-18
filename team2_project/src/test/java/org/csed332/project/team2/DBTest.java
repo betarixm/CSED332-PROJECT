@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,23 +106,37 @@ public class DBTest {
     public void testGetMetrics() {
         String testMetric = "#testMetric";
         String testClass = "#testClass";
+        int testSize = 100, sameSize = 10;
 
-        List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
-        List<MetricModel> sameMetricModels = IntStream.range(0, 10).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
+        List<MetricModel> testMetricModels = IntStream.range(0, testSize).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
+        List<MetricModel> sameMetricModels = IntStream.range(0, sameSize).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
         List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass);
 
-        Assertions.assertEquals(sameMetricModels, result);
+        Collections.reverse(result); // Result is desc. order with created field.
+
+        Assertions.assertEquals(sameMetricModels.size(), result.size());
+
+        IntStream.range(0, sameSize).forEach(i -> {
+            Assertions.assertEquals(sameMetricModels.get(i), result.get(i));
+        });
     }
 
     @Test
     public void testGetMetricsByClassNameWithLimit() {
         String testMetric = "#testMetric";
         String testClass = "#testClass";
+        int testSize = 100, sameSize = 10, limitSize = 5;
 
-        List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
-        List<MetricModel> sameMetricModels = IntStream.range(0, 10).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
-        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, 5);
+        List<MetricModel> testMetricModels = IntStream.range(0, testSize).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
+        List<MetricModel> sameMetricModels = IntStream.range(0, sameSize).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
+        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, limitSize);
 
-        Assertions.assertEquals(sameMetricModels.subList(0, 5), result);
+        Collections.reverse(sameMetricModels); // sameMetricModels is asc. order with created field.
+
+        Assertions.assertEquals(limitSize, result.size());
+
+        IntStream.range(0, limitSize).forEach(i -> {
+            Assertions.assertEquals(sameMetricModels.get(i), result.get(i));
+        });
     }
 }
