@@ -16,7 +16,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.jfree/jfreechart
     implementation group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
-
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.1.Final'
+    // https://mvnrepository.com/artifact/org.apache.derby/derby
+    implementation 'org.apache.derby:derby:10.14.2.0'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
