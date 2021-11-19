@@ -29,7 +29,9 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
     }
 
     public double calculate() {
-        return codeLineMetrics.stream().mapToDouble(m -> m.calculate()).sum();
+        int line = (int) codeLineMetrics.stream().mapToDouble(m -> m.calculate()).sum();
+        set(line);
+        return line;
     }
 
     public List<CodeLineMetric> getCodeLineMetrics() {
