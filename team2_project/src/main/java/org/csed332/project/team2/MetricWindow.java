@@ -109,7 +109,7 @@ public class MetricWindow {
         ChartPanel chartPanel2 = new ChartPanel(coverageChart2);
         chartPanel2.setSize(200, 200);
         coveragePanel2.add(chartPanel2, BorderLayout.CENTER);
-        chartPanel2.validate();
+        chartPanel2.validate();*/
     }
 
     /**
