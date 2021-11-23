@@ -8,15 +8,18 @@ public class CodeLineMetricTest {
     CodeLineMetric projectCodeLineMetric;
 
     @BeforeEach
-    void initialize(){
-        projectCodeLineMetric = new ProjectCodeLineMetric();
+    public void initialize() {
+        // set with your absolute path of your project
+        projectCodeLineMetric = new ProjectCodeLineMetric("D:/subin/lectures_local/csed332/submit_hw/homework1/problem1");
     }
 
+    // test project path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1
     @Test
-    void testProjectCalculate(){
-        Assertions.assertEquals(projectCodeLineMetric.calculate(), 357.0);
+    public void testProjectCalculate() {
+        Assertions.assertEquals(projectCodeLineMetric.get(), 271.0);
     }
 
+    // test package path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1/src/main/java/edu/postech/csed332/homework1
     @Test
     public void testPackageCalculate() {
         // set with your absolute path of your package
@@ -30,9 +33,9 @@ public class CodeLineMetricTest {
     Account.java  HighInterestAccount.java  LowInterestAccount.java
      */
     @Test
-    void testClassCalculate(){
-        CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/org/csed332/project/team2/metrics/ClassCodeLineMetric.java");
-        Assertions.assertEquals(classCodeLineMetric.calculate(), 29.0);
+    public void testClassCalculate() {
+        CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/Bank.java");
+        Assertions.assertEquals(classCodeLineMetric.calculate(), 109.0);
 
         CodeLineMetric classCodeLineMetric2 = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/HighInterestAccount.java");
         Assertions.assertEquals(classCodeLineMetric2.calculate(), 48.0);
