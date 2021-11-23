@@ -75,7 +75,7 @@ public class ProjectToolWindow {
                 popup.showInFocusCenter();
 
                 // TODO what metrics makes degrading? it should be passed from backend
-                MetricType[] warnMetric = {MetricType.CYCLO, MetricType.COVERAGE};
+                MetricType[] warnMetric = {MetricType.LINES_OF_CODE};
                 window.showWarnMetric(warnMetric);
 
             }

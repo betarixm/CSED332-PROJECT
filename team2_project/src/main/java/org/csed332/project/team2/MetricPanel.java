@@ -20,7 +20,7 @@ public class MetricPanel {
     private Label metricValue;
     private JFreeChart metricChart;
 
-    public enum MetricType {LINES_OF_CODE, HALSTED, CYCLO, INDEX, COVERAGE};
+    public enum MetricType {LINES_OF_CODE}; // TODO: add other types once implemented HALSTED, CYCLO, INDEX, COVERAGE
 
     private MetricType type;
 
