@@ -37,7 +37,4 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         return Collections.unmodifiableList(codeLineMetrics);
     }
 
-    public String getID() {
-        return "0000-0000-0000-0000";
-    }
 }
