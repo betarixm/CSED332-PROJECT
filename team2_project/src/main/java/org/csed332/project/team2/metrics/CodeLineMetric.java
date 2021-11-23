@@ -1,5 +1,7 @@
 package org.csed332.project.team2.metrics;
 
+import org.csed332.project.team2.db.service.MetricModelService;
+
 public abstract class CodeLineMetric implements Metric {
     private int codeLine;
     protected String path;
@@ -22,7 +24,7 @@ public abstract class CodeLineMetric implements Metric {
     }
 
     public String getID() {
-        return null;
+        return "code-line";
     }
 
     // for test
