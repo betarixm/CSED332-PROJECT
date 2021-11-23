@@ -19,7 +19,7 @@ public class MetricPanel {
     private Label metricValue;
     private JFreeChart metricChart;
 
-    public enum MetricType {HALSTED, CYCLO, INDEX, COVERAGE};
+    public enum MetricType {LINES_OF_CODE, HALSTED, CYCLO, INDEX, COVERAGE};
 
     private MetricType type;
     MetricPanel(Metric _metric, MetricType _type) {
@@ -50,9 +50,8 @@ public class MetricPanel {
 
 
     public void updateMetric() {
-        metric.calculate();
         //TODO : after fix the bug of Metric.get it will work well
-        double value = metric.get();
+        double value = metric.calculate();
         metricValue.setText(Double.toString(value));
         //Should we update the panel?
 

@@ -25,7 +25,9 @@ import java.net.URL;
  */
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
+    private JPanel toolbar;
     private final JButton buttonCalcMetric;
+    private final JButton buttonSaveMetric;
     private final JButton buttonWarning;
     int width, height;
 
@@ -41,14 +43,21 @@ public class ProjectToolWindow {
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
+        toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
         projectToolWindowContent.setLayout(new BoxLayout(projectToolWindowContent, BoxLayout.PAGE_AXIS));
 
-        buttonCalcMetric = new JButton("Calc Metrics");
-        projectToolWindowContent.add(buttonCalcMetric);
+        buttonCalcMetric = new JButton("Calculate Metrics");
+        toolbar.add(buttonCalcMetric);
+
+        buttonSaveMetric = new JButton("Save Metrics");
+        toolbar.add(buttonSaveMetric);
 
         // TODO: this action then needs to be triggered from backend without a button
-        buttonWarning = new JButton("Pls warn me");
-        projectToolWindowContent.add(buttonWarning);
+        buttonWarning = new JButton("Show sample warning");
+        toolbar.add(buttonWarning);
+        projectToolWindowContent.add(toolbar);
+        projectToolWindowContent.add(new JSeparator());
 
         MetricWindow window = MetricWindow.getInstance(width, height);
         projectToolWindowContent.add(window.getMetricContainer());

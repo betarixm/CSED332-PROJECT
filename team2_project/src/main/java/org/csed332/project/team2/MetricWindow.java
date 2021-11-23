@@ -20,16 +20,12 @@ import java.awt.*;
 public class MetricWindow {
     // Single-tone pattern
     static private MetricWindow instance;
-    //    final private JFrame window;
     final private JPanel metricContainer;
     final private MetricPanel[] metricPanels;
 
-
     /**
      * Constructor for MetricWindow
-     * The created window is
-     * - Scrollable
-     * - Contains a panel with a title for each metric
+     * The created window is scrollable and contains a panel with a title for each metric
      *
      * @param width  the width of the window
      * @param height the height of the window
