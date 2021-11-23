@@ -4,10 +4,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
 import org.jetbrains.annotations.NotNull;
+import java.io.File;
 
 public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
     public ProjectCodeLineMetric(String path) {
         super(path + "/src/main/java");
+        try {
+            File file = new File(path + "/src/main/java");
+            if (!file.exists() || !file.isDirectory())
+                throw new IllegalArgumentException("not project path!!");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public ProjectCodeLineMetric() {
