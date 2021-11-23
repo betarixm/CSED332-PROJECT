@@ -1,6 +1,9 @@
 package org.csed332.project.team2.metrics;
 
-import java.io.File;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.wm.WindowManager;
+import org.jetbrains.annotations.NotNull;
 
 public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
     public ProjectCodeLineMetric(String path) {
@@ -8,7 +11,7 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
     }
 
     public ProjectCodeLineMetric() {
-        this(new File("").getAbsolutePath() + "/src/main/java");
+        this(getActiveProject());
     }
 
     public ProjectCodeLineMetric(Project project) {
