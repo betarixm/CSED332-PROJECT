@@ -16,7 +16,15 @@ public class ClassCodeLineMetric extends CodeLineMetric {
     public ClassCodeLineMetric(String path) {
         super(path);
         String namePlusJava = new File(path).getName();
-        this.className = namePlusJava.substring(0, namePlusJava.length() - 5);
+
+        try {
+            if (!namePlusJava.endsWith(".java"))
+                throw new IllegalArgumentException("not java file!");
+            this.className = namePlusJava.substring(0, namePlusJava.length() - 5);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
         super.set(-1);
     }
 
