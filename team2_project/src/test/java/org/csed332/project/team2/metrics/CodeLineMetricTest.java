@@ -1,22 +1,29 @@
 package org.csed332.project.team2.metrics;
 
+import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.db.service.MetricModelService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class CodeLineMetricTest {
     CodeLineMetric projectCodeLineMetric;
+    // set with your absolute path of your project
+    // test project path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1
+    String projectPath = "D:/subin/lectures_local/csed332/submit_hw/homework1/problem1";
 
     @BeforeEach
     public void initialize() {
         // set with your absolute path of your project
-        projectCodeLineMetric = new ProjectCodeLineMetric("D:/subin/lectures_local/csed332/submit_hw/homework1/problem1");
+        projectCodeLineMetric = new ProjectCodeLineMetric(this.projectPath);
     }
 
-    // test project path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1
+
     @Test
     public void testProjectCalculate() {
-        Assertions.assertEquals(projectCodeLineMetric.get(), 271.0);
+        Assertions.assertEquals(projectCodeLineMetric.calculate(), 271.0);
     }
 
     // test package path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1/src/main/java/edu/postech/csed332/homework1
