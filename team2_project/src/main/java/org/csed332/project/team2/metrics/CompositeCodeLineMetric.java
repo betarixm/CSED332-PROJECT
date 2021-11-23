@@ -16,8 +16,7 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         super(path);
         codeLineMetrics = new ArrayList<>();
 
-        String absolutePath = new File(path).getAbsolutePath();
-        String[] subPathList = new File(absolutePath).list();
+        String[] subPathList = new File(path).list();
 
         for (String subPath : subPathList) {
             String absoluteSubPath = path + "/" + subPath;
@@ -38,7 +37,4 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         return Collections.unmodifiableList(codeLineMetrics);
     }
 
-    public String getID() {
-        return "0000-0000-0000-0000";
-    }
 }
