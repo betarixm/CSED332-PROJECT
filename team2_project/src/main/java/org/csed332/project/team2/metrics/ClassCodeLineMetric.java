@@ -1,5 +1,6 @@
 package org.csed332.project.team2.metrics;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.FileReader;
 
@@ -11,16 +12,12 @@ public class ClassCodeLineMetric extends CodeLineMetric {
 
     @Override
     public double calculate() {
-        try {
-            int lines = 1;
-            int readByte;
-            FileReader fileReader = new FileReader(this.path);
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(this.path))) {
+            int lines = 0;
 
-            while ((readByte = fileReader.read()) != -1) {
-                if ((char) readByte == '\n') lines++;
-            }
+            while (fileReader.readLine() != null)
+                lines++;
 
-            fileReader.close();
             set(lines);
 
             return lines;
