@@ -12,7 +12,8 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.panels.VerticalBox;
 import org.jetbrains.annotations.NotNull;
 
-import org.csed332.project.team2.MetricWindow.Metric;
+import org.csed332.project.team2.MetricPanel.MetricType;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,8 +25,10 @@ import java.net.URL;
  */
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
-    private final JButton buttonCalcMetric;
-    private final JButton buttonWarning;
+    private JPanel toolbar;
+    private JButton buttonCalcMetric;
+    private JButton buttonSaveMetric;
+    private JButton buttonWarning;
     int width, height;
 
     /**
@@ -38,22 +41,22 @@ public class ProjectToolWindow {
      * @param _height    the height
      */
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
+        this.width = _width;
+        this.height = _height;
+
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
         projectToolWindowContent.setLayout(new BoxLayout(projectToolWindowContent, BoxLayout.PAGE_AXIS));
-
-        buttonCalcMetric = new JButton("Calc Metrics");
-        projectToolWindowContent.add(buttonCalcMetric);
+        createToolbar();
 
         // TODO: this action then needs to be triggered from backend without a button
-        buttonWarning = new JButton("Pls warn me");
-        projectToolWindowContent.add(buttonWarning);
+        buttonWarning = new JButton("Show sample warning");
+        toolbar.add(buttonWarning);
+        projectToolWindowContent.add(toolbar);
+        projectToolWindowContent.add(new JSeparator());
 
         MetricWindow window = MetricWindow.getInstance(width, height);
         projectToolWindowContent.add(window.getMetricContainer());
-
-        this.width = _width;
-        this.height = _height;
 
         ActionListener listener = e -> {
             {
@@ -71,8 +74,8 @@ public class ProjectToolWindow {
                 JBPopup popup = popupBuilder.createPopup();
                 popup.showInFocusCenter();
 
-                // what metrics makes degrading? it should be passed from backend
-                Metric[] warnMetric = {Metric.CYCLO, Metric.COVERAGE};
+                // TODO what metrics makes degrading? it should be passed from backend
+                MetricType[] warnMetric = {MetricType.LINES_OF_CODE};
                 window.showWarnMetric(warnMetric);
 
             }
@@ -112,11 +115,8 @@ public class ProjectToolWindow {
      */
 
     private JPanel getWarning() {
-
         JPanel warnPanel = new JPanel();
-
-        // message
-        JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded");
+        JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded.");
 
         // icon
         URL warnImg = ProjectToolWindow.class.getClassLoader().getResource("exclamation-mark.png");
@@ -130,8 +130,17 @@ public class ProjectToolWindow {
 
         warnPanel.add(warnIconLabel);
         warnPanel.add(warnMessage);
-
-
         return warnPanel;
+    }
+
+    private void createToolbar() {
+        toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
+
+        buttonCalcMetric = new JButton("Calculate Metrics");
+        toolbar.add(buttonCalcMetric);
+
+        buttonSaveMetric = new JButton("Save Metrics");
+        toolbar.add(buttonSaveMetric);
     }
 }
