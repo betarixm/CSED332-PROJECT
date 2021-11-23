@@ -50,4 +50,24 @@ public class CodeLineMetricTest {
         CodeLineMetric classCodeLineMetric3 = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/LowInterestAccount.java");
         Assertions.assertEquals(classCodeLineMetric3.calculate(), 48.0);
     }
+
+    @Test
+    public void testDBConnection() {
+        CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(projectPath + "/src/main/java" + "/edu/postech/csed332/homework1/Bank.java");
+        List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), "Bank");
+        for (MetricModel metricModel : metricModelList) MetricModelService.remove(metricModel);
+
+        Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
+
+        // get before calculate
+        Assertions.assertEquals(classCodeLineMetric.get(), -1);
+        Assertions.assertEquals(classCodeLineMetric.calculate(), 109.0);
+
+        // get after calculate
+        Assertions.assertEquals(classCodeLineMetric.get(), 109.0);
+
+        // get from DB
+        CodeLineMetric classCodeLineMetric2 = new ClassCodeLineMetric(projectPath + "/src/main/java" + "/edu/postech/csed332/homework1/Bank.java");
+        Assertions.assertEquals(classCodeLineMetric2.get(), 109.0);
+    }
 }
