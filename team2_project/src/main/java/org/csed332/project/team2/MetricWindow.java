@@ -45,7 +45,6 @@ public class MetricWindow {
             metricPanels[idx] = panel;
             metricContainer.add(panel.getPanel());
 
-
            /* TitledBorder warnTitleBorder = BorderFactory.createTitledBorder("\u26A0" + metric.toString());
             warnTitleBorder.setTitleColor(Color.YELLOW);
             warnTitle[idx] = warnTitleBorder;
@@ -54,7 +53,6 @@ public class MetricWindow {
             //panel.setBorder(basicTitle[idx]);
             metricPanel[metric.ordinal()] = panel;
             metricContainer.add(panel);*/
-
         }
     }
 

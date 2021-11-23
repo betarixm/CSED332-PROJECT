@@ -26,9 +26,9 @@ import java.net.URL;
 public class ProjectToolWindow {
     private JPanel projectToolWindowContent;
     private JPanel toolbar;
-    private final JButton buttonCalcMetric;
-    private final JButton buttonSaveMetric;
-    private final JButton buttonWarning;
+    private JButton buttonCalcMetric;
+    private JButton buttonSaveMetric;
+    private JButton buttonWarning;
     int width, height;
 
     /**
@@ -41,17 +41,13 @@ public class ProjectToolWindow {
      * @param _height    the height
      */
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
+        this.width = _width;
+        this.height = _height;
+
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
-        toolbar = new JPanel();
-        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
         projectToolWindowContent.setLayout(new BoxLayout(projectToolWindowContent, BoxLayout.PAGE_AXIS));
-
-        buttonCalcMetric = new JButton("Calculate Metrics");
-        toolbar.add(buttonCalcMetric);
-
-        buttonSaveMetric = new JButton("Save Metrics");
-        toolbar.add(buttonSaveMetric);
+        createToolbar();
 
         // TODO: this action then needs to be triggered from backend without a button
         buttonWarning = new JButton("Show sample warning");
@@ -61,9 +57,6 @@ public class ProjectToolWindow {
 
         MetricWindow window = MetricWindow.getInstance(width, height);
         projectToolWindowContent.add(window.getMetricContainer());
-
-        this.width = _width;
-        this.height = _height;
 
         ActionListener listener = e -> {
             {
@@ -81,7 +74,7 @@ public class ProjectToolWindow {
                 JBPopup popup = popupBuilder.createPopup();
                 popup.showInFocusCenter();
 
-                // what metrics makes degrading? it should be passed from backend
+                // TODO what metrics makes degrading? it should be passed from backend
                 MetricType[] warnMetric = {MetricType.CYCLO, MetricType.COVERAGE};
                 window.showWarnMetric(warnMetric);
 
@@ -122,11 +115,8 @@ public class ProjectToolWindow {
      */
 
     private JPanel getWarning() {
-
         JPanel warnPanel = new JPanel();
-
-        // message
-        JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded");
+        JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded.");
 
         // icon
         URL warnImg = ProjectToolWindow.class.getClassLoader().getResource("exclamation-mark.png");
@@ -140,8 +130,17 @@ public class ProjectToolWindow {
 
         warnPanel.add(warnIconLabel);
         warnPanel.add(warnMessage);
-
-
         return warnPanel;
+    }
+
+    private void createToolbar() {
+        toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
+
+        buttonCalcMetric = new JButton("Calculate Metrics");
+        toolbar.add(buttonCalcMetric);
+
+        buttonSaveMetric = new JButton("Save Metrics");
+        toolbar.add(buttonSaveMetric);
     }
 }

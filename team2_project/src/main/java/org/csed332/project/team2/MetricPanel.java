@@ -1,4 +1,5 @@
 package org.csed332.project.team2;
+
 import org.csed332.project.team2.metrics.*;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartPanel;
@@ -22,12 +23,13 @@ public class MetricPanel {
     public enum MetricType {LINES_OF_CODE, HALSTED, CYCLO, INDEX, COVERAGE};
 
     private MetricType type;
+
     MetricPanel(Metric _metric, MetricType _type) {
         this.metric = _metric;
         this.type = _type;
 
-        TitledBorder basicTitle = BorderFactory.createTitledBorder(metric.toString());
-        TitledBorder warnTitle = BorderFactory.createTitledBorder("\u26A0" + metric.toString());
+        basicTitle = BorderFactory.createTitledBorder(this.type.toString());
+        warnTitle = BorderFactory.createTitledBorder("\u26A0" + this.type.toString());
         warnTitle.setTitleColor(Color.YELLOW);
 
         /* making JPanel */
@@ -57,19 +59,17 @@ public class MetricPanel {
 
     }
 
-    public JPanel getPanel(){
+    public JPanel getPanel() {
         return this.panel;
     }
 
-    public void setWarningTitle(){
+    public void setWarningTitle() {
         panel.setBorder(warnTitle);
     }
 
-    public void setBasicTitle(){
+    public void setBasicTitle() {
         panel.setBorder(basicTitle);
     }
-
-
 
 
 }
