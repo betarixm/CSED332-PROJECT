@@ -5,6 +5,5 @@ public interface Metric {
 
     double calculate();
 
-    // for db
     String getID();
 }
