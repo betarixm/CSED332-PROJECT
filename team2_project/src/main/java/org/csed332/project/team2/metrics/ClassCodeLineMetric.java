@@ -9,23 +9,21 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.util.List;
 
+import com.intellij.psi.*;
+
 public class ClassCodeLineMetric extends CodeLineMetric {
 
     public String className;
 
-    public ClassCodeLineMetric(String path) {
-        super(path);
-        String namePlusJava = new File(path).getName();
+    PsiClass psiClass;
 
-        try {
-            if (!namePlusJava.endsWith(".java"))
-                throw new IllegalArgumentException("not java file!");
-            this.className = namePlusJava.substring(0, namePlusJava.length() - 5);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public ClassCodeLineMetric(PsiClass psiClass) {
+        this.psiClass = psiClass;
+    }
 
-        super.set(-1);
+    @Override
+    public double calculate() {
+        return psiClass.getText().split("\n").length;
     }
 
     @Override
@@ -38,10 +36,10 @@ public class ClassCodeLineMetric extends CodeLineMetric {
     @Override
     protected void set(int value) {
         super.set(value);
-        MetricModelService.saveMetric(getID(), className, value);
+        //MetricModelService.saveMetric(getID(), className, value);
     }
 
-    @Override
+    /*@Override
     public double calculate() {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(this.path))) {
             int lines = 0;
@@ -55,5 +53,5 @@ public class ClassCodeLineMetric extends CodeLineMetric {
         } catch (IOException e) {
             return -1;
         }
-    }
+    }*/
 }

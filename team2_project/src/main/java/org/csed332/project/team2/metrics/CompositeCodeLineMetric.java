@@ -12,19 +12,8 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         codeLineMetrics.add(codeLineMetric);
     }
 
-    public CompositeCodeLineMetric(String path) {
-        super(path);
+    public CompositeCodeLineMetric() {
         codeLineMetrics = new ArrayList<>();
-
-        String[] subPathList = new File(path).list();
-
-        for (String subPath : subPathList) {
-            String absoluteSubPath = path + "/" + subPath;
-            File sub = new File(absoluteSubPath);
-            CodeLineMetric subMetric = sub.isDirectory() ?
-                    new PackageCodeLineMetric(absoluteSubPath) : new ClassCodeLineMetric(absoluteSubPath);
-            addMetric(subMetric);
-        }
     }
 
     public double calculate() {

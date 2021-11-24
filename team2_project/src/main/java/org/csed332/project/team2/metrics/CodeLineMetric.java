@@ -6,8 +6,10 @@ public abstract class CodeLineMetric implements Metric {
     private int codeLine;
     protected String path;
 
-    public CodeLineMetric(String path) {
-        setPath(path);
+    public CodeLineMetric() {
+        // TODO: how to test ProjectCodeLine?
+        //  Now, getProject() returns just temp project..
+
     }
 
     @Override
