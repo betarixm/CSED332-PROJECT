@@ -1,5 +1,6 @@
 package org.csed332.project.team2;
-import org.apache.tools.ant.Project;
+//import org.apache.tools.ant.Project;
+
 import org.csed332.project.team2.MetricPanel.MetricType;
 
 import com.intellij.ui.JBColor;
@@ -13,6 +14,9 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
+
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 
 /**
  * The window displaying the metrics.
@@ -30,7 +34,7 @@ public class MetricWindow {
      * @param width  the width of the window
      * @param height the height of the window
      */
-    public MetricWindow(int width, int height) {
+    public MetricWindow(int width, int height, Project project) {
         // We use a container to allow scrolling
         metricContainer = new JPanel();
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
@@ -40,7 +44,7 @@ public class MetricWindow {
         for (MetricType metric : MetricType.values()) {
 
             int idx = metric.ordinal();
-            Metric metricTest = new ProjectCodeLineMetric();
+            Metric metricTest = new ProjectCodeLineMetric(project);
             MetricPanel panel = new MetricPanel(metricTest, metric);
             metricPanels[idx] = panel;
             metricContainer.add(panel.getPanel());
@@ -67,9 +71,9 @@ public class MetricWindow {
      * @param height the height of the instance
      * @return the single-toned instance
      */
-    public static MetricWindow getInstance(int width, int height) {
+    public static MetricWindow getInstance(int width, int height, Project project) {
         if (instance == null) {
-            instance = new MetricWindow(width, height);
+            instance = new MetricWindow(width, height, project);
         }
         return instance;
     }
