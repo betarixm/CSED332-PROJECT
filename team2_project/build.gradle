@@ -5,6 +5,7 @@ plugins {
 
 group 'org.csed332.project.team2'
 version '1.0-SNAPSHOT'
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -20,11 +21,15 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.1.Final'
     // https://mvnrepository.com/artifact/org.apache.derby/derby
     implementation 'org.apache.derby:derby:10.14.2.0'
+
+    // https://mvnrepository.com/artifact/com.intellij/annotations
+    implementation group: 'com.intellij', name: 'annotations', version: '12.0'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = '2021.2.3'
+    plugins = ['com.intellij.java']
 }
 patchPluginXml {
     changeNotes = """
