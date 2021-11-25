@@ -10,9 +10,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.panels.VerticalBox;
+import org.csed332.project.team2.metrics.Metric;
 import org.jetbrains.annotations.NotNull;
-
-import org.csed332.project.team2.MetricPanel.MetricType;
 
 
 import javax.swing.*;
@@ -75,7 +74,7 @@ public class ProjectToolWindow {
                 popup.showInFocusCenter();
 
                 // TODO what metrics makes degrading? it should be passed from backend
-                MetricType[] warnMetric = {MetricType.LINES_OF_CODE};
+                Metric.Type[] warnMetric = {Metric.Type.LINES_OF_CODE};
                 window.showWarnMetric(warnMetric);
 
             }
