@@ -112,19 +112,16 @@ public class ProjectToolWindow {
      *
      * @return warning popup
      */
-
     private JPanel getWarning() {
         JPanel warnPanel = new JPanel();
         JLabel warnMessage = new JLabel("WARNING : Quality of the Metrics has degraded.");
 
-        // icon
         URL warnImg = ProjectToolWindow.class.getClassLoader().getResource("exclamation-mark.png");
         ImageIcon warnIcon = new ImageIcon(warnImg);
         Image tempImg = warnIcon.getImage();
 
         int iconSize = warnMessage.getFont().getSize() * 2;
         Image warnImg2 = tempImg.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH);
-
         JLabel warnIconLabel = new JLabel(new ImageIcon(warnImg2));
 
         warnPanel.add(warnIconLabel);

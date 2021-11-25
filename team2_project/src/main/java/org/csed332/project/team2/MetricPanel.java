@@ -38,6 +38,7 @@ public class MetricPanel {
         metricValue = new Label();
         //metricValue.setText("");
         panel.add(metricValue);
+        panel.setToolTipText(MetricDescription.get(this.type));
 
         /* Displays the metric chart */
         //Will have to refactor this part when implementing charts
