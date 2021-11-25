@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.util.List;
 
 public class ClassCodeLineMetric extends CodeLineMetric {
-
     public String className;
 
     public ClassCodeLineMetric(String path) {
