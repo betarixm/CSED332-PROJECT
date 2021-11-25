@@ -20,11 +20,9 @@ public class MetricPanel {
     private Label metricValue;
     private JFreeChart metricChart;
 
-    public enum MetricType {LINES_OF_CODE}; // TODO: add other types once implemented HALSTED, CYCLO, INDEX, COVERAGE
+    private Metric.Type type;
 
-    private MetricType type;
-
-    MetricPanel(Metric _metric, MetricType _type) {
+    MetricPanel(Metric _metric, Metric.Type _type) {
         this.metric = _metric;
         this.type = _type;
 
@@ -40,6 +38,7 @@ public class MetricPanel {
         metricValue = new Label();
         //metricValue.setText("");
         panel.add(metricValue);
+        panel.setToolTipText(MetricDescription.get(this.type));
 
         /* Displays the metric chart */
         //Will have to refactor this part when implementing charts
@@ -56,7 +55,6 @@ public class MetricPanel {
         double value = metric.calculate();
         metricValue.setText(Double.toString(value));
         //Should we update the panel?
-
     }
 
     public JPanel getPanel() {
@@ -70,6 +68,4 @@ public class MetricPanel {
     public void setBasicTitle() {
         panel.setBorder(basicTitle);
     }
-
-
 }
