@@ -3,11 +3,14 @@ package org.csed332.project.team2.db.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.sql.DriverManager;
+
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
     static {
         try {
+            DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
             Configuration configuration = new Configuration()
                     .addAnnotatedClass(org.csed332.project.team2.db.model.MetricModel.class)
                     .setProperty("hibernate.connection.username", "app")
