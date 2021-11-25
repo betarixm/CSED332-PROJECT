@@ -5,13 +5,20 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
-    private final static String configFile = "hibernate.cfg.xml";
 
     static {
         try {
-            sessionFactory = new Configuration().configure(configFile).buildSessionFactory();
-        } catch (Throwable ignore) {
-        }
+            Configuration configuration = new Configuration()
+                    .addAnnotatedClass(org.csed332.project.team2.db.model.MetricModel.class)
+                    .setProperty("hibernate.connection.username", "app")
+                    .setProperty("hibernate.connection.password", "app")
+                    .setProperty("hibernate.connection.url", "jdbc:derby:.db/metric;create=true")
+                    .setProperty("hibernate.hbm2ddl.auto", "update")
+                    .setProperty("current_session_context_class", "thread")
+                    .setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyTenSevenDialect");
+
+            sessionFactory = configuration.buildSessionFactory();
+        } catch (Throwable ignore) {}
     }
 
     public static SessionFactory getSessionFactory() {
