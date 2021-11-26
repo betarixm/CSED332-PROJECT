@@ -30,12 +30,10 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
             }
         }, project);
 
-        System.out.println(psiPackages);
         for (PsiPackage subPsiPackage : psiPackages) {
             this.addMetric(new PackageCodeLineMetric(subPsiPackage));
         }
 
-        System.out.println("ProjectCodeLine Constructor");
     }
 
     /**

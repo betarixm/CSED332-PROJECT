@@ -8,12 +8,12 @@ import java.util.List;
 public abstract class CompositeCodeLineMetric extends CodeLineMetric {
     private List<CodeLineMetric> codeLineMetrics;
 
-    public void addMetric(CodeLineMetric codeLineMetric) {
-        codeLineMetrics.add(codeLineMetric);
-    }
-
     public CompositeCodeLineMetric() {
         codeLineMetrics = new ArrayList<>();
+    }
+
+    public void addMetric(CodeLineMetric codeLineMetric) {
+        codeLineMetrics.add(codeLineMetric);
     }
 
     public double calculate() {

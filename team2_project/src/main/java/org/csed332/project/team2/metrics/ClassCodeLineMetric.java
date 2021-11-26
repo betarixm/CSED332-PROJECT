@@ -35,22 +35,7 @@ public class ClassCodeLineMetric extends CodeLineMetric {
     @Override
     protected void set(int value) {
         super.set(value);
-        //MetricModelService.saveMetric(getID(), className, value);
+        MetricModelService.saveMetric(getID(), className, value);
     }
 
-    /*@Override
-    public double calculate() {
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(this.path))) {
-            int lines = 0;
-
-            while (fileReader.readLine() != null)
-                lines++;
-
-            set(lines);
-
-            return lines;
-        } catch (IOException e) {
-            return -1;
-        }
-    }*/
 }

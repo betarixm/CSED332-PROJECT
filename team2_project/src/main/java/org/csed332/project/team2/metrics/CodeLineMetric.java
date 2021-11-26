@@ -4,7 +4,6 @@ import org.csed332.project.team2.db.service.MetricModelService;
 
 public abstract class CodeLineMetric implements Metric {
     private int codeLine;
-    protected String path;
 
     public CodeLineMetric() {
         // TODO: how to test ProjectCodeLine?
@@ -21,16 +20,8 @@ public abstract class CodeLineMetric implements Metric {
         this.codeLine = codeLine;
     }
 
-    protected void setPath(String path) {
-        this.path = path;
-    }
-
     public String getID() {
         return "code-line";
     }
 
-    // for test
-    public String getPath() {
-        return path;
-    }
 }
