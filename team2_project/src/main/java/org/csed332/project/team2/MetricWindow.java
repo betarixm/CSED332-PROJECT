@@ -38,10 +38,10 @@ public class MetricWindow {
         // We use a container to allow scrolling
         metricContainer = new JPanel();
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
-        metricPanels = new MetricPanel[MetricType.values().length];
+        metricPanels = new MetricPanel[Metric.Type.values().length];
 
         // Add the metric panels to the window
-        for (MetricType metric : MetricType.values()) {
+        for (Metric.Type metric : Metric.Type.values()) {
 
             int idx = metric.ordinal();
             Metric metricTest = new ProjectCodeLineMetric(project);
@@ -84,7 +84,7 @@ public class MetricWindow {
      */
     public void setMetrics() {
         //TODO:calc metrics here? or get some data by argument?
-        for (MetricType metric : MetricType.values()) {
+        for (Metric.Type metric : Metric.Type.values()) {
             int idx = metric.ordinal();
 
             MetricPanel panel = metricPanels[idx];
@@ -94,7 +94,7 @@ public class MetricWindow {
 
         // example of code coverage
         /*JFreeChart coverageChart = BarChart.getChart(80);
-        JPanel coveragePanel = metricPanel[MetricType.COVERAGE.ordinal()];
+        JPanel coveragePanel = metricPanel[Metric.Type.COVERAGE.ordinal()];
         ChartPanel chartPanel = new ChartPanel(coverageChart);
         chartPanel.setSize(200, 200);
         coveragePanel.add(chartPanel, BorderLayout.CENTER);
@@ -116,9 +116,9 @@ public class MetricWindow {
      *
      * @param warnMetrics The Metrics with degrading quality
      */
-    public void showWarnMetric(MetricType[] warnMetrics) {
+    public void showWarnMetric(Metric.Type[] warnMetrics) {
 
-        for (MetricType metric : warnMetrics) {
+        for (Metric.Type metric : warnMetrics) {
             int idx = metric.ordinal();
 
             MetricPanel panel = metricPanels[idx];

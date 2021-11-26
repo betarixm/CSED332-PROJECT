@@ -12,7 +12,6 @@ import java.util.List;
 import com.intellij.psi.*;
 
 public class ClassCodeLineMetric extends CodeLineMetric {
-
     public String className;
 
     PsiClass psiClass;
