@@ -54,7 +54,7 @@ public class ProjectToolWindow {
         projectToolWindowContent.add(toolbar);
         projectToolWindowContent.add(new JSeparator());
 
-        MetricWindow window = MetricWindow.getInstance(width, height);
+        MetricWindow window = MetricWindow.getInstance(width, height, project);
         projectToolWindowContent.add(window.getMetricContainer());
 
         ActionListener listener = e -> {

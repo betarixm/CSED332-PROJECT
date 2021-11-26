@@ -4,13 +4,13 @@
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Team2<br>
+    <em>Team2</em> test.
     ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
+    <!-- <depends>com.intellij.modules.platform</depends> -->
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->

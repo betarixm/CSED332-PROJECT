@@ -8,23 +8,12 @@ import java.util.List;
 public abstract class CompositeCodeLineMetric extends CodeLineMetric {
     private List<CodeLineMetric> codeLineMetrics;
 
-    public void addMetric(CodeLineMetric codeLineMetric) {
-        codeLineMetrics.add(codeLineMetric);
+    public CompositeCodeLineMetric() {
+        codeLineMetrics = new ArrayList<>();
     }
 
-    public CompositeCodeLineMetric(String path) {
-        super(path);
-        codeLineMetrics = new ArrayList<>();
-
-        String[] subPathList = new File(path).list();
-
-        for (String subPath : subPathList) {
-            String absoluteSubPath = path + "/" + subPath;
-            File sub = new File(absoluteSubPath);
-            CodeLineMetric subMetric = sub.isDirectory() ?
-                    new PackageCodeLineMetric(absoluteSubPath) : new ClassCodeLineMetric(absoluteSubPath);
-            addMetric(subMetric);
-        }
+    public void addMetric(CodeLineMetric codeLineMetric) {
+        codeLineMetrics.add(codeLineMetric);
     }
 
     public double calculate() {
