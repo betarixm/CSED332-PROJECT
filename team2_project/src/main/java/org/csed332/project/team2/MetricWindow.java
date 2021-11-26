@@ -1,7 +1,5 @@
 package org.csed332.project.team2;
 
-import org.csed332.project.team2.MetricPanel.MetricType;
-
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import org.csed332.project.team2.metrics.Metric;
