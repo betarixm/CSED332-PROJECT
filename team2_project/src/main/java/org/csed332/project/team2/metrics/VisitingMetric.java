@@ -14,7 +14,7 @@ public abstract class VisitingMetric extends BaseMetric {
     private PsiElement psiElement;
     private Project project;
 
-    final PsiElementVisitor visitor = new JavaElementVisitor() {
+    final public PsiElementVisitor visitor = new JavaElementVisitor() {
         @Override
         public void visitDirectory(@NotNull PsiDirectory dir) {
             final var psiPackage = JavaDirectoryService.getInstance().getPackage(dir);
