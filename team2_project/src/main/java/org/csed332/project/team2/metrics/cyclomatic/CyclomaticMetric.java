@@ -8,7 +8,7 @@ import java.util.Objects;
 public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(PsiElement element) {
         super(element);
-        setId("cyclomatic");
+        setID("cyclomatic");
     }
 
     @Override

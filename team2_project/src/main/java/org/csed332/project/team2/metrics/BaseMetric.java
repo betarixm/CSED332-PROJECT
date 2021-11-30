@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseMetric {
+public abstract class BaseMetric implements Metric {
     static enum Type {LINES_OF_CODE, CYCLOMATIC}
 
     private double metric;
@@ -21,11 +21,11 @@ public abstract class BaseMetric {
 
     public abstract double calculate();
 
-    public double getMetric() {
+    public double get() {
         return this.metric;
     }
 
-    public Double getMetric(PsiClass psiClass, PsiMethod psiMethod) {
+    public Double get(PsiClass psiClass, PsiMethod psiMethod) {
         if (metrics.containsKey(psiClass)) {
             return metrics.get(psiClass).get(psiMethod);
         }
@@ -49,11 +49,11 @@ public abstract class BaseMetric {
         metrics.get(psiClass).put(psiMethod, metric);
     }
 
-    public String getId() {
+    public String getID() {
         return this.id;
     }
 
-    protected void setId(String id) {
+    protected void setID(String id) {
         this.id = id;
     }
 }

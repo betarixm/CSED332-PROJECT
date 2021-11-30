@@ -22,6 +22,6 @@ public abstract class BaseMetricComposite extends BaseMetric {
     @Override
     public double calculate() {
         setMetric(metricList.stream().mapToDouble(BaseMetric::calculate).sum());
-        return getMetric();
+        return get();
     }
 }
