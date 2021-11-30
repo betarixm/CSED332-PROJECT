@@ -44,6 +44,17 @@ public abstract class VisitingMetric extends BaseMetric {
         public void visitField(PsiField field) {
             visitFieldMetric(field);
         }
+
+        @Override
+        public void visitConditionalExpression(PsiConditionalExpression expr) {
+            visitBranchMetric(expr);
+        }
+
+        @Override
+        public void visitSwitchLabelStatement(PsiSwitchLabelStatement sLabel) {
+            visitSwitchMetric(sLabel);
+        }
+
     };
 
     public VisitingMetric(PsiElement element) {
@@ -65,6 +76,10 @@ public abstract class VisitingMetric extends BaseMetric {
     protected abstract void visitMethodMetric(PsiMethod method);
 
     protected abstract void visitFieldMetric(PsiField field);
+
+    protected abstract void visitBranchMetric(PsiConditionalExpression expr);
+
+    protected abstract void visitSwitchMetric(PsiSwitchLabelStatement sLabel);
 
     protected void setVisitResult(double result) {
         visitResult = result;
