@@ -6,7 +6,7 @@ public abstract class BaseMetric {
     private double metric;
     private String id;
 
-    protected abstract double calculate();
+    public abstract double calculate();
 
     public double getMetric() {
         return this.metric;
