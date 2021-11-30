@@ -1,5 +1,7 @@
 package org.csed332.project.team2;
 
+import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.metrics.*;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartPanel;
@@ -9,6 +11,7 @@ import org.jdom.Content;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.List;
 
 
 public class MetricPanel {
@@ -49,12 +52,37 @@ public class MetricPanel {
         chartPanel.validate();*/
     }
 
+    int arbitraryValue = 0;
 
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
-        double value = metric.calculate();
+        double value = arbitraryValue++;//metric.calculate();
+        //save here
+        MetricModelService.saveMetric(metric.getID(), "None", value);
+        compareMetric();
+
+       // List<MetricModel> values = MetricModelService.getMetrics(metric.getID(), "None", 5);
+
+        /*String s = "";
+        for(MetricModel m:values){
+            s = String.format("%s\n%f", s,m.getFigure());
+        }*/
         metricValue.setText(Double.toString(value));
         //Should we update the panel?
+    }
+
+    public void compareMetric(){
+        List<MetricModel> values = MetricModelService.getMetrics(metric.getID(), "None", 2);
+        if(values.size() >= 2){
+            double actual = values.get(0).getFigure();
+            double old = values.get(1).getFigure();
+
+            //warningConditionFunction
+            if(actual > old){ // TODO add function in metric
+                setWarningTitle();
+                //Observer pattern for warning the window
+            }
+        }
     }
 
     public JPanel getPanel() {
