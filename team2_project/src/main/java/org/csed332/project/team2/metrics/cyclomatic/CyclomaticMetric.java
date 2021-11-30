@@ -1,9 +1,9 @@
 package org.csed332.project.team2.metrics.cyclomatic;
 
 import com.intellij.psi.*;
-import org.csed332.project.team2.metrics.MetricVisitor;
+import org.csed332.project.team2.metrics.VisitingMetric;
 
-public class CyclomaticMetric extends MetricVisitor {
+public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(PsiElement element) {
         super(element);
         setId("cyclomatic");

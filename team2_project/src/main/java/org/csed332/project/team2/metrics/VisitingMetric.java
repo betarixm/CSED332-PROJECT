@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 
-public abstract class MetricVisitor extends BaseMetric {
+public abstract class VisitingMetric extends BaseMetric {
     private double visitResult = 0;
     private PsiElement psiElement;
     private Project project;
@@ -46,7 +46,7 @@ public abstract class MetricVisitor extends BaseMetric {
         }
     };
 
-    public MetricVisitor(PsiElement element) {
+    public VisitingMetric(PsiElement element) {
         setPsiElement(element);
     }
 
