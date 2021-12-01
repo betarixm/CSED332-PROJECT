@@ -2,8 +2,10 @@ package org.csed332.project.team2;
 
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
+import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.ProjectCodeLineMetric;
+import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -38,23 +40,17 @@ public class MetricWindow {
         metricPanels = new MetricPanel[Metric.Type.values().length];
 
         // Add the metric panels to the window
-        for (Metric.Type metric : Metric.Type.values()) {
+        Metric codeLineMetric = new ProjectCodeLineMetric(project);
+        MetricPanel codeLinePanel = new MetricPanel(codeLineMetric, Metric.Type.LINES_OF_CODE);
+        metricPanels[0] = codeLinePanel;
+        metricContainer.add(codeLinePanel.getPanel());
 
-            int idx = metric.ordinal();
-            Metric metricTest = new ProjectCodeLineMetric(project);
-            MetricPanel panel = new MetricPanel(metricTest, metric);
-            metricPanels[idx] = panel;
-            metricContainer.add(panel.getPanel());
+        BaseMetric cycloMetric = new CyclomaticMetric(project);
+        BaseMetricPanel cycloPanel = new BaseMetricPanel(cycloMetric, Metric.Type.CYCLOMATIC);
+        metricPanels[1] = cycloPanel;
+        metricContainer.add(cycloPanel.getPanel());
 
-           /* TitledBorder warnTitleBorder = BorderFactory.createTitledBorder("\u26A0" + metric.toString());
-            warnTitleBorder.setTitleColor(Color.YELLOW);
-            warnTitle[idx] = warnTitleBorder;
-            basicTitle[idx] = BorderFactory.createTitledBorder(metric.toString());
 
-            //panel.setBorder(basicTitle[idx]);
-            metricPanel[metric.ordinal()] = panel;
-            metricContainer.add(panel);*/
-        }
     }
 
     public JPanel getMetricContainer() {
