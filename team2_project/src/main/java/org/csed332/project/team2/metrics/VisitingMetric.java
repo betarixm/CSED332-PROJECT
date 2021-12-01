@@ -204,6 +204,11 @@ public abstract class VisitingMetric extends BaseMetric {
         public void visitProvidesStatement(PsiProvidesStatement statement) {
             visitProvidesStatementMetric(statement);
         }
+
+        @Override
+        public void visitLocalVariable(PsiLocalVariable variable) {
+            visitLocalVariableMetric(variable);
+        }
     };
 
     public VisitingMetric(PsiElement element) {
@@ -301,6 +306,8 @@ public abstract class VisitingMetric extends BaseMetric {
     protected abstract void visitUsesStatementMetric(PsiUsesStatement statement);
 
     protected abstract void visitProvidesStatementMetric(PsiProvidesStatement statement);
+
+    protected abstract void visitLocalVariableMetric(PsiLocalVariable variable);
 
     protected void setVisitResult(double result) {
         visitResult = result;

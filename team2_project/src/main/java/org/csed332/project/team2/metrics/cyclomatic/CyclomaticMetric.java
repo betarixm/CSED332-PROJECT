@@ -113,7 +113,9 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitDeclarationStatementMetric(PsiDeclarationStatement statement) {
-
+        for (PsiElement element : statement.getDeclaredElements()) {
+            element.accept(visitor);
+        }
     }
 
     @Override
@@ -291,5 +293,10 @@ public class CyclomaticMetric extends VisitingMetric {
     @Override
     protected void visitProvidesStatementMetric(PsiProvidesStatement statement) {
 
+    }
+
+    @Override
+    protected void visitLocalVariableMetric(PsiLocalVariable variable) {
+        variable.getInitializer().accept(visitor);
     }
 }
