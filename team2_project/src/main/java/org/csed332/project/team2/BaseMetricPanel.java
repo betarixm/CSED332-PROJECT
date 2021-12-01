@@ -1,10 +1,11 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.table.JBTable;
 import kotlin.random.Random;
 import org.csed332.project.team2.MetricPanel;
+import org.csed332.project.team2.metrics.*;
 
 import javax.swing.*;
 import javax.swing.table.*;
