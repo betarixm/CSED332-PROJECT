@@ -1,6 +1,9 @@
 package org.csed332.project.team2.metrics.cyclomatic;
 
 import com.intellij.psi.*;
+import com.intellij.psi.formatter.java.CodeBlockBlock;
+import com.intellij.psi.impl.source.PsiMethodImpl;
+import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
 import org.csed332.project.team2.metrics.VisitingMetric;
@@ -46,10 +49,10 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitMethodMetric(PsiMethod method) {
-        PsiCodeBlock codes = method.getBody();
+        PsiCodeBlock codeBlock = method.getBody();
 
-        if (codes != null) {
-            for (PsiStatement statement : codes.getStatements()) {
+        if (codeBlock != null) {
+            for (PsiStatement statement : codeBlock.getStatements()) {
                 statement.accept(visitor);
             }
         }
@@ -198,16 +201,25 @@ public class CyclomaticMetric extends VisitingMetric {
     @Override
     protected void visitSwitchStatementMetric(PsiSwitchStatement statement) {
         requireNonNullElse(statement.getExpression()).accept(visitor);
-        for (PsiStatement expr : Objects.requireNonNullElse(statement.getBody(), new PsiCodeBlockImpl("")).getStatements()) {
-            expr.accept(visitor);
+
+        PsiCodeBlock codeBlock = statement.getBody();
+        if (codeBlock != null) {
+            for (PsiStatement expr : codeBlock.getStatements()) {
+                expr.accept(visitor);
+            }
         }
+
     }
 
     @Override
     protected void visitSynchronizedStatementMetric(PsiSynchronizedStatement statement) {
         requireNonNullElse(statement.getBody()).accept(visitor);
-        for (PsiStatement expr : Objects.requireNonNullElse(statement.getBody(), new PsiCodeBlockImpl("")).getStatements()) {
-            expr.accept(visitor);
+
+        PsiCodeBlock codeBlock = statement.getBody();
+        if (codeBlock != null) {
+            for (PsiStatement expr : codeBlock.getStatements()) {
+                expr.accept(visitor);
+            }
         }
     }
 
@@ -220,9 +232,15 @@ public class CyclomaticMetric extends VisitingMetric {
     protected void visitTryStatementMetric(PsiTryStatement statement) {
         setVisitResult(getVisitResult() + 1);
 
-        for (PsiStatement expr : Objects.requireNonNullElse(statement.getTryBlock(), new PsiCodeBlockImpl("")).getStatements()) {
-            expr.accept(visitor);
+        PsiCodeBlock tryBlock = statement.getTryBlock();
+        PsiCodeBlock finalBlock = statement.getFinallyBlock();
+
+        if (tryBlock != null) {
+            for (PsiStatement expr : tryBlock.getStatements()) {
+                expr.accept(visitor);
+            }
         }
+
 
         for (PsiCodeBlock block : statement.getCatchBlocks()) {
             for (PsiStatement expr : block.getStatements()) {
@@ -230,9 +248,13 @@ public class CyclomaticMetric extends VisitingMetric {
             }
         }
 
-        for (PsiStatement expr : Objects.requireNonNullElse(statement.getFinallyBlock(), new PsiCodeBlockImpl("")).getStatements()) {
-            expr.accept(visitor);
+
+        if (finalBlock != null) {
+            for (PsiStatement expr : finalBlock.getStatements()) {
+                expr.accept(visitor);
+            }
         }
+
     }
 
     @Override
