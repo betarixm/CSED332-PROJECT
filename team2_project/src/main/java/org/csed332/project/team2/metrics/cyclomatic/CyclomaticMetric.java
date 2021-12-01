@@ -78,8 +78,6 @@ public class CyclomaticMetric extends VisitingMetric {
         if (!sLabel.isDefaultCase()) {
             setVisitResult(getVisitResult() + 1);
         }
-
-        requireNonNullElse(sLabel.getEnclosingSwitchBlock()).accept(visitor);
     }
 
     @Override
@@ -91,7 +89,11 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitBlockStatementMetric(PsiBlockStatement statement) {
-        statement.getCodeBlock().accept(visitor);
+
+        for (PsiStatement expr : statement.getCodeBlock().getStatements()) {
+            expr.accept(visitor);
+        }
+
     }
 
     @Override
@@ -150,6 +152,7 @@ public class CyclomaticMetric extends VisitingMetric {
     @Override
     protected void visitForeachStatementMetric(PsiForeachStatement statement) {
         setVisitResult(getVisitResult() + 1);
+
         requireNonNullElse(statement.getIteratedValue()).accept(visitor);
         requireNonNullElse(statement.getBody()).accept(visitor);
     }
