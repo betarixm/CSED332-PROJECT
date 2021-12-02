@@ -1,73 +1,71 @@
 package org.csed332.project.team2.metrics;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 public class CodeLineMetricTest {
-    CodeLineMetric projectCodeLineMetric;
-    // set with your absolute path of your project
-    // test project path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1
-    String projectPath = "D:/subin/lectures_local/csed332/submit_hw/homework1/problem1";
+    private static final String testPath = "testdata/singleFiles";
+    private static FixtureHelper helperMainClass;
 
-    @BeforeEach
-    public void initialize() {
-        // set with your absolute path of your project
-        projectCodeLineMetric = new ProjectCodeLineMetric(this.projectPath);
+    @BeforeAll
+    public static void initialize() throws Exception {
+        String fileName = "MainClass.java";
+        helperMainClass = new FixtureHelper(testPath);
+        helperMainClass.setUp();
+        helperMainClass.configure(fileName);
     }
 
-
     @Test
-    public void testProjectCalculate() {
-        Assertions.assertEquals(projectCodeLineMetric.calculate(), 271.0);
+    public void testProjectCodeLineMetricCalculateNoPackages() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            CodeLineMetric projectCodeLineMetric = new ProjectCodeLineMetric(project);
+                            Assertions.assertEquals(0.0, projectCodeLineMetric.calculate());
+                        });
     }
 
-    // test package path: D:/subin/lectures_local/csed332/submit_hw/homework1/problem1/src/main/java/edu/postech/csed332/homework1
     @Test
-    public void testPackageCalculate() {
-        // set with your absolute path of your package
-        CodeLineMetric packageCodeLineMetric = new PackageCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1");
-        Assertions.assertEquals(packageCodeLineMetric.calculate(), 271.0);
-    }
-
-    /*
-    test class list:
-    ACCTYPE.java  Bank.java                 IllegalOperationException.java
-    Account.java  HighInterestAccount.java  LowInterestAccount.java
-     */
-    @Test
-    public void testClassCalculate() {
-        CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/Bank.java");
-        Assertions.assertEquals(classCodeLineMetric.calculate(), 109.0);
-
-        CodeLineMetric classCodeLineMetric2 = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/HighInterestAccount.java");
-        Assertions.assertEquals(classCodeLineMetric2.calculate(), 48.0);
-
-        CodeLineMetric classCodeLineMetric3 = new ClassCodeLineMetric(projectCodeLineMetric.getPath() + "/edu/postech/csed332/homework1/LowInterestAccount.java");
-        Assertions.assertEquals(classCodeLineMetric3.calculate(), 48.0);
+    public void testClassCodeLineMetricCalculate() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
+                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
+                        });
     }
 
     @Test
     public void testDBConnection() {
-        CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(projectPath + "/src/main/java" + "/edu/postech/csed332/homework1/Bank.java");
-        List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), "Bank");
-        for (MetricModel metricModel : metricModelList) MetricModelService.remove(metricModel);
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
 
-        Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
+                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
+                            for (MetricModel metricModel : metricModelList) {
+                                MetricModelService.remove(metricModel);
+                            }
 
-        // get before calculate
-        Assertions.assertEquals(classCodeLineMetric.get(), -1);
-        Assertions.assertEquals(classCodeLineMetric.calculate(), 109.0);
+                            Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
 
-        // get after calculate
-        Assertions.assertEquals(classCodeLineMetric.get(), 109.0);
-
-        // get from DB
-        CodeLineMetric classCodeLineMetric2 = new ClassCodeLineMetric(projectPath + "/src/main/java" + "/edu/postech/csed332/homework1/Bank.java");
-        Assertions.assertEquals(classCodeLineMetric2.get(), 109.0);
+                            // get before calculate
+                            Assertions.assertEquals(0.0, classCodeLineMetric.get());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
+                            classCodeLineMetric.set((int) classCodeLineMetric.calculate());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.get());
+                        });
     }
 }
