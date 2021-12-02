@@ -15,7 +15,7 @@ public class FixtureHelper {
     private CodeInsightTestFixture fixture;
 
     public FixtureHelper(String testPath) {
-        this.testPath = new File(testPath).getAbsolutePath();
+        this.testPath = new File("src/test/resources/" + testPath).getAbsolutePath();
     }
 
     public void setUp() throws Exception {

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 public class CodeLineMetricTest {
-    private static final String testPath = "testdata/singleFiles";
+    private static final String testPath = "TestProjects/SingleFiles";
     private static FixtureHelper helperMainClass;
 
     @BeforeAll
