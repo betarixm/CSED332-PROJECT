@@ -336,6 +336,8 @@ public abstract class VisitingMetric extends BaseMetric {
 
     @Override
     public double calculate() {
+        setVisitResult(0);
+
         if (psiElement != null) {
             setMetric(visit(psiElement));
         } else if (project != null) {
