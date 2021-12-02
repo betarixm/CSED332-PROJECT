@@ -209,6 +209,26 @@ public abstract class VisitingMetric extends BaseMetric {
         public void visitLocalVariable(PsiLocalVariable variable) {
             visitLocalVariableMetric(variable);
         }
+
+        @Override
+        public void visitAssignmentExpression(PsiAssignmentExpression expr) {
+            visitAssignmentExpressionMetric(expr);
+        }
+
+        @Override
+        public void visitParenthesizedExpression(PsiParenthesizedExpression expr) {
+            visitParenthesizedExpressionMetric(expr);
+        }
+
+        @Override
+        public void visitPolyadicExpression(PsiPolyadicExpression expr) {
+            visitPolyadicExpressionMetric(expr);
+        }
+
+        @Override
+        public void visitUnaryExpression(PsiUnaryExpression expr) {
+            visitUnaryExpressionMetric(expr);
+        }
     };
 
     public VisitingMetric(PsiElement element) {
@@ -308,6 +328,15 @@ public abstract class VisitingMetric extends BaseMetric {
     protected abstract void visitProvidesStatementMetric(PsiProvidesStatement statement);
 
     protected abstract void visitLocalVariableMetric(PsiLocalVariable variable);
+
+    protected abstract void visitAssignmentExpressionMetric(PsiAssignmentExpression expr);
+
+    protected abstract void visitParenthesizedExpressionMetric(PsiParenthesizedExpression expr);
+
+    protected abstract void visitPolyadicExpressionMetric(PsiPolyadicExpression expr);
+
+    protected abstract void visitUnaryExpressionMetric(PsiUnaryExpression expr);
+
 
     protected void setVisitResult(double result) {
         visitResult = result;
