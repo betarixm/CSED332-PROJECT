@@ -25,11 +25,7 @@ public class BaseMetricPanel extends MetricPanel {
     public BaseMetricPanel(BaseMetric _metric, Metric.Type _type) {
         super(_metric, _type);
         baseMetric = _metric;
-        tableModel = new DefaultTableModel();
-
-        tableModel.addColumn("Class");
-        tableModel.addColumn("Method");
-        tableModel.addColumn("MetricValue");
+        setTableModel();
 
         table = new JBTable(tableModel);
         table.setShowColumns(true);
@@ -75,6 +71,9 @@ public class BaseMetricPanel extends MetricPanel {
         double totalMetric = baseMetric.calculate();
         Map<PsiClass, Map<PsiMethod, Double>> value = (baseMetric).getMetrics();
 
+        setTableModel();
+        table.setModel(tableModel);
+
         for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.entrySet()) {
             String aClass = entry.getKey().getName();
 
@@ -87,5 +86,13 @@ public class BaseMetricPanel extends MetricPanel {
         }
 
         metricValue.setText("Total : " + Double.toString(totalMetric));
+    }
+
+    public void setTableModel() {
+        tableModel = new DefaultTableModel();
+
+        tableModel.addColumn("Class");
+        tableModel.addColumn("Method");
+        tableModel.addColumn("MetricValue");
     }
 }
