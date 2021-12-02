@@ -1,16 +1,16 @@
 package org.csed332.project.team2.metrics.halstead;
 
-public class HalsteadMetric {
+public class HalsteadMetricCalculator {
     private int numberUniqueOperators = 0;
     private int numberUniqueOperands = 0;
     private int numberTotalOperators = 0;
-    private int numberTotaleOperands = 0;
+    private int numberTotalOperands = 0;
 
-    public HalsteadMetric(int n1, int n2, int N1, int N2) {
+    public HalsteadMetricCalculator(int n1, int n2, int N1, int N2) {
         numberUniqueOperators = n1;
         numberUniqueOperands = n2;
         numberTotalOperators = N1;
-        numberTotaleOperands = N2;
+        numberTotalOperands = N2;
     }
 
     public int getVocabulary() {
@@ -18,11 +18,11 @@ public class HalsteadMetric {
     }
 
     public int getSize() {
-        return numberTotalOperators + numberTotaleOperands;
+        return numberTotalOperators + numberTotalOperands;
     }
 
     public double getVolume() {
-        return (numberTotalOperators + numberTotaleOperands) * (Math.log(numberUniqueOperators + numberUniqueOperands) / Math.log(2));
+        return (numberTotalOperators + numberTotalOperands) * (Math.log(numberUniqueOperators + numberUniqueOperands) / Math.log(2));
     }
 
     public double getDifficulty() {
