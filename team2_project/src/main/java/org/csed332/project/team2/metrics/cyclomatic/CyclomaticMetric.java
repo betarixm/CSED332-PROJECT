@@ -5,6 +5,7 @@ import com.intellij.psi.formatter.java.CodeBlockBlock;
 import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
+import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
@@ -297,6 +298,29 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitLocalVariableMetric(PsiLocalVariable variable) {
-        variable.getInitializer().accept(visitor);
+        Objects.requireNonNullElse(variable.getInitializer(), new PsiEmptyExpressionImpl()).accept(visitor);
+    }
+
+    @Override
+    protected void visitAssignmentExpressionMetric(PsiAssignmentExpression expr) {
+        expr.getLExpression().accept(visitor);
+        expr.getRExpression().accept(visitor);
+    }
+
+    @Override
+    protected void visitParenthesizedExpressionMetric(PsiParenthesizedExpression expr) {
+        expr.getExpression().accept(visitor);
+    }
+
+    @Override
+    protected void visitPolyadicExpressionMetric(PsiPolyadicExpression expr) {
+        for (PsiExpression expression : expr.getOperands()) {
+            expression.accept(visitor);
+        }
+    }
+
+    @Override
+    protected void visitUnaryExpressionMetric(PsiUnaryExpression expr) {
+        expr.getOperand().accept(visitor);
     }
 }
