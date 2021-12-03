@@ -12,7 +12,6 @@ import java.util.List;
 import com.intellij.psi.*;
 
 public class ClassCodeLineMetric extends CodeLineMetric {
-    public String className;
 
     PsiClass psiClass;
 
@@ -22,20 +21,19 @@ public class ClassCodeLineMetric extends CodeLineMetric {
 
     @Override
     public double calculate() {
-        return psiClass.getText().split("\n").length;
+        int codeLine = psiClass.getText().split("\n").length;
+        set(codeLine);
+        return codeLine;
     }
 
     @Override
     public double get() {
-        List<MetricModel> metricModelList = MetricModelService.getMetrics(getID(), className, 1);
-
-        return metricModelList.isEmpty() ? super.get() : metricModelList.get(0).getFigure();
+        return super.get();
     }
 
     @Override
     protected void set(int value) {
         super.set(value);
-        MetricModelService.saveMetric(getID(), className, value);
     }
 
     @Override
