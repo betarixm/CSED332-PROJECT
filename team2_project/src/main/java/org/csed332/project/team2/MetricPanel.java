@@ -1,7 +1,5 @@
 package org.csed332.project.team2;
 
-import org.csed332.project.team2.db.model.MetricModel;
-import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.metrics.*;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartPanel;
@@ -11,7 +9,6 @@ import org.jdom.Content;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.List;
 
 
 public class MetricPanel {
@@ -52,16 +49,13 @@ public class MetricPanel {
         chartPanel.validate();*/
     }
 
-    int arbitraryValue = 0;
-
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
         double value = metric.calculate();
         metric.save();
         if (metric.checkDegradation()) {
             setWarningTitle();
-        }
-        else {
+        } else {
             setBasicTitle();
         }
 

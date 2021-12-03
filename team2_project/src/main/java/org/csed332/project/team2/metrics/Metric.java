@@ -11,9 +11,9 @@ public interface Metric {
     String getID();
 
     /*
-    * Compare current metric value with most recent one.
-    * If metric value degraded, return true. Otherwise, return false.
-    */
+     * Compare current metric value with most recent one.
+     * If metric value degraded, return true. Otherwise, return false.
+     */
     boolean checkDegradation();
 
     void save();

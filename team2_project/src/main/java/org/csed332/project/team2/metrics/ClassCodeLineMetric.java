@@ -42,8 +42,7 @@ public class ClassCodeLineMetric extends CodeLineMetric {
 
         if (metricModelList.size() == 2) {
             return (metricModelList.get(0).getFigure() > metricModelList.get(1).getFigure());
-        }
-        else return false;
+        } else return false;
     }
 
     @Override
