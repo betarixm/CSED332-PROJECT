@@ -3,6 +3,7 @@ package org.csed332.project.team2;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
 import com.intellij.testFramework.fixtures.*;
 
 import java.io.File;
@@ -56,5 +57,18 @@ public class FixtureHelper {
         final PsiClass[] classes = psiJavaFile.getClasses();
         final PsiClass psiClass = classes[0];
         return psiClass;
+    }
+
+    public PsiClass getPsiClass(String Name) {
+        PsiFile psiFile = this.getPsiFile();
+        PsiJavaFile psiJavaFile = (PsiJavaFile) psiFile;
+        final PsiClass[] classes = psiJavaFile.getClasses();
+
+        for (PsiClass aClass : classes) {
+            if (aClass.getName().equals(Name)) {
+                return aClass;
+            }
+        }
+        return classes[0];
     }
 }
