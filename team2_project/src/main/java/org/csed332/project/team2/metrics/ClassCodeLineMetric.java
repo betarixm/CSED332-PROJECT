@@ -38,4 +38,18 @@ public class ClassCodeLineMetric extends CodeLineMetric {
         MetricModelService.saveMetric(getID(), className, value);
     }
 
+    @Override
+    public boolean checkDegradation() {
+        List<MetricModel> metricModelList = MetricModelService.getMetrics(getID(), psiClass.getName(), 2);
+
+        if (metricModelList.size() == 2) {
+            return (metricModelList.get(0).getFigure() > metricModelList.get(1).getFigure());
+        }
+        else return false;
+    }
+
+    @Override
+    public void save() {
+        MetricModelService.saveMetric(getID(), psiClass.getName(), get());
+    }
 }

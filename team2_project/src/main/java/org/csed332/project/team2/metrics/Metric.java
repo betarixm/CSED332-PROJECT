@@ -9,4 +9,12 @@ public interface Metric {
     double calculate();
 
     String getID();
+
+    /*
+    * Compare current metric value with most recent one.
+    * If metric value degraded, return true. Otherwise, return false.
+    */
+    boolean checkDegradation();
+
+    void save();
 }

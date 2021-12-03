@@ -56,4 +56,10 @@ public abstract class BaseMetric implements Metric {
     protected void setID(String id) {
         this.id = id;
     }
+
+    public abstract boolean checkDegradation();
+
+    public void save() {
+        //TODO: Implement save
+    }
 }

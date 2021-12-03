@@ -23,6 +23,12 @@ public class CyclomaticMetric extends VisitingMetric {
         setID("cyclomatic");
     }
 
+    @Override
+    public boolean checkDegradation() {
+        //TODO: make this method return true if value of Cyclomatic Metric degraded.
+        return false;
+    }
+
     private PsiElement requireNonNullElse(PsiElement element) {
         return Objects.requireNonNullElse(element, new PsiEmptyStatementImpl());
     }
