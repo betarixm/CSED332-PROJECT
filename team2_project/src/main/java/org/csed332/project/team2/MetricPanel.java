@@ -56,33 +56,17 @@ public class MetricPanel {
 
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
-        double value = arbitraryValue++;//metric.calculate();
-        //save here
-        MetricModelService.saveMetric(metric.getID(), "None", value);
-        compareMetric();
+        double value = metric.calculate();
+        metric.save();
+        if (metric.checkDegradation()) {
+            setWarningTitle();
+        }
+        else {
+            setBasicTitle();
+        }
 
-       // List<MetricModel> values = MetricModelService.getMetrics(metric.getID(), "None", 5);
-
-        /*String s = "";
-        for(MetricModel m:values){
-            s = String.format("%s\n%f", s,m.getFigure());
-        }*/
         metricValue.setText(Double.toString(value));
         //Should we update the panel?
-    }
-
-    public void compareMetric(){
-        List<MetricModel> values = MetricModelService.getMetrics(metric.getID(), "None", 2);
-        if(values.size() >= 2){
-            double actual = values.get(0).getFigure();
-            double old = values.get(1).getFigure();
-
-            //warningConditionFunction
-            if(actual > old){ // TODO add function in metric
-                setWarningTitle();
-                //Observer pattern for warning the window
-            }
-        }
     }
 
     public JPanel getPanel() {
