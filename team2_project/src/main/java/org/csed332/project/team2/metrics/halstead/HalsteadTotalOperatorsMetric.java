@@ -6,10 +6,11 @@ import org.csed332.project.team2.metrics.VisitingMetric;
 
 public class HalsteadTotalOperatorsMetric extends VisitingMetric {
 
-    public HalsteadTotalOperatorsMetric(PsiElement element){
+    public HalsteadTotalOperatorsMetric(PsiElement element) {
         super(element);
         setID("halstead-total-operator");
     }
+
     public HalsteadTotalOperatorsMetric(Project project) {
         super(project);
         setID("halstead-total-operator");
@@ -37,7 +38,7 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
 
     @Override
     protected void visitMethodMetric(PsiMethod method) {
-        method.getText();
+        // TODO: parse with method-> sum of halsteadVisitor.operators' value
     }
 
     @Override
