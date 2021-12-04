@@ -12,6 +12,7 @@ import java.util.Map;
 //  then visit all nodes to count the number of total operators
 public class HalsteadParser {
     private HalsteadVisitor halsteadVisitor;
+    private final String fakeClassName = "A";
 
     public HalsteadParser() {
         this.halsteadVisitor = new HalsteadVisitor();
@@ -19,8 +20,9 @@ public class HalsteadParser {
 
     public void parse(PsiMethod method) {
         ASTParser parser = ASTParser.newParser(AST.JLS13);
-        String fakeClassText = "public class A {" + method.getText() + "}";
-        parser.setSource(fakeClassText.toCharArray());
+        String fakeClassString = "public class " + fakeClassName + " {" + method.getText() + "}";
+
+        parser.setSource(fakeClassString.toCharArray());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
         Map options = JavaCore.getOptions();
@@ -30,6 +32,12 @@ public class HalsteadParser {
         final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
         cu.accept(this.halsteadVisitor);
+
+        this.halsteadVisitor.operands.remove(fakeClassName);
+        this.halsteadVisitor.operands.remove(method.getName());
+
+        int distinctOperators = this.halsteadVisitor.operators.size();
+        int distinctOperands = this.halsteadVisitor.operands.size();
     }
 
 

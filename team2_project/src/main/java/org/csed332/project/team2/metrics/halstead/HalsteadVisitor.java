@@ -81,6 +81,11 @@ public class HalsteadVisitor extends ASTVisitor {
         return true;
     }
 
+    @Override
+    public boolean visit(VariableDeclarationFragment fragment) {
+        addOperator("=");
+        return true;
+    }
 
     public void addOperator(String operator) {
         if (!operators.containsKey(operator))
