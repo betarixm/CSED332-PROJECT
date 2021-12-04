@@ -13,17 +13,39 @@ import org.junit.jupiter.api.Test;
 public class HalsteadParserTest {
     private static final String testPath = "testdata/singleFiles";
     private static FixtureHelper helperMainClass;
+    private static FixtureHelper helperSimpleAddition;
+
+    private static FixtureHelper setUpFixture(String fileName) throws Exception {
+        FixtureHelper fixtureHelper = new FixtureHelper(testPath);
+        fixtureHelper.setUp();
+        fixtureHelper.configure(fileName);
+        return fixtureHelper;
+    }
 
     @BeforeAll
     public static void initialize() throws Exception {
-        String fileName = "MainClass.java";
-        helperMainClass = new FixtureHelper(testPath);
-        helperMainClass.setUp();
-        helperMainClass.configure(fileName);
+        helperSimpleAddition = setUpFixture( "SimpleAddition.java");
+        helperMainClass = setUpFixture("MainClass.java");
     }
 
     @Test
-    public void parseMethodTest() {
+    public void parseMethodSimpleAddition() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperSimpleAddition.getFixture().getProject();
+                            final PsiClass psiClass = helperSimpleAddition.getFirstPsiClass();
+
+                            PsiMethod psiMethod = psiClass.getAllMethods()[0];
+                            HalsteadParser halsteadParser = new HalsteadParser();
+                            halsteadParser.parse(psiMethod);
+
+                            Assertions.assertEquals(0, 0);
+                        });
+    }
+
+    @Test
+    public void parseMethodMainClass() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
