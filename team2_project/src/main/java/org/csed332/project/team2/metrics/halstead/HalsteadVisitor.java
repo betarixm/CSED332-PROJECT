@@ -5,8 +5,26 @@ import org.eclipse.jdt.core.dom.*;
 import java.util.HashMap;
 
 public class HalsteadVisitor extends ASTVisitor {
-    public HashMap<String, Integer> operands = new HashMap<>();
-    public HashMap<String, Integer> operators = new HashMap<>();
+    private HashMap<String, Integer> operands = new HashMap<>();
+    private HashMap<String, Integer> operators = new HashMap<>();
+
+    public int getNumberOfTotalOperators() {
+        return operators.values().stream().reduce(0, (a, b) -> a + b);
+    }
+
+    public int getNumberOfUniqueOperators(){
+        return operators.size();
+    }
+
+    public int getNumberOfTotalOperands() {
+        // TODO: substract -2? because fakeClassName and methodName should not be counted
+        return operands.values().stream().reduce(0, (a, b) -> a + b);
+    }
+
+    public int getNumberOfUniqueOperands(){
+        // TODO: substract -2? because fakeClassName and methodName should not be counted
+        return operands.size();
+    }
 
     public boolean visit(CompilationUnit unit) {
         return true;

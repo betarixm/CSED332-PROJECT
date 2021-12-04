@@ -12,6 +12,7 @@ import java.util.Map;
 //  then visit all nodes to count the number of total operators
 public class HalsteadParser {
     private HalsteadVisitor halsteadVisitor;
+    // TODO: use another "unique" className that's hopefully not used, e.g. methodName + randomId
     private final String fakeClassName = "A";
 
     public HalsteadParser() {
@@ -19,7 +20,7 @@ public class HalsteadParser {
     }
 
     public void parse(PsiMethod method) {
-        ASTParser parser = ASTParser.newParser(AST.JLS13);
+        ASTParser parser = ASTParser.newParser(AST.JLS14);
         String fakeClassString = "public class " + fakeClassName + " {" + method.getText() + "}";
 
         parser.setSource(fakeClassString.toCharArray());
@@ -32,12 +33,6 @@ public class HalsteadParser {
         final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
         cu.accept(this.halsteadVisitor);
-
-        this.halsteadVisitor.operands.remove(fakeClassName);
-        this.halsteadVisitor.operands.remove(method.getName());
-
-        int distinctOperators = this.halsteadVisitor.operators.size();
-        int distinctOperands = this.halsteadVisitor.operands.size();
     }
 
 

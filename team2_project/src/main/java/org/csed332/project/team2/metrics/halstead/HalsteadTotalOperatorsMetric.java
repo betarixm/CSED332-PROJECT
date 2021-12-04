@@ -5,15 +5,19 @@ import com.intellij.psi.*;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
 public class HalsteadTotalOperatorsMetric extends VisitingMetric {
+    public enum Type{ TOTAL_OPERATORS, UNIQUE_OPERATORS, TOTAL_OPERANDS, UNIQUE_OPERANDS }
+    Type type;
 
-    public HalsteadTotalOperatorsMetric(PsiElement element) {
+    public HalsteadTotalOperatorsMetric(PsiElement element, Type type) {
         super(element);
-        setID("halstead-total-operator");
+        setID(type.toString());
+        this.type = type;
     }
 
-    public HalsteadTotalOperatorsMetric(Project project) {
+    public HalsteadTotalOperatorsMetric(Project project, Type type) {
         super(project);
-        setID("halstead-total-operator");
+        setID(type.toString());
+        this.type = type;
     }
 
     @Override
@@ -38,7 +42,25 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
 
     @Override
     protected void visitMethodMetric(PsiMethod method) {
-        // TODO: parse with method-> sum of halsteadVisitor.operators' value
+        HalsteadParser halsteadParser = new HalsteadParser();
+        halsteadParser.parse(method);
+        switch (type){
+            case TOTAL_OPERANDS:
+                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+                break;
+
+            case TOTAL_OPERATORS:
+                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+                break;
+
+            case UNIQUE_OPERANDS:
+                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+                break;
+
+            case UNIQUE_OPERATORS:
+                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
+                break;
+        }
     }
 
     @Override
