@@ -14,38 +14,22 @@ public class HalsteadParserTest {
     private static final String testPath = "testdata/singleFiles";
     private static FixtureHelper helperMainClass;
     private static FixtureHelper helperSimpleAddition;
-
-    private static FixtureHelper setUpFixture(String fileName) throws Exception {
-        FixtureHelper fixtureHelper = new FixtureHelper(testPath);
-        fixtureHelper.setUp();
-        fixtureHelper.configure(fileName);
-        return fixtureHelper;
-    }
+    private static FixtureHelper helperSimpleInt;
 
     @BeforeAll
     public static void initialize() throws Exception {
-        helperSimpleAddition = setUpFixture( "SimpleAddition.java");
-        helperMainClass = setUpFixture("MainClass.java");
+        String fileName = "MainClass.java";
+        helperMainClass = new FixtureHelper(testPath);
+        helperMainClass.setUp();
+    }
+
+    private void setUpFixture(String fileName) throws Exception {
+        helperMainClass.configure(fileName);
     }
 
     @Test
-    public void parseMethodSimpleAddition() {
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final Project project = helperSimpleAddition.getFixture().getProject();
-                            final PsiClass psiClass = helperSimpleAddition.getFirstPsiClass();
-
-                            PsiMethod psiMethod = psiClass.getAllMethods()[0];
-                            HalsteadParser halsteadParser = new HalsteadParser();
-                            halsteadParser.parse(psiMethod);
-
-                            Assertions.assertEquals(0, 0);
-                        });
-    }
-
-    @Test
-    public void parseMethodMainClass() {
+    public void parseMethodOneOperator() throws Exception {
+        setUpFixture("SimpleInt.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -58,5 +42,40 @@ public class HalsteadParserTest {
 
                             Assertions.assertEquals(0, 0);
                         });
+    }
+
+    @Test
+    public void parseMethodSimpleAddition() throws Exception {
+        setUpFixture("SimpleAddition.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+
+                            PsiMethod psiMethod = psiClass.getAllMethods()[0];
+                            HalsteadParser halsteadParser = new HalsteadParser();
+                            halsteadParser.parse(psiMethod);
+
+                            Assertions.assertEquals(0, 0);
+                        });
+    }
+
+    @Test
+    public void parseMethodMainClass() throws Exception {
+        setUpFixture("MainClass.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+
+                            PsiMethod psiMethod = psiClass.getAllMethods()[0];
+                            HalsteadParser halsteadParser = new HalsteadParser();
+                            halsteadParser.parse(psiMethod);
+
+                            Assertions.assertEquals(0, 0);
+                        });
+        helperMainClass.tearDown();
     }
 }
