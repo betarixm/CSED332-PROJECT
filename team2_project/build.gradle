@@ -26,7 +26,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.intellij/annotations
     implementation group: 'com.intellij', name: 'annotations', version: '12.0'
 
-    implementation group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.core', version: '3.20.0'
+    implementation group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.core', version: '3.22.0'
 
 }
 
