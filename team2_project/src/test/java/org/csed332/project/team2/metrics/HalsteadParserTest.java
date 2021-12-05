@@ -40,7 +40,10 @@ public class HalsteadParserTest {
                             HalsteadParser halsteadParser = new HalsteadParser();
                             halsteadParser.parse(psiMethod);
 
-                            Assertions.assertEquals(0, 0);
+                            Assertions.assertEquals(8, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+                            Assertions.assertEquals(8, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+                            Assertions.assertEquals(2, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+                            Assertions.assertEquals(1, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
                         });
     }
 
@@ -57,7 +60,10 @@ public class HalsteadParserTest {
                             HalsteadParser halsteadParser = new HalsteadParser();
                             halsteadParser.parse(psiMethod);
 
-                            Assertions.assertEquals(0, 0);
+                            Assertions.assertEquals(11, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+                            Assertions.assertEquals(8, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+                            Assertions.assertEquals(4, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+                            Assertions.assertEquals(2, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
                         });
     }
 
@@ -74,7 +80,10 @@ public class HalsteadParserTest {
                             HalsteadParser halsteadParser = new HalsteadParser();
                             halsteadParser.parse(psiMethod);
 
-                            Assertions.assertEquals(0, 0);
+                            Assertions.assertEquals(8, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+                            Assertions.assertEquals(8, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+                            Assertions.assertEquals(0, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+                            Assertions.assertEquals(0, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
                         });
         helperMainClass.tearDown();
     }
