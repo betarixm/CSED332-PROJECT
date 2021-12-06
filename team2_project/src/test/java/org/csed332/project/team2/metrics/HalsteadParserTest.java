@@ -6,19 +6,14 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.metrics.halstead.HalsteadParser;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class HalsteadParserTest {
     private static final String testPath = "testdata/singleFiles";
     private static FixtureHelper helperMainClass;
-    private static FixtureHelper helperSimpleAddition;
-    private static FixtureHelper helperSimpleInt;
 
     @BeforeAll
     public static void initialize() throws Exception {
-        String fileName = "MainClass.java";
         helperMainClass = new FixtureHelper(testPath);
         helperMainClass.setUp();
     }
@@ -85,6 +80,5 @@ public class HalsteadParserTest {
                             Assertions.assertEquals(0, halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
                             Assertions.assertEquals(0, halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
                         });
-        helperMainClass.tearDown();
     }
 }
