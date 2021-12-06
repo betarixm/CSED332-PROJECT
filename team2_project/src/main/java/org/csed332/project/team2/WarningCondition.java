@@ -22,12 +22,18 @@ public class WarningCondition {
         this.mode = mode;
     }
     public void setThreshold(double value){
-        threshold = value;
+        this.threshold = value;
     }
     public void setTeta(double value){
-        teta = value;
+        this.teta = value;
     }
     public Boolean shouldWarn(double oldValue, double newValue){
-        return true;
+        switch (mode){
+            case DECREASE: return oldValue - newValue >= teta;
+            case INCREASE: return newValue - oldValue >= teta;
+            case LESS_THAN: return newValue <= threshold;
+            case MORE_THAN: return newValue >= threshold;
+            default: return false;
+        }
     }
 }
