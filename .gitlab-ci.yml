@@ -30,6 +30,10 @@ test:
   stage: test
   script:
     - ./gradlew check
+  artifacts:
+    when: always
+    reports:
+      junit: team2_project/build/test-results/test/**/TEST-*.xml
 
 after_script:
   - echo "[CI] Done"
