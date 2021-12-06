@@ -33,3 +33,4 @@ test:
 
 after_script:
   - echo "[CI] Done"
+  - cat /builds/team2/team2/team2_project/build/reports/tests/test/index.html #debug
