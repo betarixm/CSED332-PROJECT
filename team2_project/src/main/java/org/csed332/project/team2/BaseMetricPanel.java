@@ -8,7 +8,6 @@ import com.intellij.ui.table.JBTable;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
-import org.csed332.project.team2.metrics.halstead.HalsteadTotalOperatorsMetric;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -25,10 +24,15 @@ public class BaseMetricPanel extends MetricPanel {
     DefaultTableModel tableModel;
     private Metric.Type type;
 
+    List<String> valueNames;
+
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type) {
         super(_metrics, _type);
         type = _type;
         baseMetrics = List.of(_metrics);
+        if (_type == Metric.Type.HALSTEAD)
+            valueNames = new ArrayList<>(List.of(new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}));
+        else valueNames = new ArrayList<>(List.of(new String[]{"MetricValue"}));
         setTableModel();
 
         table = new JBTable(tableModel);
@@ -89,7 +93,7 @@ public class BaseMetricPanel extends MetricPanel {
                         Double aValue = subEntry.getValue();
                         String aMethod = subEntry.getKey().getName();
                         List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
-                        List valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
+                        List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
                         valueList.add(aValue);
                         tableRowMap.put(listKey, valueList);
                     }
@@ -100,9 +104,9 @@ public class BaseMetricPanel extends MetricPanel {
             for (List<String> key : tableRowMap.keySet()) {
                 String aClass = key.get(0);
                 String aMethod = key.get(1);
-                List listValues = tableRowMap.get(key);
-                HalsteadMetricCalculator calc = new HalsteadMetricCalculator((int) listValues.get(0),
-                        (int) listValues.get(1), (int) listValues.get(2),(int) listValues.get(3));
+                List<Double> listValues = tableRowMap.get(key);
+                HalsteadMetricCalculator calc = new HalsteadMetricCalculator(listValues.get(0).intValue(),
+                        listValues.get(1).intValue(), listValues.get(2).intValue(), listValues.get(3).intValue());
                 tableModel.addRow(new Object[]{aClass, aMethod, calc.getVocabulary(), calc.getVolume(),
                         calc.getDifficulty(), calc.getEfforts()});
             }
@@ -125,7 +129,6 @@ public class BaseMetricPanel extends MetricPanel {
                 tableModel.addRow(new Object[]{aClass, aMethod, aValue.toString()});
             }
         }
-
         metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
     }
 
@@ -134,8 +137,8 @@ public class BaseMetricPanel extends MetricPanel {
 
         tableModel.addColumn("Class");
         tableModel.addColumn("Method");
-        for (int i = 0; i < baseMetrics.size(); i++) {
-            tableModel.addColumn("MetricValue" + i);
+        for (String valueName : valueNames) {
+            tableModel.addColumn(valueName);
         }
     }
 }
