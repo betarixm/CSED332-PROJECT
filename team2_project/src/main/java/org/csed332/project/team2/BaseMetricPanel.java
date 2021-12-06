@@ -12,8 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;
@@ -33,7 +35,6 @@ public class BaseMetricPanel extends MetricPanel {
 
         getPanel().add(table);
 
-
         int width = resizeColumnWidth();
 
         JBScrollPane scrollPane = new JBScrollPane(table);
@@ -42,8 +43,6 @@ public class BaseMetricPanel extends MetricPanel {
 
         scrollPane.setPreferredSize(new Dimension(width, width));
         getPanel().add(scrollPane);
-
-
     }
 
     public int resizeColumnWidth() {
@@ -65,7 +64,7 @@ public class BaseMetricPanel extends MetricPanel {
 
         return totalWidth;
     }
-    //
+
     @Override
     public void updateMetric() {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
