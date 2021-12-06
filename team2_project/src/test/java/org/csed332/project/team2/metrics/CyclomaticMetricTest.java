@@ -11,6 +11,7 @@ import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,8 @@ public class CyclomaticMetricTest {
 
     @BeforeAll
     public static void initialize() throws Exception {
-
-        helperMainClass = new FixtureHelper(testPath);
+        helperMainClass = FixtureHelper.getInstance();
+        helperMainClass.changeFile(testPath);
         helperMainClass.setUp();
 
     }
