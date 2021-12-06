@@ -19,9 +19,11 @@ public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;
     JBTable table;
     DefaultTableModel tableModel;
+    private Metric.Type type;
 
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type) {
         super(_metrics, _type);
+        type = _type;
         baseMetrics = List.of(_metrics);
         setTableModel();
 
@@ -63,69 +65,68 @@ public class BaseMetricPanel extends MetricPanel {
 
         return totalWidth;
     }
-
+    //
     @Override
     public void updateMetric() {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
         List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
-        for (BaseMetric baseMetric : baseMetrics) {
-            totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
-            values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
-        }
-        setTableModel();
-        table.setModel(tableModel);
-        Map<List<String>, Double> tableRowMap = new HashMap<>();
 
-        for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
+        if (this.type == Metric.Type.HALSTEAD) { // TODO: refactor! => but this might be a bigger refactor with BaseMetric and DataBase
+            for (BaseMetric baseMetric : baseMetrics) {
+                totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
+                values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
+            }
 
-            String anId = value.first;
-            for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
-                String aClass = entry.getKey().getName();
-                for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
+            setTableModel();
+            table.setModel(tableModel);
+            Map<List<String>, List<Double>> tableRowMap = new HashMap<>();
 
-                    Double aValue = subEntry.getValue();
-                    String aMethod = subEntry.getKey().getName();
-
-                    List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod, anId}));
-                    tableRowMap.put(listKey, aValue);
-
-                    tableModel.addRow(new Object[]{aClass, aMethod, aValue.toString()});
+            for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
+                for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
+                    String aClass = entry.getKey().getName();
+                    for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
+                        Double aValue = subEntry.getValue();
+                        String aMethod = subEntry.getKey().getName();
+                        List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
+                        List valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
+                        valueList.add(aValue);
+                        tableRowMap.put(listKey, valueList);
+                    }
                 }
             }
-        }
-        List<List<String>> tableRowList = new ArrayList<>();
-        for (List<String> key : tableRowMap.keySet()) {
 
-            String aClass = key.get(0);
-            String aMethod = key.get(1);
-            String aType = key.get(2);
-
-            String total_operators = "";
-            String unique_operators = "";
-            String total_operands = "";
-            String unique_operands = "";
-
-            switch (aType) {
-                case ("TOTAL_OPERATORS"):
-                    total_operators = tableRowMap.get(key).toString();
-                    break;
-                case ("UNIQUE_OPERATORS"):
-                    unique_operators = tableRowMap.get(key).toString();
-                    break;
-                case ("TOTAL_OPERANDS"):
-                    total_operands = tableRowMap.get(key).toString();
-                    break;
-                case ("UNIQUE_OPERANDS"):
-                    unique_operands = tableRowMap.get(key).toString();
-                    break;
+            List<List<String>> tableRowList = new ArrayList<>();
+            for (List<String> key : tableRowMap.keySet()) {
+                String aClass = key.get(0);
+                String aMethod = key.get(1);
+                List listValues = tableRowMap.get(key);
+                // TODO: compute Halstead Values
+                tableModel.addRow(new Object[]{aClass, aMethod, listValues.get(0).toString(),
+                        listValues.get(1).toString(),
+                        listValues.get(2).toString(),
+                        listValues.get(3).toString()});
             }
-            tableRowList.add(List.of(new String[]{aClass, aMethod, total_operators, unique_operators, total_operands, unique_operands}));
-
+            return;
         }
 
-        for (List<String> list : tableRowList) {
-            tableModel.addRow((Vector<?>) list);
+        double totalMetric = baseMetrics.get(0).calculate();
+        Map<PsiClass, Map<PsiMethod, Double>> value = (baseMetrics.get(0)).getMetrics();
+
+        setTableModel();
+        table.setModel(tableModel);
+
+        for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.entrySet()) {
+            String aClass = entry.getKey().getName();
+
+            for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
+                Double aValue = subEntry.getValue();
+                String aMethod = subEntry.getKey().getName();
+
+                tableModel.addRow(new Object[]{aClass, aMethod, aValue.toString()});
+            }
         }
+
+        metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
     }
 
     public void setTableModel() {

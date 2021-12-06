@@ -37,10 +37,10 @@ public class MetricWindow {
         metricPanels[0] = codeLinePanel;
         metricContainer.add(codeLinePanel.getPanel());
 
-        BaseMetric cycloMetric = new CyclomaticMetric(project);
-        BaseMetricPanel cycloPanel = new BaseMetricPanel(new BaseMetric[]{cycloMetric}, Metric.Type.CYCLOMATIC);
-        metricPanels[1] = cycloPanel;
-        metricContainer.add(cycloPanel.getPanel());
+//        BaseMetric cycloMetric = new CyclomaticMetric(project);
+//        BaseMetricPanel cycloPanel = new BaseMetricPanel(new BaseMetric[]{cycloMetric}, Metric.Type.CYCLOMATIC);
+//        metricPanels[1] = cycloPanel;
+//        metricContainer.add(cycloPanel.getPanel());
 
         //TOTAL_OPERATORS, UNIQUE_OPERATORS, TOTAL_OPERANDS, UNIQUE_OPERANDS
         BaseMetric[] halsteadMetrics = {
@@ -50,7 +50,7 @@ public class MetricWindow {
                 new HalsteadTotalOperatorsMetric(project, HalsteadTotalOperatorsMetric.Type.UNIQUE_OPERANDS)
         };
         BaseMetricPanel halsteadPanel = new BaseMetricPanel(halsteadMetrics, Metric.Type.HALSTEAD);
-        metricPanels[2] = halsteadPanel;
+        metricPanels[1] = halsteadPanel;
         metricContainer.add(halsteadPanel.getPanel());
 
 
