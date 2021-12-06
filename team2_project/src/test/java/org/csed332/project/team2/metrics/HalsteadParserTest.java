@@ -9,7 +9,7 @@ import org.csed332.project.team2.metrics.halstead.HalsteadParser;
 import org.junit.jupiter.api.*;
 
 public class HalsteadParserTest {
-    private static final String testPath = "testdata/singleFiles";
+    private static final String testPath = "TestProjects/SingleFiles";
     private static FixtureHelper helperMainClass;
 
     @BeforeAll

@@ -232,4 +232,24 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
     protected void visitLocalVariableMetric(PsiLocalVariable variable) {
 
     }
+
+    @Override
+    protected void visitAssignmentExpressionMetric(PsiAssignmentExpression expr) {
+
+    }
+
+    @Override
+    protected void visitParenthesizedExpressionMetric(PsiParenthesizedExpression expr) {
+
+    }
+
+    @Override
+    protected void visitPolyadicExpressionMetric(PsiPolyadicExpression expr) {
+
+    }
+
+    @Override
+    protected void visitUnaryExpressionMetric(PsiUnaryExpression expr) {
+
+    }
 }
