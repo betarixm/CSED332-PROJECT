@@ -12,17 +12,31 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FixtureHelper {
-    private final String testPath;
+    private  String testPath;
     private CodeInsightTestFixture fixture;
+    private static FixtureHelper Instance=null;
 
-    public FixtureHelper(String testPath) {
+    private FixtureHelper() {}
+
+    public static FixtureHelper getInstance() {
+        if(Instance != null) {
+            return Instance;
+        } else {
+            return new FixtureHelper();
+        }
+    }
+
+    public void changeFile(String testPath) {
         this.testPath = new File("src/test/resources/" + testPath).getAbsolutePath();
     }
 
-    public void setUp() throws Exception {
+    public void setUp() {
         final TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder("test2");
         fixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectBuilder.getFixture());
-        fixture.setUp();
+        try {
+            fixture.setUp();
+        } catch (Exception e) {
+        }
         fixture.setTestDataPath(testPath);
     }
 
