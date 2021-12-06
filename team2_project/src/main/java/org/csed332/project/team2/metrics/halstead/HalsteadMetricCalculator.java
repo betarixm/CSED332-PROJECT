@@ -6,11 +6,11 @@ public class HalsteadMetricCalculator {
     private int numberTotalOperators = 0;
     private int numberTotalOperands = 0;
 
-    public HalsteadMetricCalculator(int n1, int n2, int N1, int N2) {
-        numberUniqueOperators = n1;
-        numberUniqueOperands = n2;
+    public HalsteadMetricCalculator(int N1, int n1, int N2, int n2) {
         numberTotalOperators = N1;
+        numberUniqueOperators = n1;
         numberTotalOperands = N2;
+        numberUniqueOperands = n2;
     }
 
     public int getVocabulary() {
@@ -22,7 +22,7 @@ public class HalsteadMetricCalculator {
     }
 
     public double getVolume() {
-        return (numberTotalOperators + numberTotalOperands) * (Math.log(numberUniqueOperators + numberUniqueOperands) / Math.log(2));
+        return getSize() * (Math.log(getVocabulary()) / Math.log(2));
     }
 
     public double getDifficulty() {

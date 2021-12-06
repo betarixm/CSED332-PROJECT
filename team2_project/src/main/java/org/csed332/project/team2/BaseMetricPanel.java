@@ -7,6 +7,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
+import org.csed332.project.team2.metrics.halstead.HalsteadTotalOperatorsMetric;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -99,11 +101,10 @@ public class BaseMetricPanel extends MetricPanel {
                 String aClass = key.get(0);
                 String aMethod = key.get(1);
                 List listValues = tableRowMap.get(key);
-                // TODO: compute Halstead Values
-                tableModel.addRow(new Object[]{aClass, aMethod, listValues.get(0).toString(),
-                        listValues.get(1).toString(),
-                        listValues.get(2).toString(),
-                        listValues.get(3).toString()});
+                HalsteadMetricCalculator calc = new HalsteadMetricCalculator((int) listValues.get(0),
+                        (int) listValues.get(1), (int) listValues.get(2),(int) listValues.get(3));
+                tableModel.addRow(new Object[]{aClass, aMethod, calc.getVocabulary(), calc.getVolume(),
+                        calc.getDifficulty(), calc.getEfforts()});
             }
             return;
         }
