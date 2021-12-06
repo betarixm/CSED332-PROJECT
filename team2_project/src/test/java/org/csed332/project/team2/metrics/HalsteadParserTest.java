@@ -18,6 +18,11 @@ public class HalsteadParserTest {
         helperMainClass.setUp();
     }
 
+    @AfterAll
+    public static void tear() throws Exception {
+        helperMainClass.tearDown();
+    }
+
     private void setUpFixture(String fileName) throws Exception {
         helperMainClass.configure(fileName);
     }
