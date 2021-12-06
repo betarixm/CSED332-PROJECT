@@ -1,7 +1,5 @@
 package org.csed332.project.team2;
 
-import java.util.Optional;
-
 public class WarningCondition {
 
     public enum Mode {INCREASE,DECREASE,MORE_THAN, LESS_THAN}
@@ -29,7 +27,7 @@ public class WarningCondition {
     public void setTeta(double value){
         teta = value;
     }
-    public Boolean shouldWarn(double value){
+    public Boolean shouldWarn(double oldValue, double newValue){
         return true;
     }
 }
