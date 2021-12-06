@@ -43,11 +43,11 @@ public class WarningConditionTest {
     /// increase and decrease with teta
     @Test
     public void tetaPositiveTest() {
-        Assertions.assertTrue(w_teta.shouldWarn(0, teta));
         Assertions.assertTrue(w_teta.shouldWarn(0, teta+1));
     }
     @Test
     public void tetaNegativeTest() {
+        Assertions.assertFalse(w_teta.shouldWarn(0, teta));
         Assertions.assertFalse(w_teta.shouldWarn(0, 0));
         Assertions.assertFalse(w_teta.shouldWarn(0, teta-1));
         Assertions.assertFalse(w_teta.shouldWarn(0, -teta));

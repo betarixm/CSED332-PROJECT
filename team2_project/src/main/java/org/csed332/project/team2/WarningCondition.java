@@ -29,8 +29,8 @@ public class WarningCondition {
     }
     public Boolean shouldWarn(double oldValue, double newValue){
         switch (mode){
-            case DECREASE: return oldValue - newValue >= teta;
-            case INCREASE: return newValue - oldValue >= teta;
+            case DECREASE: return oldValue - newValue > teta;
+            case INCREASE: return newValue - oldValue > teta;
             case LESS_THAN: return newValue <= threshold;
             case MORE_THAN: return newValue >= threshold;
             default: return false;
