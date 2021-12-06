@@ -1,4 +1,4 @@
-image: openjdk:11-jdk-slim
+image: amazoncorretto:11
 
 stages:
   - build
