@@ -1,0 +1,52 @@
+image: amazoncorretto:11
+
+stages:
+  - build
+  - test
+  - visualize
+
+before_script:
+  - cd team2_project
+  - echo `pwd`
+  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE"
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - team2_project/.gradle/wrapper
+    - team2_project/.gradle/caches
+
+build:
+  stage: build
+  script:
+    - ./gradlew assemble
+  artifacts:
+    paths:
+      - team2_project/build/libs/*.jar
+    expire_in: 1 week
+  only:
+    - master
+
+test:
+  stage: test
+  script:
+    - ./gradlew check jacocoTestReport
+  artifacts:
+    when: always
+    paths:
+      - team2_project/build/reports/jacoco/test/jacocoTestReport.xml
+    reports:
+      junit: team2_project/build/test-results/test/**/TEST-*.xml
+
+coverage:
+  stage: visualize
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+  script:
+    - python /opt/cover2cover.py build/reports/jacoco/test/jacocoTestReport.xml $CI_PROJECT_DIR/team2_project/src/main/java/ > build/cobertura.xml
+  needs: ["test"]
+  artifacts:
+    reports:
+      cobertura: team2_project/build/cobertura.xml
+
+after_script:
+  - echo "[CI] Done"
