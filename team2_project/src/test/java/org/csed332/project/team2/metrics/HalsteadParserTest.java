@@ -14,12 +14,13 @@ public class HalsteadParserTest {
 
     @BeforeAll
     public static void initialize() throws Exception {
-        helperMainClass = new FixtureHelper(testPath);
+        helperMainClass = FixtureHelper.getInstance();
+        helperMainClass.changeFile(testPath);
         helperMainClass.setUp();
     }
 
     @AfterAll
-    public static void tear() throws Exception {
+    public static void dispose() throws Exception {
         helperMainClass.tearDown();
     }
 
