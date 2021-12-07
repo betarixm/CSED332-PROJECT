@@ -6,9 +6,7 @@ import com.intellij.psi.PsiClass;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -19,10 +17,12 @@ public class CodeLineMetricTest {
     @BeforeAll
     public static void initialize() throws Exception {
         String fileName = "MainClass.java";
-        helperMainClass = new FixtureHelper(testPath);
+        helperMainClass = FixtureHelper.getInstance();
+        helperMainClass.changeFile(testPath);
         helperMainClass.setUp();
         helperMainClass.configure(fileName);
     }
+
 
     @Test
     public void testProjectCodeLineMetricCalculateNoPackages() {
@@ -46,26 +46,8 @@ public class CodeLineMetricTest {
                         });
     }
 
-    @Test
-    public void testDBConnection() {
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
-
-                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
-                            for (MetricModel metricModel : metricModelList) {
-                                MetricModelService.remove(metricModel);
-                            }
-
-                            Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
-
-                            // get before calculate
-                            Assertions.assertEquals(0.0, classCodeLineMetric.get());
-                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
-                            classCodeLineMetric.set((int) classCodeLineMetric.calculate());
-                            Assertions.assertEquals(1.0, classCodeLineMetric.get());
-                        });
+    @AfterAll
+    public static void dispose() throws Exception {
+        helperMainClass.tearDown();
     }
 }
