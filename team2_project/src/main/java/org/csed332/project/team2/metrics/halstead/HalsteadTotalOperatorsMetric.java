@@ -21,6 +21,12 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
     }
 
     @Override
+    public boolean checkDegradation() {
+        //TODO: make this method return true if value of Halstead Metric degraded.
+        return false;
+    }
+
+    @Override
     protected void visitPackageMetric(PsiPackage pack) {
         for (PsiPackage subPack : pack.getSubPackages()) {
             subPack.accept(visitor);
