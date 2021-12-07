@@ -12,8 +12,8 @@ before_script:
 
 cache:
   paths:
-    - .gradle/wrapper
-    - .gradle/caches
+    - team2_project/.gradle/wrapper
+    - team2_project/.gradle/caches
 
 build:
   stage: build
@@ -21,7 +21,7 @@ build:
     - ./gradlew assemble
   artifacts:
     paths:
-      - build/libs/*.jar
+      - team2_project/build/libs/*.jar
     expire_in: 1 week
   only:
     - master
