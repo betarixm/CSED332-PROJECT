@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseMetric implements Metric {
-    static enum Type {LINES_OF_CODE, CYCLOMATIC}
+    static enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
 
     private double metric;
     private String id;
