@@ -99,7 +99,6 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitBreakStatementMetric(PsiBreakStatement statement) {
-        requireNonNullElse(statement.findExitedStatement()).accept(visitor);
     }
 
     @Override
@@ -109,7 +108,6 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitContinueStatementMetric(PsiContinueStatement statement) {
-        requireNonNullElse(statement.findContinuedStatement()).accept(visitor);
     }
 
     @Override
