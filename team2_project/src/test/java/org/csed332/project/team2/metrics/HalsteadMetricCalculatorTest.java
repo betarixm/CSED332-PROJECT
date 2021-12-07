@@ -1,12 +1,11 @@
 package org.csed332.project.team2.metrics;
 
 import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class HalsteadMetricCalculatorTest {
-
-    HalsteadMetricCalculator halsteadMetricCalculator = new HalsteadMetricCalculator(3, 5, 10, 20);
+    HalsteadMetricCalculator halsteadMetricCalculator = new HalsteadMetricCalculator(10, 3, 20, 5);
 
     @Test
     public void calculateVocabulary() {
