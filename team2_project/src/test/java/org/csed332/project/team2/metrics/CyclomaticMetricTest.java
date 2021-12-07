@@ -221,6 +221,11 @@ public class CyclomaticMetricTest {
                         });
     }
 
+    @AfterAll
+    public static void dispose() throws Exception {
+        helperMainClass.tearDown();
+    }
+
 
     public Map<String, PsiMethod> getMethods(PsiClass aClass) {
         Map<String, PsiMethod> result = new HashMap<>();

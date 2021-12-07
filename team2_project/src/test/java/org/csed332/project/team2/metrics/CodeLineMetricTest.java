@@ -69,9 +69,8 @@ public class CodeLineMetricTest {
                         });
     }
 
-/*    @AfterAll
+    @AfterAll
     public static void dispose() throws Exception {
         helperMainClass.tearDown();
-    }*/
-
+    }
 }
