@@ -46,29 +46,6 @@ public class CodeLineMetricTest {
                         });
     }
 
-    @Test
-    public void testDBConnection() {
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
-
-                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
-                            for (MetricModel metricModel : metricModelList) {
-                                MetricModelService.remove(metricModel);
-                            }
-
-                            Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
-
-                            // get before calculate
-                            Assertions.assertEquals(0.0, classCodeLineMetric.get());
-                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
-                            classCodeLineMetric.set((int) classCodeLineMetric.calculate());
-                           Assertions.assertEquals(1.0, classCodeLineMetric.get());
-                        });
-    }
-
     @AfterAll
     public static void dispose() throws Exception {
         helperMainClass.tearDown();
