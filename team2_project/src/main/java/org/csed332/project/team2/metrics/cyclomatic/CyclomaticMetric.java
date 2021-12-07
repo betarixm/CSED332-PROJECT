@@ -301,13 +301,13 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitAssignmentExpressionMetric(PsiAssignmentExpression expr) {
-        expr.getLExpression().accept(visitor);
-        expr.getRExpression().accept(visitor);
+        Objects.requireNonNullElse(expr.getLExpression(), new PsiEmptyExpressionImpl()).accept(visitor);
+        Objects.requireNonNullElse(expr.getRExpression(), new PsiEmptyExpressionImpl()).accept(visitor);
     }
 
     @Override
     protected void visitParenthesizedExpressionMetric(PsiParenthesizedExpression expr) {
-        expr.getExpression().accept(visitor);
+        Objects.requireNonNullElse(expr.getExpression(), new PsiEmptyExpressionImpl()).accept(visitor);
     }
 
     @Override
@@ -319,6 +319,6 @@ public class CyclomaticMetric extends VisitingMetric {
 
     @Override
     protected void visitUnaryExpressionMetric(PsiUnaryExpression expr) {
-        expr.getOperand().accept(visitor);
+        Objects.requireNonNullElse(expr.getOperand(), new PsiEmptyExpressionImpl()).accept(visitor);
     }
 }
