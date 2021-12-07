@@ -1,29 +1,29 @@
 package org.csed332.project.team2;
 
-import org.csed332.project.team2.metrics.*;
+import org.csed332.project.team2.metrics.Metric;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ChartPanel;
-
-import org.jdom.Content;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MetricPanel {
-    private Metric metric;
+    // TODO: expand metric to metrics, metricValue to metricValues
+    private List<Metric> metrics;
     private JPanel panel;
 
     private TitledBorder basicTitle;
     private TitledBorder warnTitle;
-    protected Label metricValue;
+    protected List<Label> metricValues;
     private JFreeChart metricChart;
 
     private Metric.Type type;
 
-    MetricPanel(Metric _metric, Metric.Type _type) {
-        this.metric = _metric;
+    MetricPanel(Metric[] _metrics, Metric.Type _type) {
+        this.metrics = List.of(_metrics);
         this.type = _type;
 
         basicTitle = BorderFactory.createTitledBorder(this.type.toString());
@@ -35,9 +35,10 @@ public class MetricPanel {
         setBasicTitle();
 
         /* Displays the metric value */
-        metricValue = new Label();
+        metricValues = new ArrayList<>();
+        metricValues.add(new Label());
         //metricValue.setText("");
-        panel.add(metricValue);
+        panel.add(metricValues.get(0));
         panel.setToolTipText(MetricDescription.get(this.type));
 
         /* Displays the metric chart */
@@ -52,8 +53,10 @@ public class MetricPanel {
 
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
-        double value = metric.calculate();
-        metricValue.setText(Double.toString(value));
+        for (int i = 0; i < metrics.size(); i++) {
+            double value = metrics.get(i).calculate();
+            metricValues.get(i).setText(Double.toString(value));
+        }
         //Should we update the panel?
     }
 
@@ -68,4 +71,5 @@ public class MetricPanel {
     public void setBasicTitle() {
         panel.setBorder(basicTitle);
     }
+
 }
