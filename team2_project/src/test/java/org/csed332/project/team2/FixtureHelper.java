@@ -19,11 +19,10 @@ public class FixtureHelper {
     private FixtureHelper() {}
 
     public static FixtureHelper getInstance() {
-        if(Instance != null) {
-            return Instance;
-        } else {
-            return new FixtureHelper();
+        if (Instance == null) {
+            Instance = new FixtureHelper();
         }
+        return Instance;
     }
 
     public void changeFile(String testPath) {
