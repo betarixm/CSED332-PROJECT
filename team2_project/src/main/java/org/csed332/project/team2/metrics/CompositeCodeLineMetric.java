@@ -26,4 +26,15 @@ public abstract class CompositeCodeLineMetric extends CodeLineMetric {
         return Collections.unmodifiableList(codeLineMetrics);
     }
 
+    @Override
+    public boolean checkDegradation() {
+        return codeLineMetrics.stream().anyMatch(Metric::checkDegradation);
+    }
+
+    @Override
+    public void save() {
+        for (CodeLineMetric c : codeLineMetrics) {
+            c.save();
+        }
+    }
 }
