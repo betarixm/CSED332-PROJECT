@@ -28,10 +28,15 @@ public class CyclomaticMetricTest {
 
     @BeforeAll
     public static void initialize() throws Exception {
+        String fileName = "MainClass.java";
         helperMainClass = FixtureHelper.getInstance();
         helperMainClass.changeFile(testPath);
         helperMainClass.setUp();
+    }
 
+    @AfterAll
+    public static void dispose() throws Exception {
+        helperMainClass.tearDown();
     }
 
     @Test
@@ -220,12 +225,6 @@ public class CyclomaticMetricTest {
                             Assertions.assertEquals(4.0, metrics.get(methods.get("nestedWhile")));
                         });
     }
-
-    @AfterAll
-    public static void dispose() throws Exception {
-        helperMainClass.tearDown();
-    }
-
 
     public Map<String, PsiMethod> getMethods(PsiClass aClass) {
         Map<String, PsiMethod> result = new HashMap<>();

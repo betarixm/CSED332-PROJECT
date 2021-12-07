@@ -1,30 +1,38 @@
 package org.csed332.project.team2;
 
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.table.JBTable;
-import kotlin.random.Random;
-import org.csed332.project.team2.MetricPanel;
-import org.csed332.project.team2.metrics.*;
-
-import javax.swing.*;
-import javax.swing.table.*;
-
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.components.JBTreeTable;
-import org.objectweb.asm.tree.analysis.BasicValue;
+import com.intellij.ui.table.JBTable;
+import org.csed332.project.team2.metrics.BaseMetric;
+import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BaseMetricPanel extends MetricPanel {
-    BaseMetric baseMetric;
+    List<BaseMetric> baseMetrics;
     JBTable table;
     DefaultTableModel tableModel;
+    private Metric.Type type;
 
-    public BaseMetricPanel(BaseMetric _metric, Metric.Type _type) {
-        super(_metric, _type);
-        baseMetric = _metric;
+    List<String> valueNames;
+
+    public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type) {
+        super(_metrics, _type);
+        type = _type;
+        baseMetrics = List.of(_metrics);
+        if (_type == Metric.Type.HALSTEAD)
+            valueNames = new ArrayList<>(List.of(new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}));
+        else valueNames = new ArrayList<>(List.of(new String[]{"MetricValue"}));
         setTableModel();
 
         table = new JBTable(tableModel);
@@ -32,7 +40,6 @@ public class BaseMetricPanel extends MetricPanel {
         table.setRowHeight(10);
 
         getPanel().add(table);
-
 
         int width = resizeColumnWidth();
 
@@ -42,8 +49,6 @@ public class BaseMetricPanel extends MetricPanel {
 
         scrollPane.setPreferredSize(new Dimension(width, width));
         getPanel().add(scrollPane);
-
-
     }
 
     public int resizeColumnWidth() {
@@ -68,8 +73,48 @@ public class BaseMetricPanel extends MetricPanel {
 
     @Override
     public void updateMetric() {
-        double totalMetric = baseMetric.calculate();
-        Map<PsiClass, Map<PsiMethod, Double>> value = (baseMetric).getMetrics();
+        List<Pair<String, Double>> totalMetrics = new ArrayList<>();
+        List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
+
+        if (this.type == Metric.Type.HALSTEAD) { // TODO: refactor! => but this might be a bigger refactor with BaseMetric and DataBase
+            for (BaseMetric baseMetric : baseMetrics) {
+                totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
+                values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
+            }
+
+            setTableModel();
+            table.setModel(tableModel);
+            Map<List<String>, List<Double>> tableRowMap = new HashMap<>();
+
+            for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
+                for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
+                    String aClass = entry.getKey().getName();
+                    for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
+                        Double aValue = subEntry.getValue();
+                        String aMethod = subEntry.getKey().getName();
+                        List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
+                        List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
+                        valueList.add(aValue);
+                        tableRowMap.put(listKey, valueList);
+                    }
+                }
+            }
+
+            List<List<String>> tableRowList = new ArrayList<>();
+            for (List<String> key : tableRowMap.keySet()) {
+                String aClass = key.get(0);
+                String aMethod = key.get(1);
+                List<Double> listValues = tableRowMap.get(key);
+                HalsteadMetricCalculator calc = new HalsteadMetricCalculator(listValues.get(0).intValue(),
+                        listValues.get(1).intValue(), listValues.get(2).intValue(), listValues.get(3).intValue());
+                tableModel.addRow(new Object[]{aClass, aMethod, calc.getVocabulary(), calc.getVolume(),
+                        calc.getDifficulty(), calc.getEfforts()});
+            }
+            return;
+        }
+
+        double totalMetric = baseMetrics.get(0).calculate();
+        Map<PsiClass, Map<PsiMethod, Double>> value = (baseMetrics.get(0)).getMetrics();
 
         setTableModel();
         table.setModel(tableModel);
@@ -84,8 +129,7 @@ public class BaseMetricPanel extends MetricPanel {
                 tableModel.addRow(new Object[]{aClass, aMethod, aValue.toString()});
             }
         }
-
-        metricValue.setText("Total : " + Double.toString(totalMetric));
+        metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
     }
 
     public void setTableModel() {
@@ -93,6 +137,8 @@ public class BaseMetricPanel extends MetricPanel {
 
         tableModel.addColumn("Class");
         tableModel.addColumn("Method");
-        tableModel.addColumn("MetricValue");
+        for (String valueName : valueNames) {
+            tableModel.addColumn(valueName);
+        }
     }
 }

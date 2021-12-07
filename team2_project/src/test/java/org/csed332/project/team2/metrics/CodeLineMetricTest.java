@@ -23,6 +23,10 @@ public class CodeLineMetricTest {
         helperMainClass.configure(fileName);
     }
 
+    @AfterAll
+    public static void dispose() throws Exception {
+        helperMainClass.tearDown();
+    }
 
     @Test
     public void testProjectCodeLineMetricCalculateNoPackages() {
@@ -44,10 +48,5 @@ public class CodeLineMetricTest {
                             CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
                             Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
                         });
-    }
-
-    @AfterAll
-    public static void dispose() throws Exception {
-        helperMainClass.tearDown();
     }
 }

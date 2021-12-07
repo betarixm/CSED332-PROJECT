@@ -41,6 +41,7 @@ public class FixtureHelper {
 
     public void tearDown() throws Exception {
         fixture.tearDown();
+        fixture = null;
     }
 
     public PsiFile configure(String clsName) throws IOException {
