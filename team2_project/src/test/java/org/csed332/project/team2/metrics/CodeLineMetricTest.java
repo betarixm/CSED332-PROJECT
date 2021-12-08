@@ -49,4 +49,42 @@ public class CodeLineMetricTest {
                             Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
                         });
     }
+
+    @Test
+    public void testDBConnection2() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
+                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
+                            classCodeLineMetric.get();
+                        });
+    }
+
+    @Test
+    public void testDBConnection() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
+
+                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
+                            for (MetricModel metricModel : metricModelList) {
+                                MetricModelService.remove(metricModel);
+                            }
+
+                            Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
+
+                            // get before calculate
+                            Assertions.assertEquals(0.0, classCodeLineMetric.get());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
+                            classCodeLineMetric.set((int) classCodeLineMetric.calculate());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.get());
+                        });
+    }
+
+
+
 }
