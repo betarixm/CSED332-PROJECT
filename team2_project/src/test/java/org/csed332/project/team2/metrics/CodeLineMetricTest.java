@@ -51,18 +51,6 @@ public class CodeLineMetricTest {
     }
 
     @Test
-    public void testDBConnection2() {
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
-                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
-                            classCodeLineMetric.get();
-                        });
-    }
-
-    @Test
     public void testDBConnection() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
