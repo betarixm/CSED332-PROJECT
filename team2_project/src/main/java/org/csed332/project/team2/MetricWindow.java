@@ -73,29 +73,12 @@ public class MetricWindow {
     }
 
     public void setMetrics() {
-        //TODO:calc metrics here? or get some data by argument?
         for (Metric.Type metric : Metric.Type.values()) {
             int idx = metric.ordinal();
 
             MetricPanel panel = metricPanels[idx];
             panel.updateMetric();
         }
-
-        // example of code coverage
-        /*JFreeChart coverageChart = BarChart.getChart(80);
-        JPanel coveragePanel = metricPanel[Metric.Type.COVERAGE.ordinal()];
-        ChartPanel chartPanel = new ChartPanel(coverageChart);
-        chartPanel.setSize(200, 200);
-        coveragePanel.add(chartPanel, BorderLayout.CENTER);
-        chartPanel.validate();
-
-        //Example of Index code coverage
-        JFreeChart coverageChart2 = BarChart.getChart(80);
-        JPanel coveragePanel2 = metricPanel[MetricType.INDEX.ordinal()];
-        ChartPanel chartPanel2 = new ChartPanel(coverageChart2);
-        chartPanel2.setSize(200, 200);
-        coveragePanel2.add(chartPanel2, BorderLayout.CENTER);
-        chartPanel2.validate();*/
     }
 
     public void showWarnMetric(Metric.Type[] warnMetrics) {

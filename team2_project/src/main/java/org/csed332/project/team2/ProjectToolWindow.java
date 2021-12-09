@@ -59,7 +59,6 @@ public class ProjectToolWindow {
 
         ActionListener listener = e -> {
             {
-                // calc Metrics TODO: this actually needs to update metrics, not add charts all the time
                 window.setMetrics();
             }
         };
