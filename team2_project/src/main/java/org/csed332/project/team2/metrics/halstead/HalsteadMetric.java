@@ -4,17 +4,20 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
-public class HalsteadTotalOperatorsMetric extends VisitingMetric {
-    public enum Type{ TOTAL_OPERATORS, UNIQUE_OPERATORS, TOTAL_OPERANDS, UNIQUE_OPERANDS }
+import java.util.ArrayList;
+import java.util.List;
+
+public class HalsteadMetric extends VisitingMetric {
+    public enum Type{ VOCABULARY, VOLUME, DIFFICULTY, EFFORT }
     Type type;
 
-    public HalsteadTotalOperatorsMetric(PsiElement element, Type type) {
+    public HalsteadMetric(PsiElement element, Type type) {
         super(element);
         setID(type.toString());
         this.type = type;
     }
 
-    public HalsteadTotalOperatorsMetric(Project project, Type type) {
+    public HalsteadMetric(Project project, Type type) {
         super(project);
         setID(type.toString());
         this.type = type;
@@ -50,21 +53,28 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
     protected void visitMethodMetric(PsiMethod method) {
         HalsteadParser halsteadParser = new HalsteadParser();
         halsteadParser.parse(method);
+        HalsteadMetricCalculator calc = new HalsteadMetricCalculator(
+                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
+                halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators(),
+                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
+                halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands()
+        );
+
         switch (type){
-            case TOTAL_OPERANDS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+            case VOCABULARY:
+                setVisitResult(getVisitResult() + calc.getVocabulary());
                 break;
 
-            case TOTAL_OPERATORS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+            case VOLUME:
+                setVisitResult(getVisitResult() + calc.getVolume());
                 break;
 
-            case UNIQUE_OPERANDS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+            case DIFFICULTY:
+                setVisitResult(getVisitResult() + calc.getDifficulty());
                 break;
 
-            case UNIQUE_OPERATORS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
+            case EFFORT:
+                setVisitResult(getVisitResult() + calc.getEfforts());
                 break;
         }
     }
