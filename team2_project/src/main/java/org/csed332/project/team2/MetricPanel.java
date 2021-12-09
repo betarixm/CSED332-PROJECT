@@ -1,5 +1,6 @@
 package org.csed332.project.team2;
 
+import com.intellij.util.SlowOperations;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.utils.MetricDescription;
 import org.jfree.chart.JFreeChart;
@@ -44,17 +45,17 @@ public class MetricPanel {
 
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
-        for (int i = 0; i < metrics.size(); i++) {
-            double value = metrics.get(i).calculate();
-            metrics.get(i).save();
-            if (metrics.get(i).checkDegradation()) {
-                setWarningTitle();
-            } else {
-                setBasicTitle();
+            for (int i = 0; i < metrics.size(); i++) {
+                double value = metrics.get(i).calculate();
+                metrics.get(i).save();
+                if (metrics.get(i).checkDegradation()) {
+                    setWarningTitle();
+                } else {
+                    setBasicTitle();
+                }
+                metricValues.get(i).setText(Double.toString(value));
             }
-            metricValues.get(i).setText(Double.toString(value));
-        }
-        //Should we update the panel?
+            //Should we update the panel?
     }
 
     public JPanel getPanel() {
