@@ -1,18 +1,19 @@
 package org.csed332.project.team2;
 
-import com.google.common.util.concurrent.CycleDetectingLockFactory;
-import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.ui.components.panels.VerticalBox;
+import com.intellij.util.SlowOperations;
 import org.csed332.project.team2.metrics.Metric;
 import org.jetbrains.annotations.NotNull;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +60,17 @@ public class ProjectToolWindow {
 
         ActionListener listener = e -> {
             {
-                window.setMetrics();
+                ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
+                    public void run(@NotNull ProgressIndicator progressIndicator) {
+                        ApplicationManager.getApplication().invokeLater(() -> {
+                            ApplicationManager.getApplication().runReadAction(() -> {
+                                SlowOperations.allowSlowOperations(() -> {
+                                    window.setMetrics();
+                                });
+                            });
+                        });
+                    }
+                });
             }
         };
 
