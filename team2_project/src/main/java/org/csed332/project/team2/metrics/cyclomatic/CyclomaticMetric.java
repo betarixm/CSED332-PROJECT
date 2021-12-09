@@ -1,19 +1,19 @@
 package org.csed332.project.team2.metrics.cyclomatic;
 
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.java.CodeBlockBlock;
-import com.intellij.psi.impl.source.PsiMethodImpl;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.intellij.openapi.project.Project;
 
 public class CyclomaticMetric extends VisitingMetric {
+    protected String type;
+
     public CyclomaticMetric(PsiElement element) {
         super(element);
         setID("cyclomatic");
@@ -22,6 +22,31 @@ public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(Project project) {
         super(project);
         setID("cyclomatic");
+    }
+
+    @Override
+    public double get() {
+        return 0;
+    }
+
+    @Override
+    public Double get(PsiClass psiClass, PsiMethod psiMethod) {
+        return null;
+    }
+
+    @Override
+    public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
+        return metrics.entrySet().stream().collect(
+                Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().entrySet().stream().collect(
+                                Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        f -> f.getValue().get(type).get()
+                                )
+                        )
+                )
+        );
     }
 
     @Override
@@ -50,7 +75,7 @@ public class CyclomaticMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
-            setMetric(getVisitResult() - value, aClass, method);
+            setMetric(getVisitResult() - value, aClass, method, type);
         }
     }
 

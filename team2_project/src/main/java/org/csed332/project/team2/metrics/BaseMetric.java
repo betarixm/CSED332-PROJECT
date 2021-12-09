@@ -3,17 +3,15 @@ package org.csed332.project.team2.metrics;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseMetric implements Metric {
     static enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
 
-    private double metric;
     private String id;
 
-    private final Map<PsiClass, Map<PsiMethod, Double>> metrics;
+    protected final Map<PsiClass, Map<PsiMethod, MetricValue>> metrics;
 
     public BaseMetric() {
         metrics = new HashMap<>();
@@ -21,32 +19,22 @@ public abstract class BaseMetric implements Metric {
 
     public abstract double calculate();
 
-    public double get() {
-        return this.metric;
-    }
+    public abstract double get();
 
-    public Double get(PsiClass psiClass, PsiMethod psiMethod) {
-        if (metrics.containsKey(psiClass)) {
-            return metrics.get(psiClass).get(psiMethod);
-        }
+    public abstract Double get(PsiClass psiClass, PsiMethod psiMethod);
 
-        return null;
-    }
+    public abstract Map<PsiClass, Map<PsiMethod, Double>> getMetrics();
 
-    public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
-        return Collections.unmodifiableMap(metrics);
-    }
-
-    public void setMetric(double metric) {
-        this.metric = metric;
-    }
-
-    public void setMetric(double metric, PsiClass psiClass, PsiMethod psiMethod) {
+    public void setMetric(double metric, PsiClass psiClass, PsiMethod psiMethod, String type) {
         if (!metrics.containsKey(psiClass)) {
             metrics.put(psiClass, new HashMap<>());
         }
 
-        metrics.get(psiClass).put(psiMethod, metric);
+        if(!metrics.get(psiClass).containsKey(psiMethod)) {
+            metrics.get(psiClass).put(psiMethod, new MetricValue(getID(), psiClass.getName()));
+        }
+
+        metrics.get(psiClass).get(psiMethod).set(type, metric);
     }
 
     public String getID() {
