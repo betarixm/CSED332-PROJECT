@@ -1,10 +1,12 @@
 plugins {
     id 'org.jetbrains.intellij' version '1.2.1'
     id 'java'
+    id 'jacoco'
 }
 
 group 'org.csed332.project.team2'
 version '1.0-SNAPSHOT'
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -13,17 +15,66 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // https://mvnrepository.com/artifact/org.jfree/jfreechart
+    implementation group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.1.Final'
+    // https://mvnrepository.com/artifact/org.apache.derby/derby
+    implementation 'org.apache.derby:derby:10.14.2.0'
+
+    // https://mvnrepository.com/artifact/com.intellij/annotations
+    implementation group: 'com.intellij', name: 'annotations', version: '12.0'
+
+    implementation group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.core', version: '3.22.0'
+
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = '2021.2.3'
+    plugins = ['com.intellij.java']
 }
 patchPluginXml {
     changeNotes = """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
 }
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
 }
