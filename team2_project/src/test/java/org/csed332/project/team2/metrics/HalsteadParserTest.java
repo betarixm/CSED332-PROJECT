@@ -24,13 +24,13 @@ public class HalsteadParserTest {
         helperMainClass.tearDown();
     }
 
-    private void setUpFixture(String fileName) throws Exception {
+    private void configureFixture(String fileName) throws Exception {
         helperMainClass.configure(fileName);
     }
 
     @Test
     public void parseMethodOneOperator() throws Exception {
-        setUpFixture("SimpleInt.java");
+        configureFixture("SimpleInt.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -50,7 +50,7 @@ public class HalsteadParserTest {
 
     @Test
     public void parseMethodSimpleAddition() throws Exception {
-        setUpFixture("SimpleAddition.java");
+        configureFixture("SimpleAddition.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -70,7 +70,7 @@ public class HalsteadParserTest {
 
     @Test
     public void parseMethodMainClass() throws Exception {
-        setUpFixture("MainClass.java");
+        configureFixture("MainClass.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {

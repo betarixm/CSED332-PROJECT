@@ -1,25 +1,16 @@
 package org.csed332.project.team2.metrics;
 
-import com.intellij.debugger.memory.agent.parsers.StringArrayParser;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.impl.stores.IProjectStore;
-import com.intellij.openapi.project.Project;
-import com.intellij.patterns.PsiMethodPattern;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
-import org.csed332.project.team2.db.model.MetricModel;
-import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CyclomaticMetricTest {
@@ -28,7 +19,6 @@ public class CyclomaticMetricTest {
 
     @BeforeAll
     public static void initialize() throws Exception {
-        String fileName = "MainClass.java";
         helperMainClass = FixtureHelper.getInstance();
         helperMainClass.changeFile(testPath);
         helperMainClass.setUp();

@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.utils;
 
 import org.csed332.project.team2.metrics.Metric;
 
@@ -18,7 +18,7 @@ public class MetricDescription {
             Metric.Type.CYCLOMATIC, "This is the number of lines of code of the whole project."
     );
 
-    static String get(Metric.Type type) {
+    public static String get(Metric.Type type) {
         return descriptions.getOrDefault(type, NO_DESC);
     }
 }

@@ -22,17 +22,14 @@ public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;
     JBTable table;
     DefaultTableModel tableModel;
-    private Metric.Type type;
+    private boolean computeTotal = false;
+    private List<String> columNames;
 
-    List<String> valueNames;
-
-    public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type) {
+    public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type, String[] _columnNames, boolean _computeTotal) {
         super(_metrics, _type);
-        type = _type;
         baseMetrics = List.of(_metrics);
-        if (_type == Metric.Type.HALSTEAD)
-            valueNames = new ArrayList<>(List.of(new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}));
-        else valueNames = new ArrayList<>(List.of(new String[]{"MetricValue"}));
+        columNames = List.of(_columnNames);
+        computeTotal = _computeTotal;
         setTableModel();
 
         table = new JBTable(tableModel);
@@ -76,68 +73,53 @@ public class BaseMetricPanel extends MetricPanel {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
         List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
 
-        if (this.type == Metric.Type.HALSTEAD) { // TODO: refactor! => but this might be a bigger refactor with BaseMetric and DataBase
-            for (BaseMetric baseMetric : baseMetrics) {
-                totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
-                values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
-            }
-
-            setTableModel();
-            table.setModel(tableModel);
-            Map<List<String>, List<Double>> tableRowMap = new HashMap<>();
-
-            for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
-                for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
-                    String aClass = entry.getKey().getName();
-                    for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
-                        Double aValue = subEntry.getValue();
-                        String aMethod = subEntry.getKey().getName();
-                        List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
-                        List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
-                        valueList.add(aValue);
-                        tableRowMap.put(listKey, valueList);
-                    }
-                }
-            }
-
-            List<List<String>> tableRowList = new ArrayList<>();
-            for (List<String> key : tableRowMap.keySet()) {
-                String aClass = key.get(0);
-                String aMethod = key.get(1);
-                List<Double> listValues = tableRowMap.get(key);
-                HalsteadMetricCalculator calc = new HalsteadMetricCalculator(listValues.get(0).intValue(),
-                        listValues.get(1).intValue(), listValues.get(2).intValue(), listValues.get(3).intValue());
-                tableModel.addRow(new Object[]{aClass, aMethod, calc.getVocabulary(), calc.getVolume(),
-                        calc.getDifficulty(), calc.getEfforts()});
-            }
-            return;
+        for (BaseMetric baseMetric : baseMetrics) {
+            totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
+            values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
         }
-
-        double totalMetric = baseMetrics.get(0).calculate();
-        Map<PsiClass, Map<PsiMethod, Double>> value = (baseMetrics.get(0)).getMetrics();
 
         setTableModel();
         table.setModel(tableModel);
+        Map<List<String>, List<Double>> tableRowMap = new HashMap<>();
 
-        for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.entrySet()) {
-            String aClass = entry.getKey().getName();
-
-            for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
-                Double aValue = subEntry.getValue();
-                String aMethod = subEntry.getKey().getName();
-
-                tableModel.addRow(new Object[]{aClass, aMethod, aValue.toString()});
+        for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
+            for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
+                String aClass = entry.getKey().getName();
+                for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
+                    Double aValue = subEntry.getValue();
+                    String aMethod = subEntry.getKey().getName();
+                    List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
+                    List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
+                    valueList.add(aValue);
+                    tableRowMap.put(listKey, valueList);
+                }
             }
         }
-        metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
+
+        for (List<String> key : tableRowMap.keySet()) {
+            String aClass = key.get(0);
+            String aMethod = key.get(1);
+            List<Double> listValues = tableRowMap.get(key);
+            Object[] rowData = new Object[2 + listValues.size()];
+            rowData[0] = aClass;
+            rowData[1] = aMethod;
+            for (int i = 0; i < listValues.size(); i++) {
+                rowData[i+2] = listValues.get(i).toString();
+            }
+            tableModel.addRow(rowData);
+        }
+
+        if (computeTotal) {
+            double totalMetric = baseMetrics.get(0).calculate();
+            metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
+        }
     }
 
     public void setTableModel() {
         tableModel = new DefaultTableModel();
-
         tableModel.addColumn("Class");
         tableModel.addColumn("Method");
-        for (String valueName : valueNames) {
+        for (String valueName : columNames) {
             tableModel.addColumn(valueName);
         }
     }
