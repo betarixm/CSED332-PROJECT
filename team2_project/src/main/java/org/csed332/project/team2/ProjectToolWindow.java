@@ -1,6 +1,9 @@
 package org.csed332.project.team2;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.ComponentPopupBuilder;
@@ -57,12 +60,16 @@ public class ProjectToolWindow {
 
         ActionListener listener = e -> {
             {
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    ApplicationManager.getApplication().runReadAction(() -> {
-                        SlowOperations.allowSlowOperations(() -> {
-                window.setMetrics();
-                    });
-                    });
+                ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
+                    public void run(@NotNull ProgressIndicator progressIndicator) {
+                        ApplicationManager.getApplication().invokeLater(() -> {
+                            ApplicationManager.getApplication().runReadAction(() -> {
+                                SlowOperations.allowSlowOperations(() -> {
+                                    window.setMetrics();
+                                });
+                            });
+                        });
+                    }
                 });
             }
         };
