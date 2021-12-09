@@ -368,9 +368,9 @@ public abstract class VisitingMetric extends BaseMetric {
         setVisitResult(0);
 
         if (psiElement != null) {
-            setMetric(visit(psiElement));
+            visit(psiElement);
         } else if (project != null) {
-            setMetric(visit(project));
+            visit(project);
         }
 
         return get();

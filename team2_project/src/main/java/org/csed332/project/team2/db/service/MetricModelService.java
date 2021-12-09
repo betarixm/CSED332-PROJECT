@@ -24,17 +24,22 @@ public class MetricModelService {
     }
 
     public static List<MetricModel> getMetrics(String metric, String className) {
-        return query(metric, className, null, null, null);
+        return query(metric, className, null, null, null, null);
     }
 
-    public static List<MetricModel> getMetrics(String metric, String className, int limit) {
-        return query(metric, className, null, null, limit);
+    public static List<MetricModel> getMetrics(String metric, String className, String type) {
+        return query(metric, className, type, null, null, null);
     }
 
-    public static MetricModel saveMetric(String metric, String className, double figure) {
+    public static List<MetricModel> getMetrics(String metric, String className, String type, int limit) {
+        return query(metric, className, type, null, null, limit);
+    }
+
+    public static MetricModel saveMetric(String metric, String className, String type, double figure) {
         MetricModel m = new MetricModel();
         m.setMetric(metric);
         m.setClassName(className);
+        m.setType(type);
         m.setFigure(figure);
 
         MetricModelService.save(m);
@@ -42,7 +47,25 @@ public class MetricModelService {
         return m;
     }
 
-    public static List<MetricModel> query(String metric, String className, Date start, Date end, Integer limit) {
+    public static MetricModel updateMetric(String metric, String className, String type, double figure) {
+        List<MetricModel> l = query(metric, className, type, null, null, 1);
+        MetricModel m;
+
+        if (l.isEmpty()) {
+            m = saveMetric(metric, className, type, figure);
+        } else {
+            m = l.get(0);
+            m.setMetric(metric);
+
+            try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+                session.saveOrUpdate(m);
+            }
+        }
+
+        return m;
+    }
+
+    public static List<MetricModel> query(String metric, String className, String type, Date start, Date end, Integer limit) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<MetricModel> criteria = builder.createQuery(MetricModel.class);
@@ -58,6 +81,10 @@ public class MetricModelService {
 
             if (className != null) {
                 criteria.where(builder.equal(root.get("className"), className));
+            }
+
+            if (type != null) {
+                criteria.where(builder.equal(root.get("type"), type));
             }
 
             if (start != null) {
