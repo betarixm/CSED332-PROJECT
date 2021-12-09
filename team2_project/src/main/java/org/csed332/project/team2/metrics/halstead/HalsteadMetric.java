@@ -4,8 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {
     public enum Type{ VOCABULARY, VOLUME, DIFFICULTY, EFFORT }
@@ -21,6 +20,21 @@ public class HalsteadMetric extends VisitingMetric {
         super(project);
         setID(type.toString());
         this.type = type;
+    }
+
+    @Override
+    public double get() {
+        return 0;
+    }
+
+    @Override
+    public Double get(PsiClass psiClass, PsiMethod psiMethod) {
+        return null;
+    }
+
+    @Override
+    public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
+        return null;
     }
 
     @Override
@@ -45,7 +59,7 @@ public class HalsteadMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
-            setMetric(getVisitResult() - value, aClass, method);
+            setMetric(getVisitResult() - value, aClass, method, "");
         }
     }
 
