@@ -10,7 +10,6 @@ public class MetricModel {
     private Long id;
     private String metric;
     private String className;
-    private String type;
     private Double figure;
     private Date created = new Date();
     private Date updated = new Date();
@@ -44,14 +43,6 @@ public class MetricModel {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Double getFigure() {
@@ -93,6 +84,6 @@ public class MetricModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.className, this.type, this.figure);
+        return Objects.hash(this.id, this.className, this.figure);
     }
 }

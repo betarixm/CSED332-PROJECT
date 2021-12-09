@@ -47,6 +47,6 @@ public class ClassCodeLineMetric extends CodeLineMetric {
 
     @Override
     public void save() {
-        MetricModelService.saveMetric(getID(), psiClass.getName(), "", get());
+        MetricModelService.saveMetric(getID(), psiClass.getName(), get());
     }
 }

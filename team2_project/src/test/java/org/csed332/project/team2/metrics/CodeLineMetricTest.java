@@ -58,7 +58,7 @@ public class CodeLineMetricTest {
                             final PsiClass psiClass = helperMainClass.getFirstPsiClass();
                             CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
 
-                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null, "");
+                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
                             for (MetricModel metricModel : metricModelList) {
                                 MetricModelService.remove(metricModel);
                             }

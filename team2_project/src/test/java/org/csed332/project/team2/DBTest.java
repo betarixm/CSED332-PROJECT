@@ -38,13 +38,13 @@ public class DBTest {
     }
 
     private MetricModel generateMetricModel() {
-        MetricModel m = MetricModelService.saveMetric(UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), Math.random());
+        MetricModel m = MetricModelService.saveMetric(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Math.random());
         metricModelList.add(m);
         return m;
     }
 
     private MetricModel generateMetricModel(String metric, String className) {
-        MetricModel m = MetricModelService.saveMetric(metric, className, UUID.randomUUID().toString(), Math.random());
+        MetricModel m = MetricModelService.saveMetric(metric, className, Math.random());
         metricModelList.add(m);
         return m;
     }
@@ -107,7 +107,7 @@ public class DBTest {
     @Test
     public void testQuery() {
         List<MetricModel> testMetricModels = IntStream.range(0, 100).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
-        MetricModel m = MetricModelService.query(testMetricModels.get(0).getMetric(), null, null, null, null, null).get(0);
+        MetricModel m = MetricModelService.query(testMetricModels.get(0).getMetric(), null, null, null, null).get(0);
 
         Assertions.assertEquals(testMetricModels.get(0), m);
     }
@@ -120,7 +120,7 @@ public class DBTest {
 
         List<MetricModel> testMetricModels = IntStream.range(0, testSize).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
         List<MetricModel> sameMetricModels = IntStream.range(0, sameSize).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
-        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, null);
+        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass);
 
         Collections.reverse(result); // Result is desc. order with created field.
 
@@ -139,7 +139,7 @@ public class DBTest {
 
         List<MetricModel> testMetricModels = IntStream.range(0, testSize).mapToObj(i -> generateMetricModel()).collect(Collectors.toList());
         List<MetricModel> sameMetricModels = IntStream.range(0, sameSize).mapToObj(i -> generateMetricModel(testMetric, testClass)).collect(Collectors.toList());
-        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, null, limitSize);
+        List<MetricModel> result = MetricModelService.getMetrics(testMetric, testClass, limitSize);
 
         Collections.reverse(sameMetricModels); // sameMetricModels is asc. order with created field.
 
