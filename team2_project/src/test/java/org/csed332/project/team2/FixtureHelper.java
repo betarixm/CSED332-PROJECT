@@ -5,6 +5,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.testFramework.fixtures.*;
+import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,13 +30,13 @@ public class FixtureHelper {
         this.testPath = new File("src/test/resources/" + testPath).getAbsolutePath();
     }
 
-    public void setUp() {
-        final TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder = IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder("test2");
-        fixture = JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectBuilder.getFixture());
-        try {
-            fixture.setUp();
-        } catch (Exception e) {
-        }
+    public void setUp() throws Exception {
+
+        IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
+        TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder = factory.createLightFixtureBuilder();
+
+        fixture = IdeaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(fixtureBuilder.getFixture(), new TempDirTestFixtureImpl());
+        fixture.setUp();
         fixture.setTestDataPath(testPath);
     }
 
