@@ -15,8 +15,7 @@ public class CalcHistoryModel {
     private String metric;
     private Date timestamp = new Date();
 
-    @OneToMany(mappedBy = "history",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "metric_id")
+    @OneToMany(targetEntity = MetricModel.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<MetricModel> metricModels = new HashSet<>();
 
     public Long getId() {

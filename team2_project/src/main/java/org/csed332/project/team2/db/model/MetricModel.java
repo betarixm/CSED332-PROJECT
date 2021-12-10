@@ -14,7 +14,7 @@ public class MetricModel {
     private Date created = new Date();
     private Date updated = new Date();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = CalcHistoryModel.class, fetch = FetchType.LAZY)
     private CalcHistoryModel history;
 
     @PreUpdate
