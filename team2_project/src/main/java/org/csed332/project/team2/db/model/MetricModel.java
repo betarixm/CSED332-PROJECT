@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "MetricModels")
-public class MetricModel {
+public class MetricModel implements Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

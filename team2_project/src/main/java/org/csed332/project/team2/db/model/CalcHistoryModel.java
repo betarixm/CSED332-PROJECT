@@ -5,7 +5,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "CalcHistoryModels")
-public class CalcHistoryModel {
+public class CalcHistoryModel implements Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
