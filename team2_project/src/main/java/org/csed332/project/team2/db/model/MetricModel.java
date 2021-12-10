@@ -90,7 +90,7 @@ public class MetricModel {
 
         MetricModel m = (MetricModel) o;
 
-        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure) && this.history.equals(m.history);
+        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure) && Objects.equals(this.history, m.history);
     }
 
     @Override
