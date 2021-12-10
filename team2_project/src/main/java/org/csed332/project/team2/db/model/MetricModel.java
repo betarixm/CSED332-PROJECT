@@ -7,6 +7,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MetricModels")
 public class MetricModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String metric;
     private String className;
@@ -22,8 +24,6 @@ public class MetricModel {
         this.updated = new Date();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return this.id;
     }

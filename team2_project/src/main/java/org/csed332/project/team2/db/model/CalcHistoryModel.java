@@ -1,10 +1,7 @@
 package org.csed332.project.team2.db.model;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "CalcHistoryModels")
@@ -42,12 +39,12 @@ public class CalcHistoryModel {
         this.timestamp = timestamp;
     }
 
-    public void addMetricModel (MetricModel metricModel) {
+    public void addMetricModel(MetricModel metricModel) {
         metricModels.add(metricModel);
         metricModel.setHistory(this);
     }
 
-    public void removeMetricModel (MetricModel metricModel) {
+    public void removeMetricModel(MetricModel metricModel) {
         metricModels.remove(metricModel);
         metricModel.setHistory(null);
     }
