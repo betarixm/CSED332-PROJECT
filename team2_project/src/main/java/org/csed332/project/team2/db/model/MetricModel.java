@@ -14,6 +14,9 @@ public class MetricModel {
     private Date created = new Date();
     private Date updated = new Date();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CalcHistoryModel history;
+
     @PreUpdate
     public void onUpdate() {
         this.updated = new Date();
@@ -69,6 +72,14 @@ public class MetricModel {
         this.updated = updated;
     }
 
+    public CalcHistoryModel getHistory() {
+        return history;
+    }
+
+    public void setHistory(CalcHistoryModel history) {
+        this.history = history;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,11 +90,11 @@ public class MetricModel {
 
         MetricModel m = (MetricModel) o;
 
-        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure);
+        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure) && this.history.equals(m.history);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.className, this.figure);
+        return Objects.hash(this.id, this.className, this.figure, this.history);
     }
 }
