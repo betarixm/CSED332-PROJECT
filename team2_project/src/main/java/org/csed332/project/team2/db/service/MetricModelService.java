@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+@Deprecated
 public class MetricModelService {
     public static MetricModel getMetricById(Long id) {
         MetricModel m;
