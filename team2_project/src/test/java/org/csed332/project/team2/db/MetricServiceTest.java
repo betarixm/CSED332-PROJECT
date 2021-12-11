@@ -5,12 +5,11 @@ import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class MetricServiceTest {
@@ -26,22 +25,13 @@ public class MetricServiceTest {
     public void afterEach() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            String hql = "delete from MetricModel where className = :className and metric = :metric";
-            Query query = session.createQuery(hql);
-            for (MetricModel m : metricModelList) {
-                query.setParameter("className", m.getClassName()).setParameter("metric", m.getMetric());
-                query.executeUpdate();
-            }
-
-            hql = "delete from CalcHistoryModel where metric = :metric";
-            query = session.createQuery(hql);
             for (CalcHistoryModel c : calcHistoryModelList) {
-                query.setParameter("metric", c.getMetric());
-                query.executeUpdate();
+                session.remove(c);
             }
             session.getTransaction().commit();
         }
         metricModelList.clear();
+        calcHistoryModelList.clear();
     }
 
     private CalcHistoryModel generateCalcHistoryModel() {
@@ -58,18 +48,18 @@ public class MetricServiceTest {
 
     private MetricModel generateMetricModel(CalcHistoryModel c) {
         MetricModel m = MetricService.addMetric(
+                c.getMetric(),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-          20.0,
+                20.0,
                 c);
         metricModelList.add(m);
         return m;
     }
 
-    private MetricModel generateMetricModel(CalcHistoryModel c, String metric, String className, String methodName, String type, Double figure) {
-        MetricModel m = MetricService.addMetric(metric, className, methodName, type, figure, c);
+    private MetricModel generateMetricModel(CalcHistoryModel c, String className, String methodName, String type, Double figure) {
+        MetricModel m = MetricService.addMetric(c.getMetric(), className, methodName, type, figure, c);
         metricModelList.add(m);
         return m;
     }
@@ -89,9 +79,24 @@ public class MetricServiceTest {
 
     @Test
     public void testGetMetric() {
+        CalcHistoryModel c = generateCalcHistoryModel();
+        MetricModel m = generateMetricModel(c);
+
+        Optional<Map<String, Map<String, Map<String, Double>>>> metricOptional = MetricService.getMetric(m.getMetric());
+        Assertions.assertNotNull(metricOptional);
+        Assertions.assertTrue(metricOptional.isPresent());
+        Assertions.assertNotNull(metricOptional.get());
+        Assertions.assertEquals(1, metricOptional.get().size());
     }
 
     @Test
     public void testCompareMetrics() {
+        CalcHistoryModel c = generateCalcHistoryModel();
+        MetricModel m1 = generateMetricModel(c, "classA", "methodB", "default", 400.0);
+        MetricModel m2 = generateMetricModel(c, "classA", "methodB", "default", 440.0);
+
+        Map<String, Map<String, Map<String, Double>>> metric = MetricService.compareMetric(c.getMetric());
+        Assertions.assertNotNull(metric);
+        Assertions.assertEquals(1, metric.size());
     }
 }
