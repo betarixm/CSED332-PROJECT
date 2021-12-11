@@ -101,6 +101,6 @@ public class MetricServiceTest {
         Map<String, Map<String, Map<String, Double>>> metric = MetricService.compareMetric(c.getMetric());
         Assertions.assertNotNull(metric);
         Assertions.assertEquals(1, metric.size());
-        Assertions.assertEquals(440, metric.get(className).get(methodName).get(type));
+        Assertions.assertEquals(40, metric.get(className).get(methodName).get(type));
     }
 }
