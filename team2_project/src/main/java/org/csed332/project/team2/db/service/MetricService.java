@@ -90,7 +90,7 @@ public class MetricService {
         CalcHistoryModel c = new CalcHistoryModel();
         c.setMetric(metric);
 
-        save(c);
+        saveOrUpdate(c);
 
         return c;
     }
@@ -105,9 +105,8 @@ public class MetricService {
 
         calcHistoryModel.addMetricModel(m);
 
-        save(m);
-        save(calcHistoryModel);
-
+        saveOrUpdate(m);
+        saveOrUpdate(calcHistoryModel);
         return m;
     }
 
@@ -186,10 +185,10 @@ public class MetricService {
         return Optional.ofNullable(query(metric, className, methodName, type, history, 1).get(0));
     }
 
-    private static void save(Model m) {
+    private static void saveOrUpdate(Model m) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(m);
+            session.saveOrUpdate(m);
             session.getTransaction().commit();
         }
     }
