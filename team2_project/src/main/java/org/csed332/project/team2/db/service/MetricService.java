@@ -10,10 +10,38 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MetricService {
+    public static List<Map<String, Map<String, Map<String, Double>>>> getMetric(String metric, Integer limit) {
+        List<Map<String, Map<String, Map<String, Double>>>> result = new ArrayList<>();
+        List<CalcHistoryModel> historyModels = query(metric, limit);
+
+        for (CalcHistoryModel history : historyModels) {
+            Map<String, Map<String, Map<String, Double>>> subResult = new HashMap<>();
+            Collection<MetricModel> metricModels = history.getMetricModels();
+
+            for (MetricModel m : metricModels) {
+                if (!subResult.containsKey(m.getClassName())) {
+                    subResult.put(m.getClassName(), new HashMap<>());
+                }
+
+                if (!subResult.get(m.getClassName()).containsKey(m.getMethodName())) {
+                    subResult.get(m.getClassName()).put(m.getMethodName(), new HashMap<>());
+                }
+
+                subResult.get(m.getClassName()).get(m.getMethodName()).put(m.getType(), m.getFigure());
+                result.add(Collections.unmodifiableMap(subResult));
+            }
+        }
+
+        return result;
+    }
+
+    public static Optional<Map<String, Map<String, Map<String, Double>>>> getMetric(String metric) {
+        return Optional.ofNullable(getMetric(metric, 1).get(0));
+    }
+
     public static CalcHistoryModel generateCalcHistoryModel(String metric) {
         CalcHistoryModel c = new CalcHistoryModel();
         c.setMetric(metric);
