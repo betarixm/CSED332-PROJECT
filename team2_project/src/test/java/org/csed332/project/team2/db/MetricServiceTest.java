@@ -91,12 +91,16 @@ public class MetricServiceTest {
 
     @Test
     public void testCompareMetrics() {
+        final String className = "classA";
+        final String methodName = "methodB";
+        final String type = "default";
         CalcHistoryModel c = generateCalcHistoryModel();
-        MetricModel m1 = generateMetricModel(c, "classA", "methodB", "default", 400.0);
-        MetricModel m2 = generateMetricModel(c, "classA", "methodB", "default", 440.0);
+        MetricModel m1 = generateMetricModel(c, className, methodName, type, 400.0);
+        MetricModel m2 = generateMetricModel(c, className, methodName, type, 440.0);
 
         Map<String, Map<String, Map<String, Double>>> metric = MetricService.compareMetric(c.getMetric());
         Assertions.assertNotNull(metric);
         Assertions.assertEquals(1, metric.size());
+        Assertions.assertEquals(440, metric.get(className).get(methodName).get(type));
     }
 }
