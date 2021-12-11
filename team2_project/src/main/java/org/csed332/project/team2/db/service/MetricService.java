@@ -42,6 +42,50 @@ public class MetricService {
         return Optional.ofNullable(getMetric(metric, 1).get(0));
     }
 
+    public static Map<String, Map<String, Map<String, Double>>> compareMetric(String metric) {
+        Map<String, Map<String, Map<String, Double>>> result = new HashMap<>();
+        List<Map<String, Map<String, Map<String, Double>>>> metrics = getMetric(metric, 2);
+
+        if (metrics.size() != 2) {
+            return Map.of();
+        }
+
+        Map<String, Map<String, Map<String, Double>>> present = metrics.get(0);
+        Map<String, Map<String, Map<String, Double>>> past = metrics.get(1);
+
+        for (String className : present.keySet()) {
+            if (!past.containsKey(className)) {
+                break;
+            }
+
+            for (String methodName : present.get(className).keySet()) {
+                if (!past.get(className).containsKey(methodName)) {
+                    break;
+                }
+
+                for (Map.Entry<String, Double> type : present.get(className).get(methodName).entrySet()) {
+                    Double pastFigure = past.get(className).get(methodName).get(type.getKey());
+
+                    if (pastFigure == null) {
+                        break;
+                    }
+
+                    if (!result.containsKey(className)) {
+                        result.put(className, new HashMap<>());
+                    }
+
+                    if (!result.get(className).containsKey(methodName)) {
+                        result.get(className).put(methodName, new HashMap<>());
+                    }
+
+                    result.get(className).get(methodName).put(type.getKey(), type.getValue());
+                }
+            }
+        }
+
+        return Collections.unmodifiableMap(result);
+    }
+
     public static CalcHistoryModel generateCalcHistoryModel(String metric) {
         CalcHistoryModel c = new CalcHistoryModel();
         c.setMetric(metric);
