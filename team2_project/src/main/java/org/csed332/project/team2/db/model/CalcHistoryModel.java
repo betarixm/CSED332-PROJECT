@@ -39,6 +39,10 @@ public class CalcHistoryModel implements Model {
         this.timestamp = timestamp;
     }
 
+    public Collection<MetricModel> getMetricModels () {
+        return Collections.unmodifiableCollection(metricModels);
+    }
+
     public void addMetricModel(MetricModel metricModel) {
         metricModels.add(metricModel);
         metricModel.setHistory(this);
