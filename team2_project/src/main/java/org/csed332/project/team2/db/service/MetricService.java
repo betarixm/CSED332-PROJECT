@@ -23,10 +23,11 @@ public class MetricService {
         return c;
     }
 
-    public static MetricModel addMetric(String metric, String className, String type, Double figure, CalcHistoryModel calcHistoryModel) {
+    public static MetricModel addMetric(String metric, String className, String methodName, String type, Double figure, CalcHistoryModel calcHistoryModel) {
         MetricModel m = new MetricModel();
         m.setMetric(metric);
         m.setClassName(className);
+        m.setMethodName(methodName);
         m.setType(type);
         m.setFigure(figure);
 
@@ -66,7 +67,7 @@ public class MetricService {
         return Optional.ofNullable(query(metric, 1).get(0));
     }
 
-    public static List<MetricModel> query(String metric, String className, String type, CalcHistoryModel history, Integer limit) {
+    public static List<MetricModel> query(String metric, String className, String methodName, String type, CalcHistoryModel history, Integer limit) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<MetricModel> criteria = builder.createQuery(MetricModel.class);
@@ -82,6 +83,10 @@ public class MetricService {
 
             if (className != null) {
                 criteria.where(builder.equal(root.get("className"), className));
+            }
+
+            if (methodName != null) {
+                criteria.where(builder.equal(root.get("methodName"), methodName));
             }
 
             if (type != null) {
@@ -105,8 +110,8 @@ public class MetricService {
         }
     }
 
-    public static Optional<MetricModel> query(String metric, String className, String type, CalcHistoryModel history) {
-        return Optional.ofNullable(query(metric, className, type, history, 1).get(0));
+    public static Optional<MetricModel> query(String metric, String className, String methodName, String type, CalcHistoryModel history) {
+        return Optional.ofNullable(query(metric, className, methodName, type, history, 1).get(0));
     }
 
     private static void save(Model m) {

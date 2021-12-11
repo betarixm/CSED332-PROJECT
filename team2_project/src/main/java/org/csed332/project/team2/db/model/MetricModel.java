@@ -12,6 +12,7 @@ public class MetricModel implements Model {
     private Long id;
     private String metric;
     private String className;
+    private String methodName;
     private String type;
     private Double figure;
     private Date created = new Date();
@@ -47,6 +48,14 @@ public class MetricModel implements Model {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 
     public String getType() {
