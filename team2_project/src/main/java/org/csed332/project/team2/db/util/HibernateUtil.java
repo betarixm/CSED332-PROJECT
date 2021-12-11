@@ -13,6 +13,7 @@ public class HibernateUtil {
             DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
             Configuration configuration = new Configuration()
                     .addAnnotatedClass(org.csed332.project.team2.db.model.MetricModel.class)
+                    .addAnnotatedClass(org.csed332.project.team2.db.model.CalcHistoryModel.class)
                     .setProperty("hibernate.connection.username", "app")
                     .setProperty("hibernate.connection.password", "app")
                     .setProperty("hibernate.connection.url", "jdbc:derby:.db/metric;create=true")

@@ -2,7 +2,7 @@ package org.csed332.project.team2.metrics;
 
 
 public interface Metric {
-    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC} // TODO: add other types once implemented HALSTED, CYCLO, INDEX, COVERAGE
+    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC}
 
     double get();
 

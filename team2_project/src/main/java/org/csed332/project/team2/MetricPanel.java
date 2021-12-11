@@ -1,6 +1,8 @@
 package org.csed332.project.team2;
 
+import com.intellij.util.SlowOperations;
 import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.utils.MetricDescription;
 import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
@@ -37,33 +39,23 @@ public class MetricPanel {
         /* Displays the metric value */
         metricValues = new ArrayList<>();
         metricValues.add(new Label());
-        //metricValue.setText("");
         panel.add(metricValues.get(0));
         panel.setToolTipText(MetricDescription.get(this.type));
-
-        /* Displays the metric chart */
-        //Will have to refactor this part when implementing charts
-        /*metricChart = BarChart.getChart(80);
-        ChartPanel chartPanel = new ChartPanel(metricChart);
-        chartPanel.setSize(200, 200);
-        panel.add(chartPanel, BorderLayout.CENTER);
-        chartPanel.validate();*/
     }
-
 
     public void updateMetric() {
         //TODO : after fix the bug of Metric.get it will work well
-        for (int i = 0; i < metrics.size(); i++) {
-            double value = metrics.get(i).calculate();
-            metrics.get(i).save();
-            if (metrics.get(i).checkDegradation()) {
-                setWarningTitle();
-            } else {
-                setBasicTitle();
+            for (int i = 0; i < metrics.size(); i++) {
+                double value = metrics.get(i).calculate();
+                metrics.get(i).save();
+                if (metrics.get(i).checkDegradation()) {
+                    setWarningTitle();
+                } else {
+                    setBasicTitle();
+                }
+                metricValues.get(i).setText(Double.toString(value));
             }
-            metricValues.get(i).setText(Double.toString(value));
-        }
-        //Should we update the panel?
+            //Should we update the panel?
     }
 
     public JPanel getPanel() {

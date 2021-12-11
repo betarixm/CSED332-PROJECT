@@ -6,21 +6,26 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "MetricModels")
-public class MetricModel {
+public class MetricModel implements Model {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String metric;
     private String className;
+    private String methodName;
+    private String type;
     private Double figure;
     private Date created = new Date();
     private Date updated = new Date();
+
+    @ManyToOne(targetEntity = CalcHistoryModel.class, fetch = FetchType.LAZY)
+    private CalcHistoryModel history;
 
     @PreUpdate
     public void onUpdate() {
         this.updated = new Date();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return this.id;
     }
@@ -43,6 +48,22 @@ public class MetricModel {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Double getFigure() {
@@ -69,6 +90,14 @@ public class MetricModel {
         this.updated = updated;
     }
 
+    public CalcHistoryModel getHistory() {
+        return history;
+    }
+
+    public void setHistory(CalcHistoryModel history) {
+        this.history = history;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,11 +108,11 @@ public class MetricModel {
 
         MetricModel m = (MetricModel) o;
 
-        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure);
+        return this.id.equals(m.id) && this.className.equals(m.className) && this.figure.equals(m.figure) && Objects.equals(this.history, m.history);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.className, this.figure);
+        return Objects.hash(this.id, this.className, this.figure, this.history);
     }
 }
