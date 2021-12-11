@@ -91,12 +91,13 @@ public class MetricServiceTest {
 
     @Test
     public void testCompareMetrics() {
+        final String metricName = "metricName";
         final String className = "classA";
         final String methodName = "methodB";
         final String type = "default";
-        CalcHistoryModel c1 = generateCalcHistoryModel();
+        CalcHistoryModel c1 = generateCalcHistoryModel(metricName);
         MetricModel m1 = generateMetricModel(c1, className, methodName, type, 400.0);
-        CalcHistoryModel c2 = generateCalcHistoryModel();
+        CalcHistoryModel c2 = generateCalcHistoryModel(metricName);
         MetricModel m2 = generateMetricModel(c2, className, methodName, type, 440.0);
 
         Map<String, Map<String, Map<String, Double>>> metric = MetricService.compareMetric(c1.getMetric());
