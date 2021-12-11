@@ -78,7 +78,7 @@ public class MetricService {
                         result.get(className).put(methodName, new HashMap<>());
                     }
 
-                    result.get(className).get(methodName).put(type.getKey(), type.getValue() - pastFigure);
+                    result.get(className).get(methodName).put(type.getKey(), pastFigure - type.getValue());
                 }
             }
         }
