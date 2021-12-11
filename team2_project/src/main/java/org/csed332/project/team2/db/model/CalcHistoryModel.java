@@ -12,7 +12,7 @@ public class CalcHistoryModel implements Model {
     private String metric;
     private Date timestamp = new Date();
 
-    @OneToMany(targetEntity = MetricModel.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = MetricModel.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<MetricModel> metricModels = new HashSet<>();
 
     public Long getId() {
