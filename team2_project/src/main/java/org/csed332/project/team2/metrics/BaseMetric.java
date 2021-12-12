@@ -37,6 +37,10 @@ public abstract class BaseMetric implements Metric {
         return null;
     }
 
+    public void setWarningCondition(WarningCondition cond){
+        this.cond = cond;
+    }
+
     public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
         return Collections.unmodifiableMap(metrics);
     }
