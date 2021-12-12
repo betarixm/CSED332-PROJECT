@@ -8,18 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HalsteadMetric extends VisitingMetric {
-    public enum Type{ VOCABULARY, VOLUME, DIFFICULTY, EFFORT }
-    Type type;
+    public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
 
-    public HalsteadMetric(PsiElement element, Type type) {
+    HalsteadType type;
+
+    public HalsteadMetric(PsiElement element, HalsteadType type) {
         super(element);
-        setID(type.toString());
+        setID(Type.HALSTEAD.toString());
         this.type = type;
     }
 
-    public HalsteadMetric(Project project, Type type) {
+    public HalsteadMetric(Project project, HalsteadType type) {
         super(project);
-        setID(type.toString());
+        setID(Type.HALSTEAD.toString());
         this.type = type;
     }
 
