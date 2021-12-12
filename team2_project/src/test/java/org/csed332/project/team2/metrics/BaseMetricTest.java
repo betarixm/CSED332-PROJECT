@@ -96,7 +96,7 @@ public class BaseMetricTest {
         Assertions.assertEquals(baseMetric.checkDegradation(), warning);
     }
 
-    @Test
+    /*@Test
     public void testWarnEmpty(){
         testWarn(List.of(), false);
     }
@@ -115,5 +115,5 @@ public class BaseMetricTest {
         testWarn(List.of(1.0, 0.0), false);
         testWarn(List.of(1.0, 1.0), false);
         testWarn(List.of(0.0, 1.0), true);
-    }
+    }*/
 }
