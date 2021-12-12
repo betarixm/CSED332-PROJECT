@@ -36,4 +36,14 @@ public class WarningCondition {
             default: return false;
         }
     }
+
+    public int numberOfValuesNeeded(){
+        switch (mode){
+            case DECREASE: return 2;
+            case INCREASE: return 2;
+            case LESS_THAN: return 1;
+            case MORE_THAN: return 1;
+            default: return 0;
+        }
+    }
 }
