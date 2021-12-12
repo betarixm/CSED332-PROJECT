@@ -16,12 +16,12 @@ import com.intellij.openapi.project.Project;
 public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(PsiElement element) {
         super(element);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
     }
 
     public CyclomaticMetric(Project project) {
         super(project);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
     }
 
     @Override
