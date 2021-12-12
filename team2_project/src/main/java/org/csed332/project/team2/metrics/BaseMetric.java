@@ -32,7 +32,7 @@ public abstract class BaseMetric implements Metric {
         if (metrics.containsKey(psiClass)) {
             return metrics.get(psiClass).get(psiMethod);
         }
-
+        // TODO? get from DB
         return null;
     }
 
@@ -50,6 +50,9 @@ public abstract class BaseMetric implements Metric {
         }
 
         metrics.get(psiClass).put(psiMethod, metric);
+
+        // TODO? set to DB
+        //  use MetricService.addMetric(...)
     }
 
     public String getID() {

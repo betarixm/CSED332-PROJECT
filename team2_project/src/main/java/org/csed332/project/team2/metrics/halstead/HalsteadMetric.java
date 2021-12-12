@@ -73,7 +73,7 @@ public class HalsteadMetric extends VisitingMetric {
                 halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands()
         );
 
-        switch (type){
+        switch (type) {
             case VOCABULARY:
                 setVisitResult(getVisitResult() + calc.getVocabulary());
                 break;
