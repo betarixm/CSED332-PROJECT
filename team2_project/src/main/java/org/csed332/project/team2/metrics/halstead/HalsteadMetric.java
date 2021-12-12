@@ -2,10 +2,11 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {
     public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
@@ -28,6 +29,17 @@ public class HalsteadMetric extends VisitingMetric {
     public boolean checkDegradation() {
         //TODO: make this method return true if value of Halstead Metric degraded.
         return false;
+    }
+
+    @Override
+    public void save(CalcHistoryModel calc) {
+        Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
+        for (PsiClass _class : metrics.keySet()) {
+            for (PsiMethod _method : metrics.get(_class).keySet()) {
+                Double _figure = metrics.get(_class).get(_method);
+                MetricService.addMetric(getID(), _class.getName(), _method.getName(), type.toString(), _figure, calc);
+            }
+        }
     }
 
     @Override

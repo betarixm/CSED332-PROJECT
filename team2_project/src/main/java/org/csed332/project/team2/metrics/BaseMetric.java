@@ -2,13 +2,16 @@ package org.csed332.project.team2.metrics;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricModelService;
+import org.csed332.project.team2.db.service.MetricService;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseMetric implements Metric {
-    static enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
+    protected enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
 
     private double metric;
     private String id;
@@ -59,7 +62,9 @@ public abstract class BaseMetric implements Metric {
 
     public abstract boolean checkDegradation();
 
-    public void save() {
-        //TODO: Implement save
-    }
+    // save metrics to DB
+    public abstract void save(CalcHistoryModel calc);
+
+    @Override
+    public void save() {}
 }
