@@ -5,6 +5,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
+import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
@@ -24,6 +25,7 @@ public class BaseMetricTest {
     private static final String testPath = "TestProjects/SingleFiles";
     private static FixtureHelper helperMainClass;
     private static BaseMetric baseMetric;
+    private static WarningCondition moreCond, increaseCond;
 
     @BeforeAll
     public static void initialize() throws Exception {
@@ -39,6 +41,9 @@ public class BaseMetricTest {
                 return 0;
             }
         };
+
+        moreCond = new WarningCondition(WarningCondition.Mode.MORE_THAN, 5);
+        increaseCond = new WarningCondition(WarningCondition.Mode.INCREASE);
     }
 
     @AfterAll
@@ -68,7 +73,6 @@ public class BaseMetricTest {
                             Collections.reverse(reversedList);
                             Assertions.assertEquals(saveAndGetFromDB(valueList, psiClass, psiMethod), reversedList);
                         });
-
     }
 
     @Test
@@ -87,4 +91,29 @@ public class BaseMetricTest {
     }
 
 
+    public void testWarn(List<Double> vauleList, Boolean warning){
+        testSave(vauleList);
+        Assertions.assertEquals(baseMetric.checkDegradation(), warning);
+    }
+
+    @Test
+    public void testWarnEmpty(){
+        testWarn(List.of(), false);
+    }
+
+    @Test
+    public void testWarnMoreCondOne(){
+        baseMetric.setWarningCondition(moreCond);
+        testWarn(List.of(1.0), false);
+        testWarn(List.of(6.0), true);
+        testWarn(List.of(5.0), true);
+    }
+
+    @Test
+    public void testWarnIncreaseCond(){
+        baseMetric.setWarningCondition(increaseCond);
+        testWarn(List.of(1.0, 0.0), false);
+        testWarn(List.of(1.0, 1.0), false);
+        testWarn(List.of(0.0, 1.0), true);
+    }
 }
