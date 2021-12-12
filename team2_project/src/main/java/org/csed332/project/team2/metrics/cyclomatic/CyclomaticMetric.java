@@ -7,8 +7,11 @@ import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
+import java.util.Map;
 import java.util.Objects;
 
 import com.intellij.openapi.project.Project;
@@ -16,18 +19,32 @@ import com.intellij.openapi.project.Project;
 public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(PsiElement element) {
         super(element);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
     }
 
     public CyclomaticMetric(Project project) {
         super(project);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
     }
 
     @Override
     public boolean checkDegradation() {
         //TODO: make this method return true if value of Cyclomatic Metric degraded.
         return false;
+    }
+
+    @Override
+    public void save(CalcHistoryModel calc)
+    {
+        Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
+        for (PsiClass _class : metrics.keySet())
+        {
+            for (PsiMethod _method : metrics.get(_class).keySet())
+            {
+                Double _figure = metrics.get(_class).get(_method);
+                MetricService.addMetric(getID(), _class.getName(), _method.getName(), "", _figure, calc);
+            }
+        }
     }
 
     private PsiElement requireNonNullElse(PsiElement element) {

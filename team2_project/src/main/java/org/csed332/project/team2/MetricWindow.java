@@ -38,10 +38,10 @@ public class MetricWindow {
         metricContainer.add(codeLinePanel.getPanel());
 
         BaseMetric[] halsteadMetrics = {
-                new HalsteadMetric(project, HalsteadMetric.Type.VOCABULARY),
-                new HalsteadMetric(project, HalsteadMetric.Type.VOLUME),
-                new HalsteadMetric(project, HalsteadMetric.Type.DIFFICULTY),
-                new HalsteadMetric(project, HalsteadMetric.Type.EFFORT)
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOCABULARY),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOLUME),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.DIFFICULTY),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.EFFORT)
         };
 
         BaseMetricPanel halsteadPanel = new BaseMetricPanel(halsteadMetrics, Metric.Type.HALSTEAD, new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}, false);

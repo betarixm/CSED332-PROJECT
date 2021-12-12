@@ -5,6 +5,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
@@ -73,9 +75,12 @@ public class BaseMetricPanel extends MetricPanel {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
         List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
 
+        CalcHistoryModel calc = MetricService.generateCalcHistoryModel(baseMetrics.get(0).getID());
+
         for (BaseMetric baseMetric : baseMetrics) {
             totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
             values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
+            baseMetric.save(calc);
         }
 
         setTableModel();
