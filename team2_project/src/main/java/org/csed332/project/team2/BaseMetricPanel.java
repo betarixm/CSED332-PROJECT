@@ -3,22 +3,24 @@ package org.csed332.project.team2;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.ui.ColoredSideBorder;
+import com.intellij.ui.Colors;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
-import org.csed332.project.team2.db.model.CalcHistoryModel;
-import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;
@@ -39,12 +41,12 @@ public class BaseMetricPanel extends MetricPanel {
         warnMethod = new ArrayList<>();
 
         setTableModel();
-
         table = new JBTable(tableModel);
         table.setShowColumns(true);
         table.setRowHeight(10);
-
         getPanel().add(table);
+
+        setTableProperty();
 
         int width = resizeColumnWidth();
 
@@ -143,6 +145,7 @@ public class BaseMetricPanel extends MetricPanel {
                 rowData[i + 2] = listValues.get(i).toString();
             }
             tableModel.addRow(rowData);
+            methodList.add(aMethod);
         }
 
         if (computeTotal) {
@@ -158,5 +161,56 @@ public class BaseMetricPanel extends MetricPanel {
         for (String valueName : columNames) {
             tableModel.addColumn(valueName);
         }
+    }
+
+    public void setTableProperty() {
+
+        MouseListener tableListener = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                PsiJvmMember codePart = methodList.get(row);
+                codePart.navigate(true);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        };
+        table.addMouseListener(tableListener);
+
+        DefaultTableCellRenderer metricRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                PsiMethod target = methodList.get(row);
+                boolean setWarn = false;
+
+                if (column >= 2) {
+                    Set<PsiMethod> compareList = warnMethod.get(column - 2);
+                    setWarn = compareList.contains(target);
+                }
+
+                if (setWarn) {
+                    c.setForeground(Color.YELLOW);
+                } else {
+                    c.setForeground(Color.WHITE);
+                }
+                return c;
+            }
+        };
+        table.setDefaultRenderer(table.getColumnClass(0), metricRenderer);
     }
 }
