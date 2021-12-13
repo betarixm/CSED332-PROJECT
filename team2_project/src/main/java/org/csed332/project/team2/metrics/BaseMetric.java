@@ -2,7 +2,11 @@ package org.csed332.project.team2.metrics;
 
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import org.csed332.project.team2.WarningCondition;
+import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.db.service.MetricModelService;
 
 import org.apache.tools.ant.taskdefs.War;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
@@ -12,7 +16,6 @@ import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.MetricModel;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class BaseMetric implements Metric {
     protected enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
@@ -44,6 +47,10 @@ public abstract class BaseMetric implements Metric {
         }
         // TODO? get from DB
         return null;
+    }
+
+    public void setWarningCondition(WarningCondition cond){
+        this.cond = cond;
     }
 
     public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
