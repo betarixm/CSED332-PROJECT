@@ -27,11 +27,17 @@ public class BaseMetricPanel extends MetricPanel {
     private boolean computeTotal = false;
     private List<String> columNames;
 
+    private List<PsiMethod> methodList;
+    private List<Set<PsiMethod>> warnMethod;
+
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type, String[] _columnNames, boolean _computeTotal) {
         super(_metrics, _type);
         baseMetrics = List.of(_metrics);
         columNames = List.of(_columnNames);
         computeTotal = _computeTotal;
+        methodList = new ArrayList<>();
+        warnMethod = new ArrayList<>();
+
         setTableModel();
 
         table = new JBTable(tableModel);
@@ -71,16 +77,40 @@ public class BaseMetricPanel extends MetricPanel {
     }
 
     @Override
-    public void updateMetric() {
+    public void updateMetric(boolean warn) {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
         List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
 
-        CalcHistoryModel calc = MetricService.generateCalcHistoryModel(baseMetrics.get(0).getID());
+        methodList.clear();
+        warnMethod.clear();
+
+        if (warn) {
+            setWarningTitle();
+        } else {
+            setBasicTitle();
+        }
 
         for (BaseMetric baseMetric : baseMetrics) {
-            totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.calculate()));
+            totalMetrics.add(Pair.create(baseMetric.getID(), baseMetric.get()));
             values.add(Pair.create(baseMetric.getID(), (baseMetric).getMetrics()));
-            baseMetric.save(calc);
+            Set<PsiMethod> subMethods = new HashSet<>();
+            if (warn) {
+
+                /*Map<PsiClass, Set<PsiMethod>> degradation = baseMetric.getDegradationMetrics();
+                for (Set<PsiMethod> methods : degradation.values()) {
+                    subMethods.addAll(methods);
+                }*/
+
+                // test-data
+                for (Map<PsiMethod, Double> entry : (baseMetric).getMetrics().values()) {
+                    for (Map.Entry<PsiMethod, Double> psiMethodDoubleEntry : entry.entrySet()) {
+                        if (psiMethodDoubleEntry.getValue() > 5.0) {
+                            subMethods.add(psiMethodDoubleEntry.getKey());
+                        }
+                    }
+                }
+            }
+            warnMethod.add(subMethods);
         }
 
         setTableModel();
