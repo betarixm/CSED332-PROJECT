@@ -39,7 +39,6 @@ public class ProjectToolWindow {
     private JPanel toolbar;
     private JButton buttonCalcMetric;
     private JButton buttonSaveMetric;
-    private JButton buttonWarning;
     int width, height;
 
     Map<Metric.Type, Metric[]> metricList;
@@ -63,9 +62,6 @@ public class ProjectToolWindow {
         projectToolWindowContent.setLayout(new BoxLayout(projectToolWindowContent, BoxLayout.PAGE_AXIS));
         createToolbar();
 
-        // TODO: this action then needs to be triggered from backend without a button
-        buttonWarning = new JButton("Show sample warning");
-        toolbar.add(buttonWarning);
         projectToolWindowContent.add(toolbar);
         projectToolWindowContent.add(new JSeparator());
 
@@ -86,6 +82,9 @@ public class ProjectToolWindow {
 
         MetricWindow window = MetricWindow.getInstance(width, height, metricList);
         projectToolWindowContent.add(window.getMetricContainer());
+
+        JPanel warnPanel = getWarning();
+        ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
 
         ActionListener listener = e -> {
             {
