@@ -12,13 +12,21 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.SlowOperations;
+import gnu.trove.THashMap;
+import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.metrics.ProjectCodeLineMetric;
+import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The plugin tool window.
@@ -30,6 +38,8 @@ public class ProjectToolWindow {
     private JButton buttonSaveMetric;
     private JButton buttonWarning;
     int width, height;
+
+    Map<Metric.Type, Metric[]> metricList;
 
     /**
      * The ProjectToolWindow constructor.
@@ -43,6 +53,7 @@ public class ProjectToolWindow {
     public ProjectToolWindow(ToolWindow toolWindow, int _width, int _height) {
         this.width = _width;
         this.height = _height;
+        this.metricList = new HashMap<>();
 
         var project = getActiveProject();
         projectToolWindowContent = new JPanel();
@@ -55,7 +66,22 @@ public class ProjectToolWindow {
         projectToolWindowContent.add(toolbar);
         projectToolWindowContent.add(new JSeparator());
 
-        MetricWindow window = MetricWindow.getInstance(width, height, project);
+
+        // make metric List and metricWindow
+        Metric codeLineMetric = new ProjectCodeLineMetric(project);
+        BaseMetric[] halsteadMetrics = {
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOCABULARY),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOLUME),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.DIFFICULTY),
+                new HalsteadMetric(project, HalsteadMetric.HalsteadType.EFFORT)
+        };
+        BaseMetric cycloMetric = new CyclomaticMetric(project);
+
+        metricList.put(Metric.Type.LINES_OF_CODE, new Metric[]{codeLineMetric});
+        metricList.put(Metric.Type.HALSTEAD, halsteadMetrics);
+        metricList.put(Metric.Type.CYCLOMATIC, new BaseMetric[]{cycloMetric});
+
+        MetricWindow window = MetricWindow.getInstance(width, height, metricList);
         projectToolWindowContent.add(window.getMetricContainer());
 
         ActionListener listener = e -> {
