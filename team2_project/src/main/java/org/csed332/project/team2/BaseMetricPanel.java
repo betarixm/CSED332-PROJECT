@@ -2,6 +2,7 @@ package org.csed332.project.team2;
 
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiJvmMember;
 import com.intellij.psi.PsiMethod;
 import com.intellij.ui.ColoredSideBorder;
 import com.intellij.ui.Colors;
