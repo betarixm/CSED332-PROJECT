@@ -2,12 +2,17 @@ package org.csed332.project.team2.metrics;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.db.service.MetricService;
+import org.csed332.project.team2.WarningCondition;
+import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.db.service.MetricModelService;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class BaseMetric implements Metric {
@@ -15,11 +20,13 @@ public abstract class BaseMetric implements Metric {
 
     private double metric;
     private String id;
+    protected WarningCondition cond;
 
     private final Map<PsiClass, Map<PsiMethod, Double>> metrics;
 
     public BaseMetric() {
         metrics = new HashMap<>();
+        this.cond = new WarningCondition(WarningCondition.Mode.MORE_THAN, 5);
     }
 
     public abstract double calculate();
@@ -63,7 +70,10 @@ public abstract class BaseMetric implements Metric {
         this.id = id;
     }
 
-    public abstract boolean checkDegradation();
+    @Override
+    public boolean checkDegradation() {
+        //TODO: make this method return true if value of Halstead Metric degraded.
+    }
 
     // save metrics to DB
     public abstract void save(CalcHistoryModel calc);

@@ -17,4 +17,5 @@ public interface Metric {
     boolean checkDegradation();
 
     void save();
+    // void setWarningCondition();
 }
