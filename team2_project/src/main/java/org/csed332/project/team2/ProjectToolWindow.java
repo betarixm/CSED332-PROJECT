@@ -20,6 +20,9 @@ import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.jetbrains.annotations.NotNull;
 
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -91,7 +94,34 @@ public class ProjectToolWindow {
                         ApplicationManager.getApplication().invokeLater(() -> {
                             ApplicationManager.getApplication().runReadAction(() -> {
                                 SlowOperations.allowSlowOperations(() -> {
-                                    window.setMetrics();
+                                    ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
+
+                                    for (Metric.Type metric : Metric.Type.values()) {
+                                        boolean warning = false;
+                                        int idx = metric.ordinal();
+
+                                        Metric[] subMetrics = metricList.get(metric);
+                                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
+                                        for (Metric subMetric : subMetrics) {
+                                            subMetric.calculate();
+                                            //TODO: after implementing checkDegradation, change comment.
+                                            warning = warning || subMetric.checkDegradation();
+                                            //warning = true;
+                                            if (subMetric instanceof BaseMetric) {
+                                                ((BaseMetric)subMetric).save(calcHistoryModel);
+                                            }
+                                        }
+                                        if (warning) {
+                                            warnMetric.add(metric);
+                                        }
+                                    }
+
+                                    if (!warnMetric.isEmpty()) {
+                                        JBPopup popup = popupBuilder.createPopup();
+                                        popup.showInFocusCenter();
+                                        System.out.println(warnMetric.get(0));
+                                    }
+                                    window.setMetrics(warnMetric);
                                 });
                             });
                         });
@@ -101,21 +131,6 @@ public class ProjectToolWindow {
         };
 
         buttonCalcMetric.addActionListener(listener);
-        JPanel warnPanel = getWarning();
-
-        ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
-        ActionListener listenerWarning = e -> {
-            {
-                JBPopup popup = popupBuilder.createPopup();
-                popup.showInFocusCenter();
-
-                // TODO what metrics makes degrading? it should be passed from backend
-                Metric.Type[] warnMetric = {Metric.Type.LINES_OF_CODE};
-                window.showWarnMetric(warnMetric);
-
-            }
-        };
-        buttonWarning.addActionListener(listenerWarning);
     }
 
     /**
