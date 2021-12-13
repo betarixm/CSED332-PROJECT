@@ -65,12 +65,13 @@ public class MetricWindow {
         return instance;
     }
 
-    public void setMetrics() {
+    public void setMetrics(ArrayList<Metric.Type> warnMetric) {
         for (Metric.Type metric : Metric.Type.values()) {
             int idx = metric.ordinal();
+            boolean warn = warnMetric.contains(metric);
 
             MetricPanel panel = metricPanels[idx];
-            panel.updateMetric();
+            panel.updateMetric(warn);
         }
     }
 
