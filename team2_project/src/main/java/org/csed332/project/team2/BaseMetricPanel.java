@@ -115,15 +115,15 @@ public class BaseMetricPanel extends MetricPanel {
 
         setTableModel();
         table.setModel(tableModel);
-        Map<List<String>, List<Double>> tableRowMap = new HashMap<>();
+        Map<Pair<PsiClass, PsiMethod>, List<Double>> tableRowMap = new HashMap<>();
 
         for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
             for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
-                String aClass = entry.getKey().getName();
+                PsiClass aClass = entry.getKey();
                 for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
                     Double aValue = subEntry.getValue();
-                    String aMethod = subEntry.getKey().getName();
-                    List<String> listKey = new ArrayList<>(List.of(new String[]{aClass, aMethod}));
+                    PsiMethod aMethod = subEntry.getKey();
+                    Pair<PsiClass, PsiMethod> listKey = new Pair(aClass, aMethod);
                     List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
                     valueList.add(aValue);
                     tableRowMap.put(listKey, valueList);
@@ -131,21 +131,22 @@ public class BaseMetricPanel extends MetricPanel {
             }
         }
 
-        for (List<String> key : tableRowMap.keySet()) {
-            String aClass = key.get(0);
-            String aMethod = key.get(1);
+        for (Pair<PsiClass, PsiMethod> key : tableRowMap.keySet()) {
+            PsiClass aClass = key.first;
+            PsiMethod aMethod = key.second;
+
             List<Double> listValues = tableRowMap.get(key);
             Object[] rowData = new Object[2 + listValues.size()];
-            rowData[0] = aClass;
-            rowData[1] = aMethod;
+            rowData[0] = aClass.getName();
+            rowData[1] = aMethod.getName();
             for (int i = 0; i < listValues.size(); i++) {
-                rowData[i+2] = listValues.get(i).toString();
+                rowData[i + 2] = listValues.get(i).toString();
             }
             tableModel.addRow(rowData);
         }
 
         if (computeTotal) {
-            double totalMetric = baseMetrics.get(0).calculate();
+            double totalMetric = baseMetrics.get(0).get();
             metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
         }
     }
