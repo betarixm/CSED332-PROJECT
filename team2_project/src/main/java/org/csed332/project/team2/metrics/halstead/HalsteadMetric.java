@@ -2,6 +2,7 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
@@ -17,18 +18,14 @@ public class HalsteadMetric extends VisitingMetric {
         super(element);
         setID(Type.HALSTEAD.toString());
         this.type = type;
+        setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
     }
 
     public HalsteadMetric(Project project, HalsteadType type) {
         super(project);
         setID(Type.HALSTEAD.toString());
         this.type = type;
-    }
-
-    @Override
-    public boolean checkDegradation() {
-        //TODO: make this method return true if value of Halstead Metric degraded.
-        return false;
+        setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
     }
 
     @Override
