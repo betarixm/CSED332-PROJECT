@@ -16,6 +16,7 @@ import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.MetricModel;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class BaseMetric implements Metric {
     protected enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
@@ -83,8 +84,27 @@ public abstract class BaseMetric implements Metric {
     public Map<PsiClass, Set<PsiMethod>> getDegradationMetrics(){
         Map<PsiClass, Set<PsiMethod>> degradedMetrics = new HashMap<>();
 
-        List<CalcHistoryModel> query = MetricService.query(getID(), 2);
-        query.stream().filter(calcHistoryModel -> {
+        Collection<MetricModel> metricModels = MetricService.query(getID(), 1).get(0).getMetricModels();
+        for(PsiClass psiClass : metrics.keySet()){
+            for(PsiMethod psiMethod : metrics.get(psiClass).keySet()){
+                List<MetricModel> subMetricModels = metricModels.stream()
+                        .filter(m -> m.getClassName().equals(psiClass.getName())
+                                && m.getMethodName().equals(psiMethod.getName()))
+                        .collect(Collectors.toList());
+
+                if(subMetricModels.size() < 2) continue;
+
+                Double newValue = subMetricModels.get(1).getFigure();
+                Double oldValue = subMetricModels.get(0).getFigure();
+
+                if(cond.shouldWarn(oldValue, newValue)){
+                    degradedMetrics.putIfAbsent(psiClass, new HashSet<>());
+                    degradedMetrics.get(psiClass).add(psiMethod);
+                }
+            }
+        }
+
+        /*query.stream().filter(calcHistoryModel -> {
             List<MetricModel> metricModels = new ArrayList<>(calcHistoryModel.getMetricModels());
             if(metricModels.size() < 2) return false;
 
@@ -107,7 +127,7 @@ public abstract class BaseMetric implements Metric {
 
             degradedMetrics.putIfAbsent(psiClass, new HashSet<>());
             degradedMetrics.get(psiClass).add(psiMethod);
-        });
+        });*/
 
         return Collections.unmodifiableMap(degradedMetrics);
     }
