@@ -92,17 +92,17 @@ public abstract class BaseMetric implements Metric {
                                 && m.getMethodName().equals(psiMethod.getName()))
                         .collect(Collectors.toList());
 
-                if(subMetricModels.isEmpty()) continue;
-
-                Double newValue;
-                Double oldValue = subMetricModels.get(0).getFigure();
 
 
-                if(subMetricModels.size() == 2) {
-                    newValue = subMetricModels.get(1).getFigure();
-                }else{
-                    newValue = oldValue;
-                }
+                Double newValue = metrics.get(psiClass).get(psiMethod);
+                Double oldValue;
+                if(subMetricModels.isEmpty()){
+                    oldValue = newValue;
+                }else oldValue = subMetricModels.get(0).getFigure();
+
+                System.out.println(getID() + " " +  psiClass.getName() + "@" + psiMethod.getName());
+                System.out.println("new value : " + newValue);
+                System.out.println("old value : " + oldValue);
 
                 if(cond.shouldWarn(oldValue, newValue)){
                     degradedMetrics.putIfAbsent(psiClass, new HashSet<>());

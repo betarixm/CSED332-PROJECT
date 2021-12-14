@@ -99,19 +99,20 @@ public class BaseMetricPanel extends MetricPanel {
             Set<PsiMethod> subMethods = new HashSet<>();
             if (warn) {
 
-                /*Map<PsiClass, Set<PsiMethod>> degradation = baseMetric.getDegradationMetrics();
+                Map<PsiClass, Set<PsiMethod>> degradation = baseMetric.getDegradationMetrics();
+                System.out.println(degradation.keySet().size());
                 for (Set<PsiMethod> methods : degradation.values()) {
                     subMethods.addAll(methods);
-                }*/
+                }
 
                 // test-data
-                for (Map<PsiMethod, Double> entry : (baseMetric).getMetrics().values()) {
+                /*for (Map<PsiMethod, Double> entry : (baseMetric).getMetrics().values()) {
                     for (Map.Entry<PsiMethod, Double> psiMethodDoubleEntry : entry.entrySet()) {
                         if (psiMethodDoubleEntry.getValue() > 5.0) {
                             subMethods.add(psiMethodDoubleEntry.getKey());
                         }
                     }
-                }
+                }*/
             }
             warnMethod.add(subMethods);
         }
