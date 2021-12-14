@@ -104,31 +104,6 @@ public abstract class BaseMetric implements Metric {
             }
         }
 
-        /*query.stream().filter(calcHistoryModel -> {
-            List<MetricModel> metricModels = new ArrayList<>(calcHistoryModel.getMetricModels());
-            if(metricModels.size() < 2) return false;
-
-            Double olderValue = metricModels.get(0).getFigure();
-            Double newValue = metricModels.get(1).getFigure();
-
-            return cond.shouldWarn(olderValue, newValue);
-        }).forEach(calcHistoryModel -> {
-            MetricModel metricModel = calcHistoryModel.getMetricModels().iterator().next();
-            String className = metricModel.getClassName();
-            String methodName = metricModel.getMethodName();
-
-            PsiClass psiClass = metrics.keySet().stream()
-                    .filter(aClass -> aClass.getName().equals(className))
-                    .findFirst().get();
-
-            PsiMethod psiMethod = metrics.get(psiClass).keySet().stream()
-                    .filter(aMethod -> aMethod.getName().equals(methodName))
-                    .findFirst().get();
-
-            degradedMetrics.putIfAbsent(psiClass, new HashSet<>());
-            degradedMetrics.get(psiClass).add(psiMethod);
-        });*/
-
         return Collections.unmodifiableMap(degradedMetrics);
     }
 
