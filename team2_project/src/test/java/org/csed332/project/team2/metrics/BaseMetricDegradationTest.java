@@ -7,8 +7,10 @@ import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
+import org.csed332.project.team2.db.util.HibernateUtil;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
+import org.hibernate.Session;
 import org.junit.jupiter.api.*;
 
 import java.util.Map;
@@ -21,6 +23,8 @@ public class BaseMetricDegradationTest {
     private static FixtureHelper helperMainClass;
     private static FixtureHelper anotherClass;
     private static WarningCondition cond;
+    private String testId;
+    private CalcHistoryModel calc;
 
     @BeforeAll
     public static void initialize() throws Exception {
@@ -53,7 +57,8 @@ public class BaseMetricDegradationTest {
                 }
             }
         };
-
+        testId = UUID.randomUUID().toString();
+        calc = MetricService.generateCalcHistoryModel(testId);
         baseMetric.setCondition(cond);
     }
 
@@ -70,8 +75,7 @@ public class BaseMetricDegradationTest {
 
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
-                            String testId = UUID.randomUUID().toString();
-                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
+
                             baseMetric.setMetric(1.5, psiClass, psiMethod);
                             baseMetric.save(calc);
 
@@ -109,8 +113,6 @@ public class BaseMetricDegradationTest {
                             final PsiMethod psiMethod21 = psiClass2.getMethods()[0];
                             final PsiMethod psiMethod22 = psiClass2.getMethods()[1];
 
-                            String testId = UUID.randomUUID().toString();
-                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
                             baseMetric.setMetric(1.5, psiClass1, psiMethod11);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod21);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
@@ -154,8 +156,6 @@ public class BaseMetricDegradationTest {
                             final PsiMethod psiMethod21 = psiClass2.getMethods()[0];
                             final PsiMethod psiMethod22 = psiClass2.getMethods()[1];
 
-                            String testId = UUID.randomUUID().toString();
-                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
                             // Phase 1
                             baseMetric.setMetric(2.0, psiClass1, psiMethod11);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod21);
@@ -188,8 +188,7 @@ public class BaseMetricDegradationTest {
 
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
-                            String testId = UUID.randomUUID().toString();
-                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
+
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
                             baseMetric.save(calc);
 
@@ -202,8 +201,66 @@ public class BaseMetricDegradationTest {
                         });
     }
 
+    @Test
+    public void testCheckDegradationTrue(){
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            try {
+                                helperMainClass.configure("AssertTestClass.java");
+                            } catch (Exception e) {
+
+                            }
+
+                            final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
+                            final PsiMethod psiMethod = psiClass.getMethods()[0];
+
+                            baseMetric.setMetric(1.5, psiClass, psiMethod);
+                            baseMetric.save(calc);
+
+                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.save(calc);
+
+                            Assertions.assertTrue(baseMetric.checkDegradation());
+                        });
+    }
+
+    @Test
+    public void testCheckDegradationFalse(){
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            try {
+                                helperMainClass.configure("AssertTestClass.java");
+                            } catch (Exception e) {
+
+                            }
+
+                            final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
+                            final PsiMethod psiMethod = psiClass.getMethods()[0];
+
+                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.save(calc);
+
+                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.save(calc);
+
+                            Assertions.assertFalse(baseMetric.checkDegradation());
+                        });
+    }
+
     @AfterAll
     public static void dispose() throws Exception {
         helperMainClass.tearDown();
+    }
+
+    @AfterEach
+    void cleanDB()
+    {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.remove(calc);
+            session.getTransaction().commit();
+        }
     }
 }
