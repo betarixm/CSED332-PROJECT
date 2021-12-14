@@ -112,20 +112,13 @@ public class BaseMetricDegradationTest {
                             String testId = UUID.randomUUID().toString();
                             CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
                             baseMetric.setMetric(1.5, psiClass1, psiMethod11);
-                            baseMetric.save(calc);
-
-                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.save(calc);
-
                             baseMetric.setMetric(1.0, psiClass2, psiMethod21);
-                            baseMetric.save(calc);
-
-                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
-                            baseMetric.save(calc);
-
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
+                            // Phase 2
+                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
+                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
@@ -163,21 +156,15 @@ public class BaseMetricDegradationTest {
 
                             String testId = UUID.randomUUID().toString();
                             CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
+                            // Phase 1
                             baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.save(calc);
-
-                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.save(calc);
-
                             baseMetric.setMetric(1.0, psiClass2, psiMethod21);
-                            baseMetric.save(calc);
-
-                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
-                            baseMetric.save(calc);
-
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
+                            // Phase 2
+                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
+                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
