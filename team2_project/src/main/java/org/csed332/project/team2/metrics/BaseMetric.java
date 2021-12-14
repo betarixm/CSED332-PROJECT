@@ -110,7 +110,7 @@ public abstract class BaseMetric implements Metric {
     @Override
     public boolean checkDegradation() {
         //TODO: make this method return true if value of Halstead Metric degraded.
-        return false;
+        return !getDegradationMetrics().isEmpty();
     }
 
     // save metrics to DB
