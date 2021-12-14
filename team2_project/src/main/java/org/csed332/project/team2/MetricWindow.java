@@ -8,6 +8,8 @@ import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The window displaying the metrics.
@@ -25,31 +27,22 @@ public class MetricWindow {
      * @param width  the width of the window
      * @param height the height of the window
      */
-    public MetricWindow(int width, int height, Project project) {
+    public MetricWindow(int width, int height, Map<Metric.Type, Metric[]> metricList) {
         // We use a container to allow scrolling
         metricContainer = new JPanel();
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
         metricPanels = new MetricPanel[Metric.Type.values().length];
 
         // Add the metric panels to the window
-        Metric codeLineMetric = new ProjectCodeLineMetric(project);
-        MetricPanel codeLinePanel = new MetricPanel(new Metric[]{codeLineMetric}, Metric.Type.LINES_OF_CODE);
+        MetricPanel codeLinePanel = new MetricPanel(metricList.get(Metric.Type.LINES_OF_CODE), Metric.Type.LINES_OF_CODE);
         metricPanels[0] = codeLinePanel;
         metricContainer.add(codeLinePanel.getPanel());
 
-        BaseMetric[] halsteadMetrics = {
-                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOCABULARY),
-                new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOLUME),
-                new HalsteadMetric(project, HalsteadMetric.HalsteadType.DIFFICULTY),
-                new HalsteadMetric(project, HalsteadMetric.HalsteadType.EFFORT)
-        };
-
-        BaseMetricPanel halsteadPanel = new BaseMetricPanel(halsteadMetrics, Metric.Type.HALSTEAD, new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}, false);
+        BaseMetricPanel halsteadPanel = new BaseMetricPanel((BaseMetric[]) metricList.get(Metric.Type.HALSTEAD), Metric.Type.HALSTEAD, new String[]{"Vocabulary", "Volume", "Difficulty", "Effort"}, false);
         metricPanels[1] = halsteadPanel;
         metricContainer.add(halsteadPanel.getPanel());
 
-        BaseMetric cycloMetric = new CyclomaticMetric(project);
-        BaseMetricPanel cycloPanel = new BaseMetricPanel(new BaseMetric[]{cycloMetric}, Metric.Type.CYCLOMATIC, new String[]{"MetricValue"}, true);
+        BaseMetricPanel cycloPanel = new BaseMetricPanel((BaseMetric[]) metricList.get(Metric.Type.CYCLOMATIC), Metric.Type.CYCLOMATIC, new String[]{"MetricValue"}, true);
         metricPanels[2] = cycloPanel;
         metricContainer.add(cycloPanel.getPanel());
     }
@@ -65,19 +58,20 @@ public class MetricWindow {
      * @param height the height of the instance
      * @return the single-toned instance
      */
-    public static MetricWindow getInstance(int width, int height, Project project) {
+    public static MetricWindow getInstance(int width, int height, Map<Metric.Type, Metric[]> metricList) {
         if (instance == null) {
-            instance = new MetricWindow(width, height, project);
+            instance = new MetricWindow(width, height, metricList);
         }
         return instance;
     }
 
-    public void setMetrics() {
+    public void setMetrics(ArrayList<Metric.Type> warnMetric) {
         for (Metric.Type metric : Metric.Type.values()) {
             int idx = metric.ordinal();
+            boolean warn = warnMetric.contains(metric);
 
             MetricPanel panel = metricPanels[idx];
-            panel.updateMetric();
+            panel.updateMetric(warn);
         }
     }
 

@@ -43,19 +43,19 @@ public class MetricPanel {
         panel.setToolTipText(MetricDescription.get(this.type));
     }
 
-    public void updateMetric() {
-        //TODO : after fix the bug of Metric.get it will work well
-            for (int i = 0; i < metrics.size(); i++) {
-                double value = metrics.get(i).calculate();
-                metrics.get(i).save();
-                if (metrics.get(i).checkDegradation()) {
-                    setWarningTitle();
-                } else {
-                    setBasicTitle();
-                }
-                metricValues.get(i).setText(Double.toString(value));
+    public void updateMetric(boolean warn) {
+        for (int i = 0; i < metrics.size(); i++) {
+            double value = metrics.get(i).calculate();
+            metrics.get(i).save();
+
+            if (warn) {
+                setWarningTitle();
+            } else {
+                setBasicTitle();
             }
-            //Should we update the panel?
+
+            metricValues.get(i).setText(Double.toString(value));
+        }
     }
 
     public JPanel getPanel() {
