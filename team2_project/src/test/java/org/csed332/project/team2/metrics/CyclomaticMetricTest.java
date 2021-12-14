@@ -4,7 +4,11 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
+import org.csed332.project.team2.db.util.HibernateUtil;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
+import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,6 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class CyclomaticMetricTest {
     private static final String testPath = "CycloTestProject";
@@ -214,6 +220,51 @@ public class CyclomaticMetricTest {
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleDoWhile")));
                             Assertions.assertEquals(4.0, metrics.get(methods.get("nestedWhile")));
                         });
+    }
+
+    @Test
+    public void testSave() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            try {
+                                helperMainClass.configure("AssertTestClass.java");
+                            } catch (Exception e) {
+
+                            }
+
+                            final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
+
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            cyclomaticMetric.calculate();
+
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<String, PsiMethod> methods = getMethods(psiClass);
+
+                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(UUID.randomUUID().toString());
+                            cyclomaticMetric.save(calc);
+
+                            Optional<Map<String, Map<String, Map<String, Double>>>> savedMetric = MetricService.getMetric(calc.getMetric());
+
+                            Assertions.assertNotNull(savedMetric);
+                            Assertions.assertTrue(savedMetric.isPresent());
+                            Assertions.assertNotNull(savedMetric.get());
+                            Assertions.assertEquals(1, savedMetric.get().size());
+
+                            Assertions.assertEquals(savedMetric.get().get("AssertTestClass").get("singleAssert")
+                                    .get(""), metrics.get(methods.get("singleAssert")));
+
+                            cleanDB(calc);
+                        });
+    }
+
+    void cleanDB(CalcHistoryModel calc)
+    {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.remove(calc);
+            session.getTransaction().commit();
+        }
     }
 
     public Map<String, PsiMethod> getMethods(PsiClass aClass) {
