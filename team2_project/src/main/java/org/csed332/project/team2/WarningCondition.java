@@ -58,5 +58,5 @@ public class WarningCondition {
         }
     }
 
-    public enum Mode {INCREASE, DECREASE, MORE_THAN, LESS_THAN}
+    public enum Mode {INCREASE, DECREASE, MORE_THAN, LESS_THAN, NO_WARNING}
 }
