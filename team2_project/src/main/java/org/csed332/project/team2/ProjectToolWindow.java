@@ -12,6 +12,7 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.SlowOperations;
+import com.intellij.util.ThrowableRunnable;
 import gnu.trove.THashMap;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
@@ -88,66 +89,45 @@ public class ProjectToolWindow {
 
         ActionListener listener = e -> {
             {
-                ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
-                    public void run(@NotNull ProgressIndicator progressIndicator) {
-                        ApplicationManager.getApplication().invokeLater(() -> {
-                            ApplicationManager.getApplication().runReadAction(() -> {
-                                SlowOperations.allowSlowOperations(() -> {
-                                    ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
+                backgroundOperation(() -> {
+                    ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
 
-                                    for (Metric.Type metric : Metric.Type.values()) {
-                                        boolean warning = false;
-                                        int idx = metric.ordinal();
+                    for (Metric.Type metric : Metric.Type.values()) {
+                        boolean warning = false;
+                        int idx = metric.ordinal();
 
-                                        Metric[] subMetrics = metricList.get(metric);
-                                        // CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
-                                        for (Metric subMetric : subMetrics) {
-                                            subMetric.calculate();
-                                            //TODO: after implementing checkDegradation, change comment.
-                                            warning = warning || subMetric.checkDegradation();
-                                            //warning = true;
-                                            /*if (subMetric instanceof BaseMetric) {
-                                                ((BaseMetric)subMetric).save(calcHistoryModel);
-                                            }*/
-                                        }
-                                        if (warning) {
-                                            warnMetric.add(metric);
-                                        }
-                                    }
-
-                                    if (!warnMetric.isEmpty()) {
-                                        JBPopup popup = popupBuilder.createPopup();
-                                        popup.showInFocusCenter();
-                                        System.out.println(warnMetric.get(0));
-                                    }
-                                    window.setMetrics(warnMetric);
-                                });
-                            });
-                        });
+                        Metric[] subMetrics = metricList.get(metric);
+                        for (Metric subMetric : subMetrics) {
+                            subMetric.calculate();
+                            //TODO: after implementing checkDegradation, change comment.
+                            warning = warning || subMetric.checkDegradation();
+                        }
+                        if (warning) {
+                            warnMetric.add(metric);
+                        }
                     }
+
+                    if (!warnMetric.isEmpty()) {
+                        JBPopup popup = popupBuilder.createPopup();
+                        popup.showInFocusCenter();
+                        System.out.println(warnMetric.get(0));
+                    }
+                    window.setMetrics(warnMetric);
                 });
             }
         };
 
         ActionListener saveButtonListener = e -> {
             {
-                ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
-                    public void run(@NotNull ProgressIndicator progressIndicator) {
-                        ApplicationManager.getApplication().invokeLater(() -> {
-                            ApplicationManager.getApplication().runReadAction(() -> {
-                                SlowOperations.allowSlowOperations(() -> {
-                                    for (Metric.Type metric : Metric.Type.values()) {
-                                        Metric[] subMetrics = metricList.get(metric);
-                                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
-                                        for (Metric subMetric : subMetrics) {
-                                            if (subMetric instanceof BaseMetric) {
-                                                ((BaseMetric)subMetric).save(calcHistoryModel);
-                                            }
-                                        }
-                                    }
-                                });
-                            });
-                        });
+                backgroundOperation(() -> {
+                    for (Metric.Type metric : Metric.Type.values()) {
+                        Metric[] subMetrics = metricList.get(metric);
+                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
+                        for (Metric subMetric : subMetrics) {
+                            if (subMetric instanceof BaseMetric) {
+                                ((BaseMetric)subMetric).save(calcHistoryModel);
+                            }
+                        }
                     }
                 });
             }
@@ -213,5 +193,21 @@ public class ProjectToolWindow {
 
         buttonSaveMetric = new JButton("Save Metrics");
         toolbar.add(buttonSaveMetric);
+    }
+
+    private void backgroundOperation(ThrowableRunnable<?> runnable){
+        ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
+            public void run(@NotNull ProgressIndicator progressIndicator) {
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    ApplicationManager.getApplication().runReadAction(() -> {
+                        try{
+                            SlowOperations.allowSlowOperations(runnable);
+                        } catch (Throwable e){
+
+                        }
+                    });
+                });
+            }
+        });
     }
 }
