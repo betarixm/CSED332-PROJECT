@@ -19,7 +19,7 @@ public abstract class BaseMetric implements Metric {
 
     public BaseMetric() {
         metrics = new HashMap<>();
-        this.cond = new WarningCondition(WarningCondition.Mode.MORE_THAN, 5);
+        this.cond = new WarningCondition(WarningCondition.Mode.NO_WARNING);
     }
 
     public void setCondition(WarningCondition cond) {
@@ -91,10 +91,13 @@ public abstract class BaseMetric implements Metric {
                     oldValue = newValue;
                 } else oldValue = subMetricModels.get(0).getFigure();
 
-                System.out.println(getID() + " " + psiClass.getName() + "@" + psiMethod.getName());
-                System.out.println("new value : " + newValue);
-                System.out.println("old value : " + oldValue);
-
+                /*if(this instanceof HalsteadMetric) {
+                    System.out.println(getID() + " " + psiClass.getName() + "@" + psiMethod.getName());
+                    System.out.println("new value : " + newValue);
+                    System.out.println("old value : " + oldValue);
+                    System.out.println(cond.mode );
+                    System.out.println(cond.threshold);
+                }*/
                 if (cond.shouldWarn(oldValue, newValue)) {
                     degradedMetrics.putIfAbsent(psiClass, new HashSet<>());
                     degradedMetrics.get(psiClass).add(psiMethod);
