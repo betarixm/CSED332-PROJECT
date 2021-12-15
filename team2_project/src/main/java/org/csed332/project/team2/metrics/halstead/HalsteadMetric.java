@@ -10,8 +10,6 @@ import org.csed332.project.team2.metrics.VisitingMetric;
 import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {
-    public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
-
     HalsteadType type;
 
     public HalsteadMetric(PsiElement element, HalsteadType type) {
@@ -28,7 +26,7 @@ public class HalsteadMetric extends VisitingMetric {
         setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
     }
 
-    public String getType(){
+    public String getType() {
         return type.toString();
     }
 
@@ -282,4 +280,6 @@ public class HalsteadMetric extends VisitingMetric {
     protected void visitUnaryExpressionMetric(PsiUnaryExpression expr) {
 
     }
+
+    public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
 }

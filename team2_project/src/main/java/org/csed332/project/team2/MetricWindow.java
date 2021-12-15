@@ -1,11 +1,7 @@
 package org.csed332.project.team2;
 
-import com.intellij.openapi.project.Project;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
-import org.csed332.project.team2.metrics.ProjectCodeLineMetric;
-import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
-import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -47,10 +43,6 @@ public class MetricWindow {
         metricContainer.add(cycloPanel.getPanel());
     }
 
-    public JPanel getMetricContainer() {
-        return metricContainer;
-    }
-
     /**
      * Get the single-toned instance of this class.
      *
@@ -63,6 +55,10 @@ public class MetricWindow {
             instance = new MetricWindow(width, height, metricList);
         }
         return instance;
+    }
+
+    public JPanel getMetricContainer() {
+        return metricContainer;
     }
 
     public void setMetrics(ArrayList<Metric.Type> warnMetric) {

@@ -10,10 +10,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public abstract class VisitingMetric extends BaseMetric {
-    private double visitResult = 0;
-    private PsiElement psiElement;
-    private Project project;
-
     final public PsiElementVisitor visitor = new JavaElementVisitor() {
         @Override
         public void visitDirectory(@NotNull PsiDirectory dir) {
@@ -230,6 +226,9 @@ public abstract class VisitingMetric extends BaseMetric {
             visitUnaryExpressionMetric(expr);
         }
     };
+    private double visitResult = 0;
+    private PsiElement psiElement;
+    private Project project;
 
     public VisitingMetric(PsiElement element) {
         setPsiElement(element);
@@ -337,13 +336,12 @@ public abstract class VisitingMetric extends BaseMetric {
 
     protected abstract void visitUnaryExpressionMetric(PsiUnaryExpression expr);
 
+    protected double getVisitResult() {
+        return visitResult;
+    }
 
     protected void setVisitResult(double result) {
         visitResult = result;
-    }
-
-    protected double getVisitResult() {
-        return visitResult;
     }
 
     protected double visit(PsiElement psiElement) {

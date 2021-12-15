@@ -39,7 +39,7 @@ public class CalcHistoryModel implements Model {
         this.timestamp = timestamp;
     }
 
-    public Collection<MetricModel> getMetricModels () {
+    public Collection<MetricModel> getMetricModels() {
         return Collections.unmodifiableCollection(metricModels);
     }
 

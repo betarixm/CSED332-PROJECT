@@ -1,9 +1,7 @@
 package org.csed332.project.team2.metrics;
 
-import java.io.File;
-import java.util.Set;
-
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiPackage;
 
 public class PackageCodeLineMetric extends CompositeCodeLineMetric {
 

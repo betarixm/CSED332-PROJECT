@@ -4,13 +4,10 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJvmMember;
 import com.intellij.psi.PsiMethod;
-import com.intellij.ui.ColoredSideBorder;
-import com.intellij.ui.Colors;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
-import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,8 +17,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;

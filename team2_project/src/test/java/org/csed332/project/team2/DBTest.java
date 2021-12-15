@@ -5,13 +5,14 @@ import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.db.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

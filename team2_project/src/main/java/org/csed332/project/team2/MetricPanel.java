@@ -1,6 +1,5 @@
 package org.csed332.project.team2;
 
-import com.intellij.util.SlowOperations;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.utils.MetricDescription;
 import org.jfree.chart.JFreeChart;
@@ -13,13 +12,12 @@ import java.util.List;
 
 
 public class MetricPanel {
+    protected List<Label> metricValues;
     // TODO: expand metric to metrics, metricValue to metricValues
     private List<Metric> metrics;
     private JPanel panel;
-
     private TitledBorder basicTitle;
     private TitledBorder warnTitle;
-    protected List<Label> metricValues;
     private JFreeChart metricChart;
 
     private Metric.Type type;

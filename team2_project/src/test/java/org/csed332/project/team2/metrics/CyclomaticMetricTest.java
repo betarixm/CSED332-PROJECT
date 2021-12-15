@@ -258,8 +258,7 @@ public class CyclomaticMetricTest {
                         });
     }
 
-    void cleanDB(CalcHistoryModel calc)
-    {
+    void cleanDB(CalcHistoryModel calc) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(calc);

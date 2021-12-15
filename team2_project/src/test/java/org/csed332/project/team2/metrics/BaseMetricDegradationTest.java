@@ -8,8 +8,6 @@ import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
-import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
-import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.hibernate.Session;
 import org.junit.jupiter.api.*;
 
@@ -18,8 +16,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class BaseMetricDegradationTest {
-    private static BaseMetric baseMetric;
     private static final String testPath = "CycloTestProject";
+    private static BaseMetric baseMetric;
     private static FixtureHelper helperMainClass;
     private static FixtureHelper anotherClass;
     private static WarningCondition cond;
@@ -35,8 +33,13 @@ public class BaseMetricDegradationTest {
         cond = new WarningCondition(WarningCondition.Mode.INCREASE);
     }
 
+    @AfterAll
+    public static void dispose() throws Exception {
+        helperMainClass.tearDown();
+    }
+
     @BeforeEach
-    public void initBaseMetric(){
+    public void initBaseMetric() {
         baseMetric = new BaseMetric() {
             @Override
             public double calculate() {
@@ -44,13 +47,10 @@ public class BaseMetricDegradationTest {
             }
 
             @Override
-            public void save(CalcHistoryModel calc)
-            {
+            public void save(CalcHistoryModel calc) {
                 Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
-                for (PsiClass _class : metrics.keySet())
-                {
-                    for (PsiMethod _method : metrics.get(_class).keySet())
-                    {
+                for (PsiClass _class : metrics.keySet()) {
+                    for (PsiMethod _method : metrics.get(_class).keySet()) {
                         Double _figure = metrics.get(_class).get(_method);
                         MetricService.addMetric(getID(), _class.getName(), _method.getName(), "", _figure, calc);
                     }
@@ -63,7 +63,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testGetDegradationMetrics(){
+    public void testGetDegradationMetrics() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -90,7 +90,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testGetDegradationMetricsMultiple(){
+    public void testGetDegradationMetricsMultiple() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -133,7 +133,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testGetDegradationMetricsNoWarningOneClass(){
+    public void testGetDegradationMetricsNoWarningOneClass() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -176,7 +176,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testGetDegradationMetricsNoDegradation(){
+    public void testGetDegradationMetricsNoDegradation() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -202,7 +202,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testCheckDegradationTrue(){
+    public void testCheckDegradationTrue() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -226,7 +226,7 @@ public class BaseMetricDegradationTest {
     }
 
     @Test
-    public void testCheckDegradationFalse(){
+    public void testCheckDegradationFalse() {
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -249,14 +249,8 @@ public class BaseMetricDegradationTest {
                         });
     }
 
-    @AfterAll
-    public static void dispose() throws Exception {
-        helperMainClass.tearDown();
-    }
-
     @AfterEach
-    void cleanDB()
-    {
+    void cleanDB() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(calc);

@@ -1,8 +1,8 @@
 package org.csed332.project.team2.db.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.*;
 
 @Entity
 @Table(name = "MetricModels")

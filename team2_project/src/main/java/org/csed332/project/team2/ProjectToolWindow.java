@@ -13,16 +13,14 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.SlowOperations;
 import com.intellij.util.ThrowableRunnable;
-import gnu.trove.THashMap;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.ProjectCodeLineMetric;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.jetbrains.annotations.NotNull;
-
-import org.csed332.project.team2.db.model.CalcHistoryModel;
-import org.csed332.project.team2.db.service.MetricService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,13 +34,12 @@ import java.util.Map;
  * The plugin tool window.
  */
 public class ProjectToolWindow {
+    int width, height;
+    Map<Metric.Type, Metric[]> metricList;
     private JPanel projectToolWindowContent;
     private JPanel toolbar;
     private JButton buttonCalcMetric;
     private JButton buttonSaveMetric;
-    int width, height;
-
-    Map<Metric.Type, Metric[]> metricList;
 
     /**
      * The ProjectToolWindow constructor.
@@ -125,7 +122,7 @@ public class ProjectToolWindow {
                         CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
                         for (Metric subMetric : subMetrics) {
                             if (subMetric instanceof BaseMetric) {
-                                ((BaseMetric)subMetric).save(calcHistoryModel);
+                                ((BaseMetric) subMetric).save(calcHistoryModel);
                             }
                         }
                     }
@@ -195,14 +192,14 @@ public class ProjectToolWindow {
         toolbar.add(buttonSaveMetric);
     }
 
-    private void backgroundOperation(ThrowableRunnable<?> runnable){
+    private void backgroundOperation(ThrowableRunnable<?> runnable) {
         ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 ApplicationManager.getApplication().invokeLater(() -> {
                     ApplicationManager.getApplication().runReadAction(() -> {
-                        try{
+                        try {
                             SlowOperations.allowSlowOperations(runnable);
-                        } catch (Throwable e){
+                        } catch (Throwable e) {
 
                         }
                     });

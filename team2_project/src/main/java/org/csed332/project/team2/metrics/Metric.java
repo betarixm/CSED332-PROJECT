@@ -2,8 +2,6 @@ package org.csed332.project.team2.metrics;
 
 
 public interface Metric {
-    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC}
-
     double get();
 
     double calculate();
@@ -17,5 +15,7 @@ public interface Metric {
     boolean checkDegradation();
 
     void save();
+
+    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC}
     // void setWarningCondition();
 }
