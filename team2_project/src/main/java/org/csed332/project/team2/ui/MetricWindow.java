@@ -1,7 +1,9 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui;
 
 import org.csed332.project.team2.metrics.BaseMetric;
 import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.ui.component.panel.BaseMetricPanel;
+import org.csed332.project.team2.ui.component.panel.MetricPanel;
 
 import javax.swing.*;
 import java.util.ArrayList;

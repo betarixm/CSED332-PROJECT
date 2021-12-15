@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.utils;
 
 public class WarningCondition {
 

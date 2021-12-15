@@ -1,4 +1,4 @@
-package org.csed332.project.team2.db;
+package org.csed332.project.team2.db.service;
 
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.model.MetricModel;
