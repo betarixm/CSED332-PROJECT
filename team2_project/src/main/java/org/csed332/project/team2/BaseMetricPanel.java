@@ -168,8 +168,10 @@ public class BaseMetricPanel extends MetricPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
-                PsiJvmMember codePart = methodList.get(row);
-                codePart.navigate(true);
+                if(!methodList.isEmpty()) {
+                    PsiJvmMember codePart = methodList.get(row);
+                    codePart.navigate(true);
+                }
             }
 
             @Override
