@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.db.service;
 
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class DBTest {
+public class MetricModelServiceTest {
     static List<MetricModel> metricModelList;
 
     static {

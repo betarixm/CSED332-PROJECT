@@ -1,5 +1,6 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.utils;
 
+import org.csed332.project.team2.utils.WarningCondition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

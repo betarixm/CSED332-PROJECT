@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui.component.panel;
 
 import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.utils.MetricDescription;
@@ -22,7 +22,7 @@ public class MetricPanel {
 
     private Metric.Type type;
 
-    MetricPanel(Metric[] _metrics, Metric.Type _type) {
+    public MetricPanel(Metric[] _metrics, Metric.Type _type) {
         this.metrics = List.of(_metrics);
         this.type = _type;
 
