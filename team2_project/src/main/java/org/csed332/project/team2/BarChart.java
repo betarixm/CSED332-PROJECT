@@ -6,8 +6,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.swing.*;
-
 /**
  * This class represents a BarChart.
  * This uses JFreeChart class to create the Chart.

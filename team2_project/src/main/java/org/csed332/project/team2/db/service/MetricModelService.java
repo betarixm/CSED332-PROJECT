@@ -2,16 +2,14 @@ package org.csed332.project.team2.db.service;
 
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.util.HibernateUtil;
-
 import org.hibernate.Session;
-
-import java.util.Date;
-import java.util.List;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.List;
 
 @Deprecated
 public class MetricModelService {

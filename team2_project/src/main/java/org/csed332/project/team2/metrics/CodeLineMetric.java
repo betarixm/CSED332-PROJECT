@@ -1,7 +1,5 @@
 package org.csed332.project.team2.metrics;
 
-import org.csed332.project.team2.db.service.MetricModelService;
-
 public abstract class CodeLineMetric implements Metric {
     private int codeLine;
 

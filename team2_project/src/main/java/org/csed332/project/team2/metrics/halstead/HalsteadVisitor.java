@@ -12,7 +12,7 @@ public class HalsteadVisitor extends ASTVisitor {
         return operators.values().stream().reduce(0, (a, b) -> a + b);
     }
 
-    public int getNumberOfUniqueOperators(){
+    public int getNumberOfUniqueOperators() {
         return operators.size();
     }
 
@@ -21,7 +21,7 @@ public class HalsteadVisitor extends ASTVisitor {
         return operands.values().stream().reduce(0, (a, b) -> a + b);
     }
 
-    public int getNumberOfUniqueOperands(){
+    public int getNumberOfUniqueOperands() {
         // TODO: substract -2? because fakeClassName and methodName should not be counted
         return operands.size();
     }

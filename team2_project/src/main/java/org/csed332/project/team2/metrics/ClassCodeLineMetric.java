@@ -1,17 +1,8 @@
 package org.csed332.project.team2.metrics;
 
-import org.apache.tools.ant.taskdefs.War;
-import org.csed332.project.team2.db.model.MetricModel;
-import org.csed332.project.team2.db.service.MetricModelService;
+import com.intellij.psi.PsiClass;
 import org.csed332.project.team2.WarningCondition;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileReader;
-import java.util.List;
-
-import com.intellij.psi.*;
+import org.csed332.project.team2.db.service.MetricModelService;
 
 public class ClassCodeLineMetric extends CodeLineMetric {
 

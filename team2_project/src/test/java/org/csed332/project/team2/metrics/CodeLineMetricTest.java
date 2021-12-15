@@ -6,7 +6,10 @@ import com.intellij.psi.PsiClass;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -72,7 +75,6 @@ public class CodeLineMetricTest {
                             Assertions.assertEquals(1.0, classCodeLineMetric.get());
                         });
     }
-
 
 
 }

@@ -3,8 +3,10 @@ package org.csed332.project.team2;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.testFramework.fixtures.*;
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
+import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
+import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 
 import java.io.File;
@@ -13,11 +15,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FixtureHelper {
-    private  String testPath;
+    private static FixtureHelper Instance = null;
+    private String testPath;
     private CodeInsightTestFixture fixture;
-    private static FixtureHelper Instance=null;
 
-    private FixtureHelper() {}
+    private FixtureHelper() {
+    }
 
     public static FixtureHelper getInstance() {
         if (Instance == null) {

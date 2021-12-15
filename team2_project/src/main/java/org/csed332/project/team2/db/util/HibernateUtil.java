@@ -22,7 +22,8 @@ public class HibernateUtil {
                     .setProperty("hibernate.dialect", "org.hibernate.dialect.DerbyTenSevenDialect");
 
             sessionFactory = configuration.buildSessionFactory();
-        } catch (Throwable ignore) {}
+        } catch (Throwable ignore) {
+        }
     }
 
     public static SessionFactory getSessionFactory() {
