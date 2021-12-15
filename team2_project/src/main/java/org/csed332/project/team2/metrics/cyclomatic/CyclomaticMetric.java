@@ -1,20 +1,16 @@
 package org.csed332.project.team2.metrics.cyclomatic;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.java.CodeBlockBlock;
-import com.intellij.psi.impl.source.PsiMethodImpl;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
+import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
 import java.util.Map;
 import java.util.Objects;
-
-import com.intellij.openapi.project.Project;
 
 public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(PsiElement element) {
@@ -25,22 +21,14 @@ public class CyclomaticMetric extends VisitingMetric {
     public CyclomaticMetric(Project project) {
         super(project);
         setID(Type.CYCLOMATIC.toString());
+        setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, 15));
     }
 
     @Override
-    public boolean checkDegradation() {
-        //TODO: make this method return true if value of Cyclomatic Metric degraded.
-        return false;
-    }
-
-    @Override
-    public void save(CalcHistoryModel calc)
-    {
+    public void save(CalcHistoryModel calc) {
         Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
-        for (PsiClass _class : metrics.keySet())
-        {
-            for (PsiMethod _method : metrics.get(_class).keySet())
-            {
+        for (PsiClass _class : metrics.keySet()) {
+            for (PsiMethod _method : metrics.get(_class).keySet()) {
                 Double _figure = metrics.get(_class).get(_method);
                 MetricService.addMetric(getID(), _class.getName(), _method.getName(), "", _figure, calc);
             }

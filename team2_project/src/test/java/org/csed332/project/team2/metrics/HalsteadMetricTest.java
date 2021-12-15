@@ -47,10 +47,10 @@ public class HalsteadMetricTest {
                         () -> {
                             final Project project = helperMainClass.getFixture().getProject();
                             final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-                            Assertions.assertEquals(9.0,  new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOCABULARY).calculate(), 0.00005);
-                            Assertions.assertEquals(50.7188,  new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME).calculate(), 0.00005);
-                            Assertions.assertEquals(0.5,  new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.DIFFICULTY).calculate(), 0.00005);
-                            Assertions.assertEquals(25.3594,  new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.EFFORT).calculate(), 0.00005);
+                            Assertions.assertEquals(9.0, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOCABULARY).calculate(), 0.00005);
+                            Assertions.assertEquals(50.7188, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME).calculate(), 0.00005);
+                            Assertions.assertEquals(0.5, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.DIFFICULTY).calculate(), 0.00005);
+                            Assertions.assertEquals(25.3594, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.EFFORT).calculate(), 0.00005);
                         });
     }
 
@@ -79,8 +79,8 @@ public class HalsteadMetricTest {
                         });
 
     }
-    void cleanDB(CalcHistoryModel calc)
-    {
+
+    void cleanDB(CalcHistoryModel calc) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.remove(calc);
