@@ -28,6 +28,10 @@ public class HalsteadMetric extends VisitingMetric {
         setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
     }
 
+    public String getType(){
+        return type.toString();
+    }
+
     @Override
     public void save(CalcHistoryModel calc) {
         Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();

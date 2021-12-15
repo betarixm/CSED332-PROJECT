@@ -14,6 +14,7 @@ import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.WarningCondition;
 import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,12 +88,13 @@ public abstract class BaseMetric implements Metric {
         Collection<MetricModel> metricModels = MetricService.query(getID(), 1).get(0).getMetricModels();
         for(PsiClass psiClass : metrics.keySet()){
             for(PsiMethod psiMethod : metrics.get(psiClass).keySet()){
+                String halsteadType = this instanceof HalsteadMetric
+                        ? ((HalsteadMetric) this).getType() : "";
                 List<MetricModel> subMetricModels = metricModels.stream()
                         .filter(m -> m.getClassName().equals(psiClass.getName())
-                                && m.getMethodName().equals(psiMethod.getName()))
+                                && m.getMethodName().equals(psiMethod.getName())
+                                && m.getType().equals(halsteadType))
                         .collect(Collectors.toList());
-
-
 
                 Double newValue = metrics.get(psiClass).get(psiMethod);
                 Double oldValue;
