@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui.component.panel;
 
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiClass;

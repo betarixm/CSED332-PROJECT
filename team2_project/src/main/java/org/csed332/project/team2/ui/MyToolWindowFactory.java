@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;

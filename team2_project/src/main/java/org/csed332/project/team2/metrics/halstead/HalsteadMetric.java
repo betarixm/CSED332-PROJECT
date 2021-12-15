@@ -2,12 +2,11 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.csed332.project.team2.WarningCondition;
+import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {

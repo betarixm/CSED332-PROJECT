@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui.component.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;

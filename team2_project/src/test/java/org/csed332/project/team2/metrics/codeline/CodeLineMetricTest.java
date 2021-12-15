@@ -1,4 +1,4 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2.metrics.codeline;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;

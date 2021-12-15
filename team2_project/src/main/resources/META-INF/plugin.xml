@@ -14,7 +14,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Metrics" anchor="right" factoryClass="org.csed332.project.team2.MyToolWindowFactory"/>
+        <toolWindow id="Metrics" anchor="right" factoryClass="org.csed332.project.team2.ui.MyToolWindowFactory"/>
     </extensions>
 
     <actions>
