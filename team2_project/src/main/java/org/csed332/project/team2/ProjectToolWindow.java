@@ -100,15 +100,15 @@ public class ProjectToolWindow {
                                         int idx = metric.ordinal();
 
                                         Metric[] subMetrics = metricList.get(metric);
-                                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
+                                        // CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
                                         for (Metric subMetric : subMetrics) {
                                             subMetric.calculate();
                                             //TODO: after implementing checkDegradation, change comment.
                                             warning = warning || subMetric.checkDegradation();
                                             //warning = true;
-                                            if (subMetric instanceof BaseMetric) {
+                                            /*if (subMetric instanceof BaseMetric) {
                                                 ((BaseMetric)subMetric).save(calcHistoryModel);
-                                            }
+                                            }*/
                                         }
                                         if (warning) {
                                             warnMetric.add(metric);
@@ -129,7 +129,32 @@ public class ProjectToolWindow {
             }
         };
 
+        ActionListener saveButtonListener = e -> {
+            {
+                ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
+                    public void run(@NotNull ProgressIndicator progressIndicator) {
+                        ApplicationManager.getApplication().invokeLater(() -> {
+                            ApplicationManager.getApplication().runReadAction(() -> {
+                                SlowOperations.allowSlowOperations(() -> {
+                                    for (Metric.Type metric : Metric.Type.values()) {
+                                        Metric[] subMetrics = metricList.get(metric);
+                                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
+                                        for (Metric subMetric : subMetrics) {
+                                            if (subMetric instanceof BaseMetric) {
+                                                ((BaseMetric)subMetric).save(calcHistoryModel);
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            }
+        };
+
         buttonCalcMetric.addActionListener(listener);
+        buttonSaveMetric.addActionListener(saveButtonListener);
     }
 
     /**
