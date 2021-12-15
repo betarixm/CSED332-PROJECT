@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 /**
  * The plugin tool window.
  */
@@ -38,8 +40,9 @@ public class ProjectToolWindow {
     Map<Metric.Type, Metric[]> metricList;
     private JPanel projectToolWindowContent;
     private JPanel toolbar;
-    private JButton buttonCalcMetric;
-    private JButton buttonSaveMetric;
+    //private JButton buttonCalcMetric;
+    //private JButton buttonSaveMetric;
+    private JButton buttonCalcAndSave;
 
     /**
      * The ProjectToolWindow constructor.
@@ -84,7 +87,7 @@ public class ProjectToolWindow {
         JPanel warnPanel = getWarning();
         ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
 
-        ActionListener listener = e -> {
+        /*ActionListener listener = e -> {
             {
                 backgroundOperation(() -> {
                     ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
@@ -128,10 +131,17 @@ public class ProjectToolWindow {
                     }
                 });
             }
-        };
+        };*/
 
-        buttonCalcMetric.addActionListener(listener);
-        buttonSaveMetric.addActionListener(saveButtonListener);
+        ActionListener calculateAndSaveListener = e -> backgroundOperation( () -> {
+            System.out.println("Button pressed");
+            doMetricsCalculation(popupBuilder, window);
+            doMetricsSave();
+        });
+
+        //buttonCalcMetric.addActionListener(listener);
+        //buttonSaveMetric.addActionListener(saveButtonListener);
+        buttonCalcAndSave.addActionListener(calculateAndSaveListener);
     }
 
     /**
@@ -185,26 +195,63 @@ public class ProjectToolWindow {
         toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
 
-        buttonCalcMetric = new JButton("Calculate Metrics");
-        toolbar.add(buttonCalcMetric);
+        //buttonCalcMetric = new JButton("Calculate Metrics");
+        //toolbar.add(buttonCalcMetric);
 
-        buttonSaveMetric = new JButton("Save Metrics");
-        toolbar.add(buttonSaveMetric);
+        //buttonSaveMetric = new JButton("Save Metrics");
+        //toolbar.add(buttonSaveMetric);
+        buttonCalcAndSave = new JButton("Calculate Metrics");
+        toolbar.add(buttonCalcAndSave);
     }
 
     private void backgroundOperation(ThrowableRunnable<?> runnable) {
         ProgressManager.getInstance().run(new Task.Backgroundable(null, "Calculating metrics...") {
             public void run(@NotNull ProgressIndicator progressIndicator) {
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    ApplicationManager.getApplication().runReadAction(() -> {
-                        try {
-                            SlowOperations.allowSlowOperations(runnable);
-                        } catch (Throwable e) {
-
-                        }
-                    });
-                });
+                ApplicationManager.getApplication().invokeLater(() -> ApplicationManager.getApplication().runReadAction(() -> {
+                    try {
+                        SlowOperations.allowSlowOperations(runnable);
+                    } catch (Throwable e) {}
+                }));
             }
         });
     }
+
+
+    private void doMetricsCalculation(ComponentPopupBuilder popupBuilder, MetricWindow window){
+        ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
+
+        for (Metric.Type metric : Metric.Type.values()) {
+            boolean warning = false;
+
+            Metric[] subMetrics = metricList.get(metric);
+            for (Metric subMetric : subMetrics) {
+                subMetric.calculate();
+                //TODO: after implementing checkDegradation, change comment.
+                warning = warning || subMetric.checkDegradation();
+            }
+            if (warning) {
+                warnMetric.add(metric);
+            }
+        }
+
+        if (!warnMetric.isEmpty()) {
+            JBPopup popup = popupBuilder.createPopup();
+            popup.showInFocusCenter();
+            System.out.println(warnMetric.get(0));
+        }
+        window.setMetrics(warnMetric);
+    }
+
+    private void doMetricsSave(){
+        for (Metric.Type metric : Metric.Type.values()) {
+            Metric[] subMetrics = metricList.get(metric);
+            CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
+            for (Metric subMetric : subMetrics) {
+                if (subMetric instanceof BaseMetric) {
+                    ((BaseMetric) subMetric).save(calcHistoryModel);
+                }
+            }
+        }
+    }
+
 }
