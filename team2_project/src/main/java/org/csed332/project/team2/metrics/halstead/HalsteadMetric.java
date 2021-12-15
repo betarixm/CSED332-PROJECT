@@ -7,23 +7,42 @@ import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {
     HalsteadType type;
+    private static final Map<HalsteadType, Double> thresholds = Map.of(
+            HalsteadType.DIFFICULTY,0.25,
+            HalsteadType.EFFORT,100.0,
+            HalsteadType.VOLUME,200.0
+    );
+
+    private static final double effortThreshold = 100;
+    private static final double volumThreshold = 200;
+    private static final double difficultyThreshold = 0.25;
 
     public HalsteadMetric(PsiElement element, HalsteadType type) {
         super(element);
         setID(Type.HALSTEAD.toString());
         this.type = type;
-        setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
+
+        if(thresholds.containsKey(type)) {
+            Double threshold = thresholds.get(type);
+            setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
+        }
+
     }
 
     public HalsteadMetric(Project project, HalsteadType type) {
         super(project);
         setID(Type.HALSTEAD.toString());
         this.type = type;
-        setCondition(new WarningCondition(WarningCondition.Mode.INCREASE));
+
+        if(thresholds.containsKey(type)) {
+            Double threshold = thresholds.get(type);
+            setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
+        }
     }
 
     public String getType() {
