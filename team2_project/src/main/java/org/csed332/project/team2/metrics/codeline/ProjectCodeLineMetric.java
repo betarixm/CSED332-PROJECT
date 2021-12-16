@@ -47,7 +47,6 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
             if (window != null && window.isActive())
                 return project;
         }
-        // if there is no active project, return an arbitrary project (the first)
         return ProjectManager.getInstance().getOpenProjects()[0];
     }
 
