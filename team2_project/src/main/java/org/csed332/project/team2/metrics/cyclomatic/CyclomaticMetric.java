@@ -4,10 +4,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
 import java.util.Map;
 import java.util.Objects;

@@ -1,9 +1,8 @@
 package org.csed332.project.team2.metrics.codeline;
 
 import com.intellij.psi.PsiClass;
-import org.csed332.project.team2.metrics.codeline.CodeLineMetric;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.service.MetricModelService;
+import org.csed332.project.team2.utils.WarningCondition;
 
 public class ClassCodeLineMetric extends CodeLineMetric {
 

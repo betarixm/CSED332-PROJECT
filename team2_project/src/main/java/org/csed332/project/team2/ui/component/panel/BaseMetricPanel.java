@@ -35,7 +35,7 @@ public class BaseMetricPanel extends MetricPanel {
     private Comparator<Pair<PsiClass, PsiMethod>> rowComparator = new Comparator<Pair<PsiClass, PsiMethod>>() {
         @Override
         public int compare(Pair<PsiClass, PsiMethod> o1, Pair<PsiClass, PsiMethod> o2) {
-            return (o1.first.getName()+o1.second.getName())
+            return (o1.first.getName() + o1.second.getName())
                     .compareTo(o2.first.getName() + o2.second.getName());
         }
     };
@@ -178,7 +178,7 @@ public class BaseMetricPanel extends MetricPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
-                if(!methodList.isEmpty()) {
+                if (!methodList.isEmpty()) {
                     PsiJvmMember codePart = methodList.get(row);
                     codePart.navigate(true);
                 }

@@ -2,19 +2,19 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
 import java.util.Map;
 
 public class HalsteadMetric extends VisitingMetric {
     HalsteadType type;
     private static final Map<HalsteadType, Double> thresholds = Map.of(
-            HalsteadType.DIFFICULTY,0.25,
-            HalsteadType.EFFORT,100.0,
-            HalsteadType.VOLUME,200.0
+            HalsteadType.DIFFICULTY, 0.25,
+            HalsteadType.EFFORT, 100.0,
+            HalsteadType.VOLUME, 200.0
     );
 
     private static final double effortThreshold = 100;
@@ -26,7 +26,7 @@ public class HalsteadMetric extends VisitingMetric {
         setID(Type.HALSTEAD.toString());
         this.type = type;
 
-        if(thresholds.containsKey(type)) {
+        if (thresholds.containsKey(type)) {
             Double threshold = thresholds.get(type);
             setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
         }
@@ -38,7 +38,7 @@ public class HalsteadMetric extends VisitingMetric {
         setID(Type.HALSTEAD.toString());
         this.type = type;
 
-        if(thresholds.containsKey(type)) {
+        if (thresholds.containsKey(type)) {
             Double threshold = thresholds.get(type);
             setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
         }
