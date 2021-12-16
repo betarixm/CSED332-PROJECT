@@ -31,7 +31,6 @@ public class MetricWindow {
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
         metricPanels = new MetricPanel[Metric.Type.values().length];
 
-        // Add the metric panels to the window
         MetricPanel codeLinePanel = new MetricPanel(metricList.get(Metric.Type.LINES_OF_CODE), Metric.Type.LINES_OF_CODE);
         metricPanels[0] = codeLinePanel;
         metricContainer.add(codeLinePanel.getPanel());
@@ -79,7 +78,5 @@ public class MetricWindow {
             MetricPanel panel = metricPanels[idx];
             panel.setWarningTitle();
         }
-
-        //TODO : show the how much the metric has worsen
     }
 }
