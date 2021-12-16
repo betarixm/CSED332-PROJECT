@@ -6,8 +6,6 @@ public abstract class CodeLineMetric implements Metric {
     private int codeLine;
 
     public CodeLineMetric() {
-        // TODO: how to test ProjectCodeLine?
-        //  Now, getProject() returns just temp project..
 
     }
 

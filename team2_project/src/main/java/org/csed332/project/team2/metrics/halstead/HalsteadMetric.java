@@ -12,9 +12,9 @@ import java.util.Map;
 public class HalsteadMetric extends VisitingMetric {
     HalsteadType type;
     private static final Map<HalsteadType, Double> thresholds = Map.of(
-            HalsteadType.DIFFICULTY,0.25,
-            HalsteadType.EFFORT,100.0,
-            HalsteadType.VOLUME,200.0
+            HalsteadType.DIFFICULTY, 0.25,
+            HalsteadType.EFFORT, 100.0,
+            HalsteadType.VOLUME, 200.0
     );
 
     private static final double effortThreshold = 100;
@@ -26,7 +26,7 @@ public class HalsteadMetric extends VisitingMetric {
         setID(Type.HALSTEAD.toString());
         this.type = type;
 
-        if(thresholds.containsKey(type)) {
+        if (thresholds.containsKey(type)) {
             Double threshold = thresholds.get(type);
             setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
         }
@@ -38,7 +38,7 @@ public class HalsteadMetric extends VisitingMetric {
         setID(Type.HALSTEAD.toString());
         this.type = type;
 
-        if(thresholds.containsKey(type)) {
+        if (thresholds.containsKey(type)) {
             Double threshold = thresholds.get(type);
             setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
         }
@@ -50,11 +50,11 @@ public class HalsteadMetric extends VisitingMetric {
 
     @Override
     public void save(CalcHistoryModel calc) {
-        Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
-        for (PsiClass _class : metrics.keySet()) {
+        Map<String, Map<PsiMethod, Double>> metrics = getMetrics();
+        for (String _class : metrics.keySet()) {
             for (PsiMethod _method : metrics.get(_class).keySet()) {
                 Double _figure = metrics.get(_class).get(_method);
-                MetricService.addMetric(getID(), _class.getName(), _method.getName(), type.toString(), _figure, calc);
+                MetricService.addMetric(getID(), _class, _method.getName(), type.toString(), _figure, calc);
             }
         }
     }

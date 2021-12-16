@@ -13,7 +13,6 @@ import java.util.List;
 
 public class MetricPanel {
     protected List<Label> metricValues;
-    // TODO: expand metric to metrics, metricValue to metricValues
     private List<Metric> metrics;
     private JPanel panel;
     private TitledBorder basicTitle;
@@ -30,11 +29,9 @@ public class MetricPanel {
         warnTitle = BorderFactory.createTitledBorder("\u26A0" + this.type.toString());
         warnTitle.setTitleColor(Color.YELLOW);
 
-        /* making JPanel */
         panel = new JPanel(new BorderLayout());
         setBasicTitle();
 
-        /* Displays the metric value */
         metricValues = new ArrayList<>();
         metricValues.add(new Label());
         panel.add(metricValues.get(0));
