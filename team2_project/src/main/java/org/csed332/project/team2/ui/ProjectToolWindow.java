@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 /**
  * The plugin tool window.
  */
@@ -84,8 +83,7 @@ public class ProjectToolWindow {
         JPanel warnPanel = getWarning();
         ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
 
-        ActionListener calculateAndSaveListener = e -> backgroundOperation( () -> {
-            System.out.println("Button pressed");
+        ActionListener calculateAndSaveListener = e -> backgroundOperation(() -> {
             doMetricsCalculation(popupBuilder, window);
             doMetricsSave();
         });
@@ -152,14 +150,15 @@ public class ProjectToolWindow {
                 ApplicationManager.getApplication().invokeLater(() -> ApplicationManager.getApplication().runReadAction(() -> {
                     try {
                         SlowOperations.allowSlowOperations(runnable);
-                    } catch (Throwable e) {}
+                    } catch (Throwable e) {
+                    }
                 }));
             }
         });
     }
 
 
-    private void doMetricsCalculation(ComponentPopupBuilder popupBuilder, MetricWindow window){
+    private void doMetricsCalculation(ComponentPopupBuilder popupBuilder, MetricWindow window) {
         ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
 
         for (Metric.Type metric : Metric.Type.values()) {
@@ -183,7 +182,7 @@ public class ProjectToolWindow {
         window.setMetrics(warnMetric);
     }
 
-    private void doMetricsSave(){
+    private void doMetricsSave() {
         for (Metric.Type metric : Metric.Type.values()) {
             Metric[] subMetrics = metricList.get(metric);
             CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
