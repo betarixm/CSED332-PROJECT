@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class BaseMetric implements Metric {
-    private final Map<PsiClass, Map<PsiMethod, Double>> metrics;
+    private final Map<String, Map<PsiMethod, Double>> metrics;
     protected WarningCondition cond;
     private double metric;
     private String id;
@@ -33,10 +33,10 @@ public abstract class BaseMetric implements Metric {
     }
 
     public Double get(PsiClass psiClass, PsiMethod psiMethod) {
-        if (metrics.containsKey(psiClass)) {
-            return metrics.get(psiClass).get(psiMethod);
+        String aClass = psiClass.getName();
+        if (metrics.containsKey(aClass)) {
+            return metrics.get(aClass).get(psiMethod);
         }
-        // TODO? get from DB
         return null;
     }
 
@@ -44,7 +44,7 @@ public abstract class BaseMetric implements Metric {
         this.cond = cond;
     }
 
-    public Map<PsiClass, Map<PsiMethod, Double>> getMetrics() {
+    public Map<String, Map<PsiMethod, Double>> getMetrics() {
         return Collections.unmodifiableMap(metrics);
     }
 
@@ -53,14 +53,13 @@ public abstract class BaseMetric implements Metric {
     }
 
     public void setMetric(double metric, PsiClass psiClass, PsiMethod psiMethod) {
-        if (!metrics.containsKey(psiClass)) {
-            metrics.put(psiClass, new HashMap<>());
+        String aClass = psiClass.getName();
+        if (!metrics.containsKey(aClass)) {
+            metrics.put(aClass, new HashMap<>());
         }
 
-        metrics.get(psiClass).put(psiMethod, metric);
+        metrics.get(aClass).put(psiMethod, metric);
 
-        // TODO? set to DB
-        //  use MetricService.addMetric(...)
     }
 
     public String getID() {
@@ -71,16 +70,16 @@ public abstract class BaseMetric implements Metric {
         this.id = id;
     }
 
-    public Map<PsiClass, Set<PsiMethod>> getDegradationMetrics() {
-        Map<PsiClass, Set<PsiMethod>> degradedMetrics = new HashMap<>();
+    public Map<String, Set<PsiMethod>> getDegradationMetrics() {
+        Map<String, Set<PsiMethod>> degradedMetrics = new HashMap<>();
 
         Collection<MetricModel> metricModels = MetricService.query(getID(), 1).get(0).getMetricModels();
-        for (PsiClass psiClass : metrics.keySet()) {
+        for (String psiClass : metrics.keySet()) {
             for (PsiMethod psiMethod : metrics.get(psiClass).keySet()) {
                 String halsteadType = this instanceof HalsteadMetric
                         ? ((HalsteadMetric) this).getType() : "";
                 List<MetricModel> subMetricModels = metricModels.stream()
-                        .filter(m -> m.getClassName().equals(psiClass.getName())
+                        .filter(m -> m.getClassName().equals(psiClass)
                                 && m.getMethodName().equals(psiMethod.getName())
                                 && m.getType().equals(halsteadType))
                         .collect(Collectors.toList());
@@ -89,15 +88,10 @@ public abstract class BaseMetric implements Metric {
                 Double oldValue;
                 if (subMetricModels.isEmpty()) {
                     oldValue = newValue;
-                } else oldValue = subMetricModels.get(0).getFigure();
+                } else {
+                    oldValue = subMetricModels.get(0).getFigure();
+                }
 
-                /*if(this instanceof HalsteadMetric) {
-                    System.out.println(getID() + " " + psiClass.getName() + "@" + psiMethod.getName());
-                    System.out.println("new value : " + newValue);
-                    System.out.println("old value : " + oldValue);
-                    System.out.println(cond.mode );
-                    System.out.println(cond.threshold);
-                }*/
                 if (cond.shouldWarn(oldValue, newValue)) {
                     degradedMetrics.putIfAbsent(psiClass, new HashSet<>());
                     degradedMetrics.get(psiClass).add(psiMethod);
@@ -110,11 +104,9 @@ public abstract class BaseMetric implements Metric {
 
     @Override
     public boolean checkDegradation() {
-        //TODO: make this method return true if value of Halstead Metric degraded.
         return !getDegradationMetrics().isEmpty();
     }
 
-    // save metrics to DB
     public abstract void save(CalcHistoryModel calc);
 
     @Override

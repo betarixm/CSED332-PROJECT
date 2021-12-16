@@ -68,7 +68,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleAssert")));
@@ -91,7 +91,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("declareExpr")));
@@ -116,7 +116,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleFor")));
@@ -140,7 +140,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleIF")));
@@ -165,7 +165,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(0.0, metrics.get(methods.get("singleSwitch")));
@@ -190,7 +190,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleTry")));
@@ -213,7 +213,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             Assertions.assertEquals(1.0, metrics.get(methods.get("singleWhile")));
@@ -238,7 +238,7 @@ public class CyclomaticMetricTest {
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
                             cyclomaticMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass);
+                            Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
                             CalcHistoryModel calc = MetricService.generateCalcHistoryModel(UUID.randomUUID().toString());
