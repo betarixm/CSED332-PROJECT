@@ -31,7 +31,7 @@ public class MetricPanel {
         warnTitle.setTitleColor(Color.YELLOW);
 
         /* making JPanel */
-        panel = new JPanel();
+        panel = new JPanel(new BorderLayout());
         setBasicTitle();
 
         /* Displays the metric value */
