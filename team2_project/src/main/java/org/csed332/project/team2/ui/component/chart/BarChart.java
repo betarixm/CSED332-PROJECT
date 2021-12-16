@@ -11,10 +11,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
  * This uses JFreeChart class to create the Chart.
  */
 public class BarChart {
-
-    // It could be changed to use given value from Backend
-    // I just use Variable num, it could be replaced by other Values..
-
     /**
      * Constructor function for BarChart.
      *
