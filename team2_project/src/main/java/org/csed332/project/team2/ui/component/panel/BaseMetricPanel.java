@@ -32,11 +32,11 @@ public class BaseMetricPanel extends MetricPanel {
     private List<PsiMethod> methodList;
     private List<Set<PsiMethod>> warnMethod;
     private NumberFormat metricValueFormatter = new DecimalFormat("#0.0");
-    private Comparator<Pair<PsiClass, PsiMethod>> rowComparator = new Comparator<Pair<PsiClass, PsiMethod>>() {
+    private Comparator<Pair<String, PsiMethod>> rowComparator = new Comparator<Pair<String, PsiMethod>>() {
         @Override
-        public int compare(Pair<PsiClass, PsiMethod> o1, Pair<PsiClass, PsiMethod> o2) {
-            return (o1.first.getName()+o1.second.getName())
-                    .compareTo(o2.first.getName() + o2.second.getName());
+        public int compare(Pair<String, PsiMethod> o1, Pair<String, PsiMethod> o2) {
+            return (o1.first + o1.second.getName())
+                    .compareTo(o2.first + o2.second.getName());
         }
     };
 
@@ -89,7 +89,7 @@ public class BaseMetricPanel extends MetricPanel {
     @Override
     public void updateMetric(boolean warn) {
         List<Pair<String, Double>> totalMetrics = new ArrayList<>();
-        List<Pair<String, Map<PsiClass, Map<PsiMethod, Double>>>> values = new ArrayList<>();
+        List<Pair<String, Map<String, Map<PsiMethod, Double>>>> values = new ArrayList<>();
 
         methodList.clear();
         warnMethod.clear();
@@ -106,8 +106,8 @@ public class BaseMetricPanel extends MetricPanel {
             Set<PsiMethod> subMethods = new HashSet<>();
             if (warn) {
 
-                Map<PsiClass, Set<PsiMethod>> degradation = baseMetric.getDegradationMetrics();
-                System.out.println(degradation.keySet().size());
+                Map<String, Set<PsiMethod>> degradation = baseMetric.getDegradationMetrics();
+
                 for (Set<PsiMethod> methods : degradation.values()) {
                     subMethods.addAll(methods);
                 }
@@ -126,15 +126,15 @@ public class BaseMetricPanel extends MetricPanel {
 
         setTableModel();
         table.setModel(tableModel);
-        SortedMap<Pair<PsiClass, PsiMethod>, List<Double>> tableRowMap = new TreeMap<>(rowComparator);
+        SortedMap<Pair<String, PsiMethod>, List<Double>> tableRowMap = new TreeMap<Pair<String, PsiMethod>, List<Double>>(rowComparator);
 
-        for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
-            for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
-                PsiClass aClass = entry.getKey();
+        for (Pair<String, Map<String, Map<PsiMethod, Double>>> value : values) {
+            for (Map.Entry<String, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
+                String aClass = entry.getKey();
                 for (Map.Entry<PsiMethod, Double> subEntry : entry.getValue().entrySet()) {
                     Double aValue = subEntry.getValue();
                     PsiMethod aMethod = subEntry.getKey();
-                    Pair<PsiClass, PsiMethod> listKey = new Pair(aClass, aMethod);
+                    Pair<String, PsiMethod> listKey = new Pair(aClass, aMethod);
                     List<Double> valueList = tableRowMap.getOrDefault(listKey, new ArrayList<>());
                     valueList.add(aValue);
                     tableRowMap.put(listKey, valueList);
@@ -142,13 +142,13 @@ public class BaseMetricPanel extends MetricPanel {
             }
         }
 
-        for (Pair<PsiClass, PsiMethod> key : tableRowMap.keySet()) {
-            PsiClass aClass = key.first;
+        for (Pair<String, PsiMethod> key : tableRowMap.keySet()) {
+            String aClass = key.first;
             PsiMethod aMethod = key.second;
 
             List<Double> listValues = tableRowMap.get(key);
             Object[] rowData = new Object[2 + listValues.size()];
-            rowData[0] = aClass.getName();
+            rowData[0] = aClass;
             rowData[1] = aMethod.getName();
             for (int i = 0; i < listValues.size(); i++) {
                 rowData[i + 2] = metricValueFormatter.format(listValues.get(i));
@@ -178,7 +178,7 @@ public class BaseMetricPanel extends MetricPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
-                if(!methodList.isEmpty()) {
+                if (!methodList.isEmpty()) {
                     PsiJvmMember codePart = methodList.get(row);
                     codePart.navigate(true);
                 }
