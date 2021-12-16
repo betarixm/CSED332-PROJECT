@@ -17,6 +17,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.*;
 
@@ -29,6 +31,7 @@ public class BaseMetricPanel extends MetricPanel {
 
     private List<PsiMethod> methodList;
     private List<Set<PsiMethod>> warnMethod;
+    private NumberFormat metricValueFormatter = new DecimalFormat("#0.0");
 
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type, String[] _columnNames, boolean _computeTotal) {
         super(_metrics, _type);
@@ -141,7 +144,7 @@ public class BaseMetricPanel extends MetricPanel {
             rowData[0] = aClass.getName();
             rowData[1] = aMethod.getName();
             for (int i = 0; i < listValues.size(); i++) {
-                rowData[i + 2] = listValues.get(i).toString();
+                rowData[i + 2] = metricValueFormatter.format(listValues.get(i));
             }
             tableModel.addRow(rowData);
             methodList.add(aMethod);
@@ -149,7 +152,7 @@ public class BaseMetricPanel extends MetricPanel {
 
         if (computeTotal) {
             double totalMetric = baseMetrics.get(0).get();
-            metricValues.get(0).setText("Total : " + Double.toString(totalMetric));
+            metricValues.get(0).setText("Total : " + metricValueFormatter.format(totalMetric));
         }
     }
 
