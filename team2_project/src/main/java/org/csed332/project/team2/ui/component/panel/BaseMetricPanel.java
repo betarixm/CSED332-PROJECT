@@ -32,6 +32,13 @@ public class BaseMetricPanel extends MetricPanel {
     private List<PsiMethod> methodList;
     private List<Set<PsiMethod>> warnMethod;
     private NumberFormat metricValueFormatter = new DecimalFormat("#0.0");
+    private Comparator<Pair<PsiClass, PsiMethod>> rowComparator = new Comparator<Pair<PsiClass, PsiMethod>>() {
+        @Override
+        public int compare(Pair<PsiClass, PsiMethod> o1, Pair<PsiClass, PsiMethod> o2) {
+            return (o1.first.getName()+o1.second.getName())
+                    .compareTo(o2.first.getName() + o2.second.getName());
+        }
+    };
 
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type, String[] _columnNames, boolean _computeTotal) {
         super(_metrics, _type);
@@ -119,7 +126,7 @@ public class BaseMetricPanel extends MetricPanel {
 
         setTableModel();
         table.setModel(tableModel);
-        Map<Pair<PsiClass, PsiMethod>, List<Double>> tableRowMap = new HashMap<>();
+        SortedMap<Pair<PsiClass, PsiMethod>, List<Double>> tableRowMap = new TreeMap<>(rowComparator);
 
         for (Pair<String, Map<PsiClass, Map<PsiMethod, Double>>> value : values) {
             for (Map.Entry<PsiClass, Map<PsiMethod, Double>> entry : value.second.entrySet()) {
