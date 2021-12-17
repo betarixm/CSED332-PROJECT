@@ -83,7 +83,6 @@ public class ProjectToolWindow {
         ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
 
         ActionListener calculateAndSaveListener = e -> backgroundOperation(() -> {
-            System.out.println("Button pressed");
             doMetricsCalculation(popupBuilder, window);
             doMetricsSave();
         });
@@ -140,7 +139,6 @@ public class ProjectToolWindow {
     private void createToolbar() {
         toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
-
         buttonCalcAndSave = new JButton("Calculate Metrics");
         toolbar.add(buttonCalcAndSave);
     }

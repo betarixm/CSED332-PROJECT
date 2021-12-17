@@ -48,11 +48,11 @@ public class BaseMetricDegradationTest {
 
             @Override
             public void save(CalcHistoryModel calc) {
-                Map<PsiClass, Map<PsiMethod, Double>> metrics = getMetrics();
-                for (PsiClass _class : metrics.keySet()) {
+                Map<String, Map<PsiMethod, Double>> metrics = getMetrics();
+                for (String _class : metrics.keySet()) {
                     for (PsiMethod _method : metrics.get(_class).keySet()) {
                         Double _figure = metrics.get(_class).get(_method);
-                        MetricService.addMetric(getID(), _class.getName(), _method.getName(), "", _figure, calc);
+                        MetricService.addMetric(getID(), _class, _method.getName(), "", _figure, calc);
                     }
                 }
             }
@@ -82,10 +82,10 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
                             baseMetric.save(calc);
 
-                            Map<PsiClass, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
+                            Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
-                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass));
-                            Assertions.assertEquals(degradationMetrics.get(psiClass), Set.of(psiMethod));
+                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass.getName()));
+                            Assertions.assertEquals(degradationMetrics.get(psiClass.getName()), Set.of(psiMethod));
                         });
     }
 
@@ -124,11 +124,11 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
-                            Map<PsiClass, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
+                            Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
-                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass1, psiClass2));
-                            Assertions.assertEquals(degradationMetrics.get(psiClass1), Set.of(psiMethod11));
-                            Assertions.assertEquals(degradationMetrics.get(psiClass2), Set.of(psiMethod21));
+                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass1.getName(), psiClass2.getName()));
+                            Assertions.assertEquals(degradationMetrics.get(psiClass1.getName()), Set.of(psiMethod11));
+                            Assertions.assertEquals(degradationMetrics.get(psiClass2.getName()), Set.of(psiMethod21));
                         });
     }
 
@@ -168,10 +168,10 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
                             baseMetric.save(calc);
 
-                            Map<PsiClass, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
+                            Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
-                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass2));
-                            Assertions.assertEquals(degradationMetrics.get(psiClass2), Set.of(psiMethod21));
+                            Assertions.assertEquals(degradationMetrics.keySet(), Set.of(psiClass2.getName()));
+                            Assertions.assertEquals(degradationMetrics.get(psiClass2.getName()), Set.of(psiMethod21));
                         });
     }
 
@@ -195,7 +195,7 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
                             baseMetric.save(calc);
 
-                            Map<PsiClass, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
+                            Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
                             Assertions.assertTrue(degradationMetrics.keySet().isEmpty());
                         });
