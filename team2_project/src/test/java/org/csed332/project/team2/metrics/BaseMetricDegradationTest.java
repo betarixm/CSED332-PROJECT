@@ -4,10 +4,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
+import org.csed332.project.team2.utils.WarningCondition;
 import org.hibernate.Session;
 import org.junit.jupiter.api.*;
 
@@ -76,10 +76,10 @@ public class BaseMetricDegradationTest {
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
 
-                            baseMetric.setMetric(1.5, psiClass, psiMethod);
+                            baseMetric.setMetric(1.5, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
@@ -113,15 +113,15 @@ public class BaseMetricDegradationTest {
                             final PsiMethod psiMethod21 = psiClass2.getMethods()[0];
                             final PsiMethod psiMethod22 = psiClass2.getMethods()[1];
 
-                            baseMetric.setMetric(1.5, psiClass1, psiMethod11);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod21);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod22);
+                            baseMetric.setMetric(1.5, psiClass1.getName(), psiMethod11);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod21);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod22);
                             baseMetric.save(calc);
 
                             // Phase 2
-                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod22);
+                            baseMetric.setMetric(2.0, psiClass1.getName(), psiMethod11);
+                            baseMetric.setMetric(2.0, psiClass2.getName(), psiMethod21);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod22);
                             baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
@@ -157,15 +157,15 @@ public class BaseMetricDegradationTest {
                             final PsiMethod psiMethod22 = psiClass2.getMethods()[1];
 
                             // Phase 1
-                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod21);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod22);
+                            baseMetric.setMetric(2.0, psiClass1.getName(), psiMethod11);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod21);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod22);
                             baseMetric.save(calc);
 
                             // Phase 2
-                            baseMetric.setMetric(2.0, psiClass1, psiMethod11);
-                            baseMetric.setMetric(2.0, psiClass2, psiMethod21);
-                            baseMetric.setMetric(1.0, psiClass2, psiMethod22);
+                            baseMetric.setMetric(2.0, psiClass1.getName(), psiMethod11);
+                            baseMetric.setMetric(2.0, psiClass2.getName(), psiMethod21);
+                            baseMetric.setMetric(1.0, psiClass2.getName(), psiMethod22);
                             baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
@@ -189,10 +189,10 @@ public class BaseMetricDegradationTest {
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
@@ -215,10 +215,10 @@ public class BaseMetricDegradationTest {
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
 
-                            baseMetric.setMetric(1.5, psiClass, psiMethod);
+                            baseMetric.setMetric(1.5, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
                             Assertions.assertTrue(baseMetric.checkDegradation());
@@ -239,10 +239,10 @@ public class BaseMetricDegradationTest {
                             final PsiClass psiClass = helperMainClass.getPsiClass("AssertTestClass");
                             final PsiMethod psiMethod = psiClass.getMethods()[0];
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
-                            baseMetric.setMetric(2.0, psiClass, psiMethod);
+                            baseMetric.setMetric(2.0, psiClass.getName(), psiMethod);
                             baseMetric.save(calc);
 
                             Assertions.assertFalse(baseMetric.checkDegradation());

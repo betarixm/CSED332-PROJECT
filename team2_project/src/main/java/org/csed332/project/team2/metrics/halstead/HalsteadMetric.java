@@ -2,10 +2,10 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class HalsteadMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
-            setMetric(getVisitResult() - value, aClass, method);
+            setMetric(getVisitResult() - value, aClass.getName(), method);
         }
     }
 

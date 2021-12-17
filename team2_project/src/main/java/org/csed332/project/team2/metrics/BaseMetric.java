@@ -2,11 +2,11 @@ package org.csed332.project.team2.metrics;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,8 +52,7 @@ public abstract class BaseMetric implements Metric {
         this.metric = metric;
     }
 
-    public void setMetric(double metric, PsiClass psiClass, PsiMethod psiMethod) {
-        String aClass = psiClass.getName();
+    public void setMetric(double metric, String aClass, PsiMethod psiMethod) {
         if (!metrics.containsKey(aClass)) {
             metrics.put(aClass, new HashMap<>());
         }
