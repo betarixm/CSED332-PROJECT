@@ -113,5 +113,5 @@ public abstract class BaseMetric implements Metric {
     public void save() {
     }
 
-    protected enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD}
+    protected enum Type {LINES_OF_CODE, CYCLOMATIC, HALSTEAD, MAINTAINABILITY}
 }

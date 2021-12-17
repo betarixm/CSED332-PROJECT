@@ -12,6 +12,6 @@ public interface Metric {
 
     void save();
 
-    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC}
+    static enum Type {LINES_OF_CODE, HALSTEAD, CYCLOMATIC, MAINTAINABILITY}
 
 }
