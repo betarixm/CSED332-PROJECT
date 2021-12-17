@@ -73,7 +73,7 @@ public class ProjectToolWindow {
                 new HalsteadMetric(project, HalsteadMetric.HalsteadType.EFFORT)
         };
         BaseMetric cycloMetric = new CyclomaticMetric(project);
-        BaseMetric miMetric = new MaintainabilityMetric(project);
+        BaseMetric miMetric = new MaintainabilityMetric(project, (HalsteadMetric) halsteadMetrics[1], (CyclomaticMetric) cycloMetric);
 
         metricList.put(Metric.Type.LINES_OF_CODE, new Metric[]{codeLineMetric});
         metricList.put(Metric.Type.HALSTEAD, halsteadMetrics);

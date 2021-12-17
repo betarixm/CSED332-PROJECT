@@ -7,6 +7,8 @@ import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.util.HibernateUtil;
+import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +39,31 @@ public class MaintainabilityMetricTest {
     }
 
     @Test
-    public void testMaintainability() throws Exception {
+    public void testMIForClass() throws Exception {
+        configureFixture("MainClass.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+
+                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            halsteadMetric.calculate();
+                            cyclomaticMetric.calculate();
+
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
+                            maintainabilityMetric.calculate();
+
+                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
+                            Map<String, PsiMethod> methods = getMethods(psiClass);
+
+                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
+                        });
+    }
+
+    @Test
+    public void testMIForMethods() throws Exception {
         configureFixture("MultiMethods.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
@@ -45,7 +71,12 @@ public class MaintainabilityMetricTest {
                             final Project project = helperMainClass.getFixture().getProject();
                             final PsiClass psiClass = helperMainClass.getFirstPsiClass();
 
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass);
+                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            halsteadMetric.calculate();
+                            cyclomaticMetric.calculate();
+
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
                             maintainabilityMetric.calculate();
 
                             Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
