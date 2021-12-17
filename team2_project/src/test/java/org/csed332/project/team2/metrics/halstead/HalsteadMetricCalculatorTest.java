@@ -1,5 +1,6 @@
 package org.csed332.project.team2.metrics.halstead;
 
+import org.csed332.project.team2.metrics.halstead.HalsteadMetricCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

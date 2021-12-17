@@ -5,9 +5,6 @@ import org.hibernate.cfg.Configuration;
 
 import java.sql.DriverManager;
 
-/**
- * Util class for hibernate(embedded database library)
- */
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
@@ -29,18 +26,10 @@ public class HibernateUtil {
         }
     }
 
-    /**
-     * Gets session factory.
-     *
-     * @return the session factory
-     */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    /**
-     * Shutdown session factory.
-     */
     public void shutdown() {
         sessionFactory.close();
     }

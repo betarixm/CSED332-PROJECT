@@ -8,6 +8,7 @@ import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
+import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -47,9 +48,9 @@ public class HalsteadMetricTest {
                             final Project project = helperMainClass.getFixture().getProject();
                             final PsiClass psiClass = helperMainClass.getFirstPsiClass();
                             Assertions.assertEquals(9.0, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOCABULARY).calculate(), 0.00005);
-                            Assertions.assertEquals(50.7188, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME).calculate(), 0.00005);
-                            Assertions.assertEquals(0.5, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.DIFFICULTY).calculate(), 0.00005);
-                            Assertions.assertEquals(25.3594, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.EFFORT).calculate(), 0.00005);
+                            Assertions.assertEquals(31.6993, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME).calculate(), 0.00005);
+                            Assertions.assertEquals(0.125, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.DIFFICULTY).calculate(), 0.00005);
+                            Assertions.assertEquals(3.9624, new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.EFFORT).calculate(), 0.00005);
                         });
     }
 
