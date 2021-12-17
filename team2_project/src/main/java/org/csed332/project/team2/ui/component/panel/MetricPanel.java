@@ -7,6 +7,8 @@ import org.jfree.chart.JFreeChart;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,8 @@ public class MetricPanel {
                 setBasicTitle();
             }
 
-            metricValues.get(i).setText(Double.toString(value));
+            NumberFormat metricValueFormatter = new DecimalFormat("#0.0");
+            metricValues.get(i).setText(metricValueFormatter.format(value));
         }
     }
 

@@ -78,7 +78,7 @@ public abstract class BaseMetric implements Metric {
             return Collections.unmodifiableMap(new HashMap<String, Set<PsiMethod>>());
         }
 
-        Collection<MetricModel> metricModels = historyModels.get(0).getMetricModels();
+        Collection<MetricModel> metricModels = MetricService.query(getID(), 1).get(0).getMetricModels();
         for (String psiClass : metrics.keySet()) {
             for (PsiMethod psiMethod : metrics.get(psiClass).keySet()) {
                 String halsteadType = this instanceof HalsteadMetric

@@ -55,7 +55,6 @@ public class CyclomaticMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
-            setVisitResult(getVisitResult() + 1);
             setMetric(getVisitResult() - value, aClass, method);
         }
     }
