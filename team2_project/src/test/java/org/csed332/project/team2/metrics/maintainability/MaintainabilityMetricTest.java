@@ -88,6 +88,30 @@ public class MaintainabilityMetricTest {
                         });
     }
 
+    @Test
+    public void testMILaterCalculation() throws Exception {
+        configureFixture("MainClass.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+
+                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
+
+                            halsteadMetric.calculate();
+                            cyclomaticMetric.calculate();
+                            maintainabilityMetric.calculate();
+
+                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
+                            Map<String, PsiMethod> methods = getMethods(psiClass);
+
+                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
+                        });
+    }
+
     void cleanDB(CalcHistoryModel calc) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
