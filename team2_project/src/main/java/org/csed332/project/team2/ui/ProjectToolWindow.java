@@ -39,8 +39,6 @@ public class ProjectToolWindow {
     Map<Metric.Type, Metric[]> metricList;
     private JPanel projectToolWindowContent;
     private JPanel toolbar;
-    //private JButton buttonCalcMetric;
-    //private JButton buttonSaveMetric;
     private JButton buttonCalcAndSave;
 
     /**
@@ -65,8 +63,6 @@ public class ProjectToolWindow {
         projectToolWindowContent.add(toolbar);
         projectToolWindowContent.add(new JSeparator());
 
-
-        // make metric List and metricWindow
         Metric codeLineMetric = new ProjectCodeLineMetric(project);
         BaseMetric[] halsteadMetrics = {
                 new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOCABULARY),
@@ -86,60 +82,12 @@ public class ProjectToolWindow {
         JPanel warnPanel = getWarning();
         ComponentPopupBuilder popupBuilder = JBPopupFactory.getInstance().createComponentPopupBuilder(warnPanel, projectToolWindowContent);
 
-        /*ActionListener listener = e -> {
-            {
-                backgroundOperation(() -> {
-                    ArrayList<Metric.Type> warnMetric = new ArrayList<Metric.Type>();
-
-                    for (Metric.Type metric : Metric.Type.values()) {
-                        boolean warning = false;
-                        int idx = metric.ordinal();
-
-                        Metric[] subMetrics = metricList.get(metric);
-                        for (Metric subMetric : subMetrics) {
-                            subMetric.calculate();
-                            //TODO: after implementing checkDegradation, change comment.
-                            warning = warning || subMetric.checkDegradation();
-                        }
-                        if (warning) {
-                            warnMetric.add(metric);
-                        }
-                    }
-
-                    if (!warnMetric.isEmpty()) {
-                        JBPopup popup = popupBuilder.createPopup();
-                        popup.showInFocusCenter();
-                        System.out.println(warnMetric.get(0));
-                    }
-                    window.setMetrics(warnMetric);
-                });
-            }
-        };
-
-        ActionListener saveButtonListener = e -> {
-            {
-                backgroundOperation(() -> {
-                    for (Metric.Type metric : Metric.Type.values()) {
-                        Metric[] subMetrics = metricList.get(metric);
-                        CalcHistoryModel calcHistoryModel = MetricService.generateCalcHistoryModel(subMetrics[0].getID());
-                        for (Metric subMetric : subMetrics) {
-                            if (subMetric instanceof BaseMetric) {
-                                ((BaseMetric) subMetric).save(calcHistoryModel);
-                            }
-                        }
-                    }
-                });
-            }
-        };*/
-
         ActionListener calculateAndSaveListener = e -> backgroundOperation(() -> {
             System.out.println("Button pressed");
             doMetricsCalculation(popupBuilder, window);
             doMetricsSave();
         });
 
-        //buttonCalcMetric.addActionListener(listener);
-        //buttonSaveMetric.addActionListener(saveButtonListener);
         buttonCalcAndSave.addActionListener(calculateAndSaveListener);
     }
 
@@ -164,7 +112,6 @@ public class ProjectToolWindow {
             if (window != null && window.isActive())
                 return project;
         }
-        // if there is no active project, return an arbitrary project (the first)
         return ProjectManager.getInstance().getOpenProjects()[0];
     }
 
@@ -194,11 +141,6 @@ public class ProjectToolWindow {
         toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
 
-        //buttonCalcMetric = new JButton("Calculate Metrics");
-        //toolbar.add(buttonCalcMetric);
-
-        //buttonSaveMetric = new JButton("Save Metrics");
-        //toolbar.add(buttonSaveMetric);
         buttonCalcAndSave = new JButton("Calculate Metrics");
         toolbar.add(buttonCalcAndSave);
     }
@@ -226,7 +168,6 @@ public class ProjectToolWindow {
             Metric[] subMetrics = metricList.get(metric);
             for (Metric subMetric : subMetrics) {
                 subMetric.calculate();
-                //TODO: after implementing checkDegradation, change comment.
                 warning = warning || subMetric.checkDegradation();
             }
             if (warning) {

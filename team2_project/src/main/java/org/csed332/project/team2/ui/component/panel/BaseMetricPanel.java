@@ -22,6 +22,9 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Panel displaying metrics implemented with BaseMetric.
+ */
 public class BaseMetricPanel extends MetricPanel {
     List<BaseMetric> baseMetrics;
     JBTable table;
@@ -40,6 +43,14 @@ public class BaseMetricPanel extends MetricPanel {
         }
     };
 
+    /**
+     * Instantiates a new BaseMetricPanel.
+     *
+     * @param _metrics      the BaseMetrics
+     * @param _type         the type
+     * @param _columnNames  the column names
+     * @param _computeTotal whether to compute total metric or not
+     */
     public BaseMetricPanel(BaseMetric[] _metrics, Metric.Type _type, String[] _columnNames, boolean _computeTotal) {
         super(_metrics, _type);
         baseMetrics = List.of(_metrics);
@@ -66,6 +77,11 @@ public class BaseMetricPanel extends MetricPanel {
         getPanel().add(scrollPane);
     }
 
+    /**
+     * Resize column width.
+     *
+     * @return the total width
+     */
     public int resizeColumnWidth() {
         final TableColumnModel columnModel = table.getColumnModel();
         int totalWidth = 0;
@@ -111,15 +127,6 @@ public class BaseMetricPanel extends MetricPanel {
                 for (Set<PsiMethod> methods : degradation.values()) {
                     subMethods.addAll(methods);
                 }
-
-                // test-data
-                /*for (Map<PsiMethod, Double> entry : (baseMetric).getMetrics().values()) {
-                    for (Map.Entry<PsiMethod, Double> psiMethodDoubleEntry : entry.entrySet()) {
-                        if (psiMethodDoubleEntry.getValue() > 5.0) {
-                            subMethods.add(psiMethodDoubleEntry.getKey());
-                        }
-                    }
-                }*/
             }
             warnMethod.add(subMethods);
         }
@@ -163,6 +170,9 @@ public class BaseMetricPanel extends MetricPanel {
         }
     }
 
+    /**
+     * Sets table model.
+     */
     public void setTableModel() {
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Class");
@@ -172,6 +182,9 @@ public class BaseMetricPanel extends MetricPanel {
         }
     }
 
+    /**
+     * Sets table property.
+     */
     public void setTableProperty() {
 
         MouseListener tableListener = new MouseListener() {

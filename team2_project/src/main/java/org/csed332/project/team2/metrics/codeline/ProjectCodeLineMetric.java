@@ -13,12 +13,23 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class for code line metric on a project.
+ */
 public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
 
+    /**
+     * Instantiates a new ProjectCodeLineMetric.
+     */
     public ProjectCodeLineMetric() {
         this(getActiveProject());
     }
 
+    /**
+     * Instantiates a new ProjectCodeLineMetric.
+     *
+     * @param project Project object
+     */
     public ProjectCodeLineMetric(Project project) {
         Set<PsiPackage> psiPackages = getRootPackages(project);
 
@@ -37,6 +48,7 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
 
     /**
      * Returns the open project of the current IntelliJ IDEA window
+     * If there is no active project, return the first project.
      *
      * @return the project
      */
@@ -47,7 +59,6 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
             if (window != null && window.isActive())
                 return project;
         }
-        // if there is no active project, return an arbitrary project (the first)
         return ProjectManager.getInstance().getOpenProjects()[0];
     }
 
