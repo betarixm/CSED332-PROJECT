@@ -52,7 +52,8 @@ public abstract class BaseMetric implements Metric {
         this.metric = metric;
     }
 
-    public void setMetric(double metric, String aClass, PsiMethod psiMethod) {
+    public void setMetric(double metric, PsiClass psiClass, PsiMethod psiMethod) {
+        String aClass = psiClass.getName();
         if (!metrics.containsKey(aClass)) {
             metrics.put(aClass, new HashMap<>());
         }
