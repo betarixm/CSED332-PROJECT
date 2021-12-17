@@ -123,8 +123,13 @@ public abstract class BaseMetric implements Metric {
      */
     public Map<String, Set<PsiMethod>> getDegradationMetrics() {
         Map<String, Set<PsiMethod>> degradedMetrics = new HashMap<>();
+        List<CalcHistoryModel> historyModels = MetricService.query(getID(), 1);
 
-        Collection<MetricModel> metricModels = MetricService.query(getID(), 1).get(0).getMetricModels();
+        if (historyModels == null || historyModels.size() == 0) {
+            return Collections.unmodifiableMap(new HashMap<String, Set<PsiMethod>>());
+        }
+
+        Collection<MetricModel> metricModels = historyModels.get(0).getMetricModels();
         for (String psiClass : metrics.keySet()) {
             for (PsiMethod psiMethod : metrics.get(psiClass).keySet()) {
                 String halsteadType = this instanceof HalsteadMetric
