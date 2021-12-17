@@ -1,25 +1,35 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2.metrics.codeline;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.*;
-import com.intellij.psi.JavaDirectoryService;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-import java.util.*;
-
+/**
+ * Class for code line metric on a project.
+ */
 public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
 
+    /**
+     * Instantiates a new ProjectCodeLineMetric.
+     */
     public ProjectCodeLineMetric() {
         this(getActiveProject());
     }
 
+    /**
+     * Instantiates a new ProjectCodeLineMetric.
+     *
+     * @param project Project object
+     */
     public ProjectCodeLineMetric(Project project) {
         Set<PsiPackage> psiPackages = getRootPackages(project);
 
@@ -38,6 +48,7 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
 
     /**
      * Returns the open project of the current IntelliJ IDEA window
+     * If there is no active project, return the first project.
      *
      * @return the project
      */
@@ -48,7 +59,6 @@ public class ProjectCodeLineMetric extends CompositeCodeLineMetric {
             if (window != null && window.isActive())
                 return project;
         }
-        // if there is no active project, return an arbitrary project (the first)
         return ProjectManager.getInstance().getOpenProjects()[0];
     }
 

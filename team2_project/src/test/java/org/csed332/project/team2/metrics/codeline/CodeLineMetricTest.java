@@ -1,4 +1,4 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2.metrics.codeline;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -6,7 +6,10 @@ import com.intellij.psi.PsiClass;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.MetricModel;
 import org.csed332.project.team2.db.service.MetricModelService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -49,4 +52,29 @@ public class CodeLineMetricTest {
                             Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
                         });
     }
+
+    @Test
+    public void testDBConnection() {
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            CodeLineMetric classCodeLineMetric = new ClassCodeLineMetric(psiClass);
+
+                            List<MetricModel> metricModelList = MetricModelService.getMetrics(classCodeLineMetric.getID(), null);
+                            for (MetricModel metricModel : metricModelList) {
+                                MetricModelService.remove(metricModel);
+                            }
+
+                            Assertions.assertEquals(classCodeLineMetric.getID(), "code-line");
+
+                            // get before calculate
+                            Assertions.assertEquals(0.0, classCodeLineMetric.get());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.calculate());
+                            classCodeLineMetric.set((int) classCodeLineMetric.calculate());
+                            Assertions.assertEquals(1.0, classCodeLineMetric.get());
+                        });
+    }
+
+
 }

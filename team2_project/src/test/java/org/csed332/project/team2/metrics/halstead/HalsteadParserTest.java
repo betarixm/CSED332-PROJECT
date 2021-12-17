@@ -1,12 +1,14 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
-import org.csed332.project.team2.metrics.halstead.HalsteadParser;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class HalsteadParserTest {
     private static final String testPath = "TestProjects/SingleFiles";
@@ -24,13 +26,13 @@ public class HalsteadParserTest {
         helperMainClass.tearDown();
     }
 
-    private void setUpFixture(String fileName) throws Exception {
+    private void configureFixture(String fileName) throws Exception {
         helperMainClass.configure(fileName);
     }
 
     @Test
     public void parseMethodOneOperator() throws Exception {
-        setUpFixture("SimpleInt.java");
+        configureFixture("SimpleInt.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -50,7 +52,7 @@ public class HalsteadParserTest {
 
     @Test
     public void parseMethodSimpleAddition() throws Exception {
-        setUpFixture("SimpleAddition.java");
+        configureFixture("SimpleAddition.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
@@ -70,7 +72,7 @@ public class HalsteadParserTest {
 
     @Test
     public void parseMethodMainClass() throws Exception {
-        setUpFixture("MainClass.java");
+        configureFixture("MainClass.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {

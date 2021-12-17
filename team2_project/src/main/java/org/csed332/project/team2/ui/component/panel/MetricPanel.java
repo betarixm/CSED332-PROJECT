@@ -1,6 +1,7 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui.component.panel;
 
 import org.csed332.project.team2.metrics.Metric;
+import org.csed332.project.team2.utils.MetricDescription;
 import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
@@ -10,19 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Panel displaying metric.
+ */
 public class MetricPanel {
-    // TODO: expand metric to metrics, metricValue to metricValues
+    protected List<Label> metricValues;
     private List<Metric> metrics;
     private JPanel panel;
-
     private TitledBorder basicTitle;
     private TitledBorder warnTitle;
-    protected List<Label> metricValues;
     private JFreeChart metricChart;
 
     private Metric.Type type;
 
-    MetricPanel(Metric[] _metrics, Metric.Type _type) {
+    /**
+     * Instantiates a new MetricPanel.
+     *
+     * @param _metrics the array of Metric
+     * @param _type    the type
+     */
+    public MetricPanel(Metric[] _metrics, Metric.Type _type) {
         this.metrics = List.of(_metrics);
         this.type = _type;
 
@@ -30,50 +38,55 @@ public class MetricPanel {
         warnTitle = BorderFactory.createTitledBorder("\u26A0" + this.type.toString());
         warnTitle.setTitleColor(Color.YELLOW);
 
-        /* making JPanel */
-        panel = new JPanel();
+        panel = new JPanel(new BorderLayout());
         setBasicTitle();
 
-        /* Displays the metric value */
         metricValues = new ArrayList<>();
         metricValues.add(new Label());
-        //metricValue.setText("");
         panel.add(metricValues.get(0));
         panel.setToolTipText(MetricDescription.get(this.type));
-
-        /* Displays the metric chart */
-        //Will have to refactor this part when implementing charts
-        /*metricChart = BarChart.getChart(80);
-        ChartPanel chartPanel = new ChartPanel(metricChart);
-        chartPanel.setSize(200, 200);
-        panel.add(chartPanel, BorderLayout.CENTER);
-        chartPanel.validate();*/
     }
 
-
-    public void updateMetric() {
-        //TODO : after fix the bug of Metric.get it will work well
+    /**
+     * Update metric.
+     * Calculate, save, warn each metric.
+     *
+     * @param warn whether the metric should be warned or not
+     */
+    public void updateMetric(boolean warn) {
         for (int i = 0; i < metrics.size(); i++) {
             double value = metrics.get(i).calculate();
             metrics.get(i).save();
-            if (metrics.get(i).checkDegradation()) {
+
+            if (warn) {
                 setWarningTitle();
             } else {
                 setBasicTitle();
             }
+
             metricValues.get(i).setText(Double.toString(value));
         }
-        //Should we update the panel?
     }
 
+    /**
+     * Gets JPanel.
+     *
+     * @return the JPanel
+     */
     public JPanel getPanel() {
         return this.panel;
     }
 
+    /**
+     * Sets title as warning state.
+     */
     public void setWarningTitle() {
         panel.setBorder(warnTitle);
     }
 
+    /**
+     * Sets title as basic state.
+     */
     public void setBasicTitle() {
         panel.setBorder(basicTitle);
     }

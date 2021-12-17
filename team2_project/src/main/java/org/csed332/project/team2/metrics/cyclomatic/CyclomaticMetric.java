@@ -1,33 +1,51 @@
 package org.csed332.project.team2.metrics.cyclomatic;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.java.CodeBlockBlock;
-import com.intellij.psi.impl.source.PsiMethodImpl;
-import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.java.PsiCodeBlockImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.psi.impl.source.tree.java.PsiEmptyStatementImpl;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
+import java.util.Map;
 import java.util.Objects;
 
-import com.intellij.openapi.project.Project;
-
+/**
+ * Class for Cyclomatic metric.
+ */
 public class CyclomaticMetric extends VisitingMetric {
+    /**
+     * Instantiates a new CyclomaticMetric.
+     *
+     * @param element the element
+     */
     public CyclomaticMetric(PsiElement element) {
         super(element);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
     }
 
+    /**
+     * Instantiates a new CyclomaticMetric.
+     *
+     * @param project the project
+     */
     public CyclomaticMetric(Project project) {
         super(project);
-        setID("cyclomatic");
+        setID(Type.CYCLOMATIC.toString());
+        setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, 15));
     }
 
     @Override
-    public boolean checkDegradation() {
-        //TODO: make this method return true if value of Cyclomatic Metric degraded.
-        return false;
+    public void save(CalcHistoryModel calc) {
+        Map<String, Map<PsiMethod, Double>> metrics = getMetrics();
+        for (String _class : metrics.keySet()) {
+            for (PsiMethod _method : metrics.get(_class).keySet()) {
+                Double _figure = metrics.get(_class).get(_method);
+                MetricService.addMetric(getID(), _class, _method.getName(), "", _figure, calc);
+            }
+        }
     }
 
     private PsiElement requireNonNullElse(PsiElement element) {
@@ -50,6 +68,7 @@ public class CyclomaticMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
+            setVisitResult(getVisitResult() + 1);
             setMetric(getVisitResult() - value, aClass, method);
         }
     }

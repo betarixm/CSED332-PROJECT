@@ -1,4 +1,4 @@
-package org.csed332.project.team2;
+package org.csed332.project.team2.ui.component.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -6,17 +6,11 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.swing.*;
-
 /**
  * This class represents a BarChart.
  * This uses JFreeChart class to create the Chart.
  */
 public class BarChart {
-
-    // It could be changed to use given value from Backend
-    // I just use Variable num, it could be replaced by other Values..
-
     /**
      * Constructor function for BarChart.
      *
