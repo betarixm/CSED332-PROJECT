@@ -3,8 +3,16 @@ package org.csed332.project.team2.metrics.codeline;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiPackage;
 
+/**
+ * Class for code line metric on a package.
+ */
 public class PackageCodeLineMetric extends CompositeCodeLineMetric {
 
+    /**
+     * Instantiates a new PackageCodeLineMetric.
+     *
+     * @param psiPackage PsiPackage object
+     */
     public PackageCodeLineMetric(PsiPackage psiPackage) {
         super();
 

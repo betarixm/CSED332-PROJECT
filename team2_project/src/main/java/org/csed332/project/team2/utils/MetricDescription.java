@@ -4,6 +4,9 @@ import org.csed332.project.team2.metrics.Metric;
 
 import java.util.Map;
 
+/**
+ * Defines description for each metric.
+ */
 public class MetricDescription {
 
     final static String NO_DESC = "No description available.";
@@ -17,6 +20,12 @@ public class MetricDescription {
             Metric.Type.CYCLOMATIC, "This is the number of lines of code of the whole project."
     );
 
+    /**
+     * Get description for given type of metric.
+     *
+     * @param type the type
+     * @return the description
+     */
     public static String get(Metric.Type type) {
         return descriptions.getOrDefault(type, NO_DESC);
     }

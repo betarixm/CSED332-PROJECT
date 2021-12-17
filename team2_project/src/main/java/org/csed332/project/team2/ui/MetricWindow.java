@@ -13,7 +13,6 @@ import java.util.Map;
  * The window displaying the metrics.
  */
 public class MetricWindow {
-    // Single-ton pattern
     static private MetricWindow instance;
     final private JPanel metricContainer;
     final private MetricPanel[] metricPanels;
@@ -22,11 +21,11 @@ public class MetricWindow {
      * Constructor for MetricWindow
      * The created window is scrollable and contains a panel with a title for each metric
      *
-     * @param width  the width of the window
-     * @param height the height of the window
+     * @param width      the width of the window
+     * @param height     the height of the window
+     * @param metricList the metric list
      */
     public MetricWindow(int width, int height, Map<Metric.Type, Metric[]> metricList) {
-        // We use a container to allow scrolling
         metricContainer = new JPanel();
         metricContainer.setLayout(new BoxLayout(metricContainer, BoxLayout.PAGE_AXIS));
         metricPanels = new MetricPanel[Metric.Type.values().length];
@@ -51,8 +50,9 @@ public class MetricWindow {
     /**
      * Get the single-toned instance of this class.
      *
-     * @param width  the width of the instance
-     * @param height the height of the instance
+     * @param width      the width of the instance
+     * @param height     the height of the instance
+     * @param metricList the metric list
      * @return the single-toned instance
      */
     public static MetricWindow getInstance(int width, int height, Map<Metric.Type, Metric[]> metricList) {
@@ -62,10 +62,20 @@ public class MetricWindow {
         return instance;
     }
 
+    /**
+     * Gets metric container panel.
+     *
+     * @return the JPanel
+     */
     public JPanel getMetricContainer() {
         return metricContainer;
     }
 
+    /**
+     * Runs updateMetric for all MetricPanel
+     *
+     * @param warnMetric the list of metric types that should be warned
+     */
     public void setMetrics(ArrayList<Metric.Type> warnMetric) {
         for (Metric.Type metric : Metric.Type.values()) {
             int idx = metric.ordinal();
@@ -76,6 +86,11 @@ public class MetricWindow {
         }
     }
 
+    /**
+     * Set some metrics to warning state.
+     *
+     * @param warnMetrics the array of metric types to set as warning
+     */
     public void showWarnMetric(Metric.Type[] warnMetrics) {
         for (Metric.Type metric : warnMetrics) {
             int idx = metric.ordinal();

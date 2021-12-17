@@ -8,7 +8,6 @@ import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
-import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
