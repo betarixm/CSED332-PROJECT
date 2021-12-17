@@ -42,6 +42,10 @@ public class MetricWindow {
         BaseMetricPanel cycloPanel = new BaseMetricPanel((BaseMetric[]) metricList.get(Metric.Type.CYCLOMATIC), Metric.Type.CYCLOMATIC, new String[]{"MetricValue"}, true);
         metricPanels[2] = cycloPanel;
         metricContainer.add(cycloPanel.getPanel());
+
+        BaseMetricPanel miPanel = new BaseMetricPanel((BaseMetric[]) metricList.get(Metric.Type.MAINTAINABILITY), Metric.Type.MAINTAINABILITY, new String[]{"MetricValue"}, true);
+        metricPanels[3] = miPanel;
+        metricContainer.add(miPanel.getPanel());
     }
 
     /**

@@ -20,6 +20,7 @@ import org.csed332.project.team2.metrics.Metric;
 import org.csed332.project.team2.metrics.codeline.ProjectCodeLineMetric;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
+import org.csed332.project.team2.metrics.maintainability.MaintainabilityMetric;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -72,10 +73,12 @@ public class ProjectToolWindow {
                 new HalsteadMetric(project, HalsteadMetric.HalsteadType.EFFORT)
         };
         BaseMetric cycloMetric = new CyclomaticMetric(project);
+        BaseMetric miMetric = new MaintainabilityMetric(project);
 
         metricList.put(Metric.Type.LINES_OF_CODE, new Metric[]{codeLineMetric});
         metricList.put(Metric.Type.HALSTEAD, halsteadMetrics);
         metricList.put(Metric.Type.CYCLOMATIC, new BaseMetric[]{cycloMetric});
+        metricList.put(Metric.Type.MAINTAINABILITY, new BaseMetric[]{miMetric});
 
         MetricWindow window = MetricWindow.getInstance(width, height, metricList);
         projectToolWindowContent.add(window.getMetricContainer());
