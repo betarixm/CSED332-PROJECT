@@ -80,7 +80,6 @@ public class BaseMetricDegradationTest {
                             baseMetric.save(calc);
 
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
-                            baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
@@ -122,7 +121,6 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(2.0, psiClass1, psiMethod11);
                             baseMetric.setMetric(2.0, psiClass2, psiMethod21);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
-                            baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
@@ -166,7 +164,6 @@ public class BaseMetricDegradationTest {
                             baseMetric.setMetric(2.0, psiClass1, psiMethod11);
                             baseMetric.setMetric(2.0, psiClass2, psiMethod21);
                             baseMetric.setMetric(1.0, psiClass2, psiMethod22);
-                            baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
@@ -193,7 +190,6 @@ public class BaseMetricDegradationTest {
                             baseMetric.save(calc);
 
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
-                            baseMetric.save(calc);
 
                             Map<String, Set<PsiMethod>> degradationMetrics = baseMetric.getDegradationMetrics();
 
@@ -219,7 +215,6 @@ public class BaseMetricDegradationTest {
                             baseMetric.save(calc);
 
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
-                            baseMetric.save(calc);
 
                             Assertions.assertTrue(baseMetric.checkDegradation());
                         });
@@ -243,7 +238,7 @@ public class BaseMetricDegradationTest {
                             baseMetric.save(calc);
 
                             baseMetric.setMetric(2.0, psiClass, psiMethod);
-                            baseMetric.save(calc);
+
 
                             Assertions.assertFalse(baseMetric.checkDegradation());
                         });
