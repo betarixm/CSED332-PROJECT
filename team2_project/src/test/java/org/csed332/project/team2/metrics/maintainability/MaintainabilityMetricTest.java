@@ -1,25 +1,15 @@
 package org.csed332.project.team2.metrics.maintainability;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
-import org.csed332.project.team2.db.model.CalcHistoryModel;
-import org.csed332.project.team2.db.service.MetricService;
-import org.csed332.project.team2.db.util.HibernateUtil;
+import org.csed332.project.team2.metrics.codeline.ClassCodeLineMetric;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
-import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 public class MaintainabilityMetricTest {
     private static final String testPath = "TestProjects/SingleFiles";
@@ -42,153 +32,25 @@ public class MaintainabilityMetricTest {
     }
 
     @Test
-    public void testMIForClass() throws Exception {
+    public void testMICalculation() throws Exception {
         configureFixture("MainClass.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
                         () -> {
-                            final Project project = helperMainClass.getFixture().getProject();
                             final PsiClass psiClass = helperMainClass.getFirstPsiClass();
 
+                            ClassCodeLineMetric codeLineMetric = new ClassCodeLineMetric(psiClass);
                             HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+
+                            codeLineMetric.calculate();
                             halsteadMetric.calculate();
                             cyclomaticMetric.calculate();
 
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(codeLineMetric, halsteadMetric, cyclomaticMetric);
                             maintainabilityMetric.calculate();
 
-                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
-                            Map<String, PsiMethod> methods = getMethods(psiClass);
-
-                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
+                            Assertions.assertEquals(90.3357, maintainabilityMetric.get(), 0.00005);
                         });
     }
-
-    @Test
-    public void testMIForMethods() throws Exception {
-        configureFixture("MultiMethods.java");
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final Project project = helperMainClass.getFixture().getProject();
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-
-                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
-                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
-                            halsteadMetric.calculate();
-                            cyclomaticMetric.calculate();
-
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
-                            maintainabilityMetric.calculate();
-
-                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
-                            Map<String, PsiMethod> methods = getMethods(psiClass);
-
-                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
-                            Assertions.assertEquals(151.9495, metrics.get(methods.get("simpleAddition")), 0.00005);
-                            Assertions.assertEquals(154.8192, metrics.get(methods.get("simpleInt")), 0.00005);
-                        });
-    }
-
-    @Test
-    public void testMILaterCalculationForClass() throws Exception {
-        configureFixture("MainClass.java");
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final Project project = helperMainClass.getFixture().getProject();
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-
-                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
-                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
-
-                            halsteadMetric.calculate();
-                            cyclomaticMetric.calculate();
-                            maintainabilityMetric.calculate();
-
-                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
-                            Map<String, PsiMethod> methods = getMethods(psiClass);
-
-                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
-                        });
-    }
-
-    @Test
-    public void testMILaterCalculationForMethods() throws Exception {
-        configureFixture("MultiMethods.java");
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final Project project = helperMainClass.getFixture().getProject();
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-
-                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
-                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
-
-                            halsteadMetric.calculate();
-                            cyclomaticMetric.calculate();
-                            maintainabilityMetric.calculate();
-
-                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
-                            Map<String, PsiMethod> methods = getMethods(psiClass);
-
-                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
-                            Assertions.assertEquals(151.9495, metrics.get(methods.get("simpleAddition")), 0.00005);
-                            Assertions.assertEquals(154.8192, metrics.get(methods.get("simpleInt")), 0.00005);
-                        });
-    }
-
-    @Test
-    public void testSave() throws Exception {
-        configureFixture("SimpleInt.java");
-        ApplicationManager.getApplication()
-                .invokeAndWait(
-                        () -> {
-                            final Project project = helperMainClass.getFixture().getProject();
-                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
-                            final PsiMethod psiMethod = psiClass.getMethods()[0];
-
-                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
-                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
-                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
-
-                            halsteadMetric.calculate();
-                            cyclomaticMetric.calculate();
-                            maintainabilityMetric.calculate();
-
-                            String testId = UUID.randomUUID().toString();
-                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
-                            maintainabilityMetric.save(calc);
-
-                            Optional<Map<String, Map<String, Map<String, Double>>>> metricOptional = MetricService.getMetric(calc.getMetric());
-                            Assertions.assertNotNull(metricOptional);
-                            Assertions.assertTrue(metricOptional.isPresent());
-                            Assertions.assertEquals(153.0273, metricOptional.get().get(psiClass.getName()).get(psiMethod.getName()).get(""), 0.00005);
-
-                            cleanDB(calc);
-                        });
-
-    }
-
-    void cleanDB(CalcHistoryModel calc) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.remove(calc);
-            session.getTransaction().commit();
-        }
-    }
-
-    public Map<String, PsiMethod> getMethods(PsiClass aClass) {
-        Map<String, PsiMethod> result = new HashMap<>();
-
-        for (PsiMethod method : aClass.getMethods()) {
-            result.put(method.getName(), method);
-        }
-
-        return result;
-    }
-
 }
