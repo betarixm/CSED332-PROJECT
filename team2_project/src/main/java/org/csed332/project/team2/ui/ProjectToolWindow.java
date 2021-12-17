@@ -65,6 +65,7 @@ public class ProjectToolWindow {
         projectToolWindowContent.add(toolbar);
         projectToolWindowContent.add(new JSeparator());
 
+
         Metric codeLineMetric = new ProjectCodeLineMetric(project);
         BaseMetric[] halsteadMetrics = {
                 new HalsteadMetric(project, HalsteadMetric.HalsteadType.VOCABULARY),

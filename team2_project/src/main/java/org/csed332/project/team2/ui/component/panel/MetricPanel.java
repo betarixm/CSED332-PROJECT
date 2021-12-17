@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Panel displaying metric.
- */
 public class MetricPanel {
     protected List<Label> metricValues;
     private List<Metric> metrics;
@@ -26,12 +23,6 @@ public class MetricPanel {
 
     private Metric.Type type;
 
-    /**
-     * Instantiates a new MetricPanel.
-     *
-     * @param _metrics the array of Metric
-     * @param _type    the type
-     */
     public MetricPanel(Metric[] _metrics, Metric.Type _type) {
         this.metrics = List.of(_metrics);
         this.type = _type;
@@ -49,12 +40,6 @@ public class MetricPanel {
         panel.setToolTipText(MetricDescription.get(this.type));
     }
 
-    /**
-     * Update metric.
-     * Calculate, save, warn each metric.
-     *
-     * @param warn whether the metric should be warned or not
-     */
     public void updateMetric(boolean warn) {
         for (int i = 0; i < metrics.size(); i++) {
             double value = metrics.get(i).calculate();
@@ -71,25 +56,14 @@ public class MetricPanel {
         }
     }
 
-    /**
-     * Gets JPanel.
-     *
-     * @return the JPanel
-     */
     public JPanel getPanel() {
         return this.panel;
     }
 
-    /**
-     * Sets title as warning state.
-     */
     public void setWarningTitle() {
         panel.setBorder(warnTitle);
     }
 
-    /**
-     * Sets title as basic state.
-     */
     public void setBasicTitle() {
         panel.setBorder(basicTitle);
     }
