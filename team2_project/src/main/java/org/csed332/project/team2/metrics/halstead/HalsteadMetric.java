@@ -75,7 +75,7 @@ public class HalsteadMetric extends VisitingMetric {
         for (PsiMethod method : aClass.getMethods()) {
             double value = getVisitResult();
             method.accept(visitor);
-            setMetric(getVisitResult() - value, aClass.getName(), method);
+            setMetric(getVisitResult() - value, aClass, method);
         }
     }
 
