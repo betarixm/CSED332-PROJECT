@@ -6,6 +6,9 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Factory class for plugin tool window.
+ */
 public class MyToolWindowFactory implements ToolWindowFactory {
     /**
      * Create the tool window content.
