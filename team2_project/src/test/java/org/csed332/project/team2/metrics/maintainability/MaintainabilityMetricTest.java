@@ -6,6 +6,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
 import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.csed332.project.team2.metrics.halstead.HalsteadMetric;
@@ -17,6 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class MaintainabilityMetricTest {
     private static final String testPath = "TestProjects/SingleFiles";
@@ -89,7 +92,7 @@ public class MaintainabilityMetricTest {
     }
 
     @Test
-    public void testMILaterCalculation() throws Exception {
+    public void testMILaterCalculationForClass() throws Exception {
         configureFixture("MainClass.java");
         ApplicationManager.getApplication()
                 .invokeAndWait(
@@ -110,6 +113,64 @@ public class MaintainabilityMetricTest {
 
                             Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
                         });
+    }
+
+    @Test
+    public void testMILaterCalculationForMethods() throws Exception {
+        configureFixture("MultiMethods.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+
+                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
+
+                            halsteadMetric.calculate();
+                            cyclomaticMetric.calculate();
+                            maintainabilityMetric.calculate();
+
+                            Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
+                            Map<String, PsiMethod> methods = getMethods(psiClass);
+
+                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
+                            Assertions.assertEquals(151.9495, metrics.get(methods.get("simpleAddition")), 0.00005);
+                            Assertions.assertEquals(154.8192, metrics.get(methods.get("simpleInt")), 0.00005);
+                        });
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        configureFixture("SimpleInt.java");
+        ApplicationManager.getApplication()
+                .invokeAndWait(
+                        () -> {
+                            final Project project = helperMainClass.getFixture().getProject();
+                            final PsiClass psiClass = helperMainClass.getFirstPsiClass();
+                            final PsiMethod psiMethod = psiClass.getMethods()[0];
+
+                            HalsteadMetric halsteadMetric = new HalsteadMetric(psiClass, HalsteadMetric.HalsteadType.VOLUME);
+                            CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
+                            MaintainabilityMetric maintainabilityMetric = new MaintainabilityMetric(psiClass, halsteadMetric, cyclomaticMetric);
+
+                            halsteadMetric.calculate();
+                            cyclomaticMetric.calculate();
+                            maintainabilityMetric.calculate();
+
+                            String testId = UUID.randomUUID().toString();
+                            CalcHistoryModel calc = MetricService.generateCalcHistoryModel(testId);
+                            maintainabilityMetric.save(calc);
+
+                            Optional<Map<String, Map<String, Map<String, Double>>>> metricOptional = MetricService.getMetric(calc.getMetric());
+                            Assertions.assertNotNull(metricOptional);
+                            Assertions.assertTrue(metricOptional.isPresent());
+                            Assertions.assertEquals(153.0273, metricOptional.get().get(psiClass.getName()).get(psiMethod.getName()).get(""), 0.00005);
+
+                            cleanDB(calc);
+                        });
+
     }
 
     void cleanDB(CalcHistoryModel calc) {
