@@ -19,7 +19,6 @@ public class BaseMetricDegradationTest {
     private static final String testPath = "CycloTestProject";
     private static BaseMetric baseMetric;
     private static FixtureHelper helperMainClass;
-    private static FixtureHelper anotherClass;
     private static WarningCondition cond;
     private String testId;
     private CalcHistoryModel calc;

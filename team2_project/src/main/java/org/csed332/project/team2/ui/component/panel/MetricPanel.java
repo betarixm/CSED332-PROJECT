@@ -17,7 +17,6 @@ public class MetricPanel {
     private JPanel panel;
     private TitledBorder basicTitle;
     private TitledBorder warnTitle;
-    private JFreeChart metricChart;
 
     private Metric.Type type;
 
