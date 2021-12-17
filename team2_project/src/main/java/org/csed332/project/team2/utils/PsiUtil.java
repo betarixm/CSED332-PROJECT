@@ -13,10 +13,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Util Class for using Psi.
- * Currently, not used.
- */
 public class PsiUtil {
     /**
      * Returns the open project of the current IntelliJ IDEA window

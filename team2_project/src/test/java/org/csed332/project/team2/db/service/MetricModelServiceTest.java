@@ -1,6 +1,7 @@
 package org.csed332.project.team2.db.service;
 
 import org.csed332.project.team2.db.model.MetricModel;
+import org.csed332.project.team2.db.service.MetricModelService;
 import org.csed332.project.team2.db.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;

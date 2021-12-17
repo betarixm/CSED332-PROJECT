@@ -12,22 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.*;
 
-/**
- * Defines methods to use database.
- * All methods interact with embedded database.
- */
 public class MetricService {
-    /**
-     * Gets list of metric data by metric name with limit.
-     * Each element of list consists of metric data that share same CalcHistoryModel.
-     * Each key string of map of return type represent class name, method name, and type.
-     * Value of third map represents value of metric.
-     * Max size of returned list equals limit.
-     *
-     * @param metric the metric name
-     * @param limit  the limit
-     * @return the list of the metric data
-     */
     public static List<Map<String, Map<String, Map<String, Double>>>> getMetric(String metric, Integer limit) {
         List<Map<String, Map<String, Map<String, Double>>>> result = new ArrayList<>();
         List<CalcHistoryModel> historyModels = query(metric, limit);
@@ -53,28 +38,10 @@ public class MetricService {
         return result;
     }
 
-    /**
-     * Gets the most recent metric data by metric name.
-     * The element consists of metric data that share same CalcHistoryModel.
-     * Each key string of map of return type represent class name, method name, and type.
-     * Value of third map represents value of metric.
-     *
-     * @param metric the metric name
-     * @return the metric data
-     */
     public static Optional<Map<String, Map<String, Map<String, Double>>>> getMetric(String metric) {
         return Optional.ofNullable(getMetric(metric, 1).get(0));
     }
 
-    /**
-     * Compare two recent metric data about a given metric name and return older value minus newer value.
-     * Each key string of map of return type represent class name, method name, and type.
-     * Value of third map represents the difference of two metric value.
-     * Returns empty map if there are no two recent data.
-     *
-     * @param metric the metric name
-     * @return the metric difference data
-     */
     public static Map<String, Map<String, Map<String, Double>>> compareMetric(String metric) {
         Map<String, Map<String, Map<String, Double>>> result = new HashMap<>();
         List<Map<String, Map<String, Map<String, Double>>>> metrics = getMetric(metric, 2);
@@ -119,12 +86,6 @@ public class MetricService {
         return Collections.unmodifiableMap(result);
     }
 
-    /**
-     * Generate a new CalcHistoryModel with given metric name and save it to database.
-     *
-     * @param metric the metric name
-     * @return the CalcHistoryModel object
-     */
     public static CalcHistoryModel generateCalcHistoryModel(String metric) {
         CalcHistoryModel c = new CalcHistoryModel();
         c.setMetric(metric);
@@ -134,18 +95,6 @@ public class MetricService {
         return c;
     }
 
-    /**
-     * Creates a new MetricModel for given metric data and save it to database.
-     * Returns created MetricModel object.
-     *
-     * @param metric           the metric name
-     * @param className        the class name
-     * @param methodName       the method name
-     * @param type             the type
-     * @param figure           the figure
-     * @param calcHistoryModel the CalcHistoryModel object that will contain new MetricModel object
-     * @return the MetricModel object
-     */
     public static MetricModel addMetric(String metric, String className, String methodName, String type, Double figure, CalcHistoryModel calcHistoryModel) {
         MetricModel m = new MetricModel();
         m.setMetric(metric);
@@ -161,15 +110,6 @@ public class MetricService {
         return m;
     }
 
-    /**
-     * Query database to get list of CalcHistoryModel with given metric name with limit.
-     * The list is sorted by timestamp, starting with the most recent one.
-     * Max size of returned list equals limit.
-     *
-     * @param metric the metric name
-     * @param limit  the limit
-     * @return the list of CalcHistoryModel objects
-     */
     public static List<CalcHistoryModel> query(String metric, Integer limit) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -194,30 +134,10 @@ public class MetricService {
         }
     }
 
-    /**
-     * Query database to get the most recent CalcHistoryModel with given metric name.
-     *
-     * @param metric the metric
-     * @return the Optional of CalcHistoryModel
-     */
     public static Optional<CalcHistoryModel> query(String metric) {
         return Optional.ofNullable(query(metric, 1).get(0));
     }
 
-    /**
-     * Query database to get list of metric data filtered with parameters.
-     * If a parameter is empty, the data is not filtered with that parameter.
-     * The list is sorted by created date, starting with the most recent one.
-     * Max size of returned list equals limit.
-     *
-     * @param metric     the metric name
-     * @param className  the class name
-     * @param methodName the method name
-     * @param type       the type
-     * @param history    the CalcHistoryModel object
-     * @param limit      the limit
-     * @return the list of metric data
-     */
     public static List<MetricModel> query(String metric, String className, String methodName, String type, CalcHistoryModel history, Integer limit) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -261,17 +181,6 @@ public class MetricService {
         }
     }
 
-    /**
-     * Query database to get a metric data filtered with parameters.
-     * If a parameter is empty, the data is not filtered with that parameter.
-     *
-     * @param metric     the metric name
-     * @param className  the class name
-     * @param methodName the method name
-     * @param type       the type
-     * @param history    the CalcHistoryModel object
-     * @return the metric data
-     */
     public static Optional<MetricModel> query(String metric, String className, String methodName, String type, CalcHistoryModel history) {
         return Optional.ofNullable(query(metric, className, methodName, type, history, 1).get(0));
     }

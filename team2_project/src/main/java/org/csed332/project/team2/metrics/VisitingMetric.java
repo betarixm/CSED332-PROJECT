@@ -9,13 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * Visitor class for BaseMetric.
- */
 public abstract class VisitingMetric extends BaseMetric {
-    /**
-     * The Visitor.
-     */
     final public PsiElementVisitor visitor = new JavaElementVisitor() {
         @Override
         public void visitDirectory(@NotNull PsiDirectory dir) {
@@ -236,382 +230,125 @@ public abstract class VisitingMetric extends BaseMetric {
     private PsiElement psiElement;
     private Project project;
 
-    /**
-     * Instantiates a new VisitingMetric.
-     *
-     * @param element the PsiElement
-     */
     public VisitingMetric(PsiElement element) {
         setPsiElement(element);
     }
 
-    /**
-     * Instantiates a new VisitingMetric.
-     *
-     * @param project the Project
-     */
     public VisitingMetric(Project project) {
         setProject(project);
     }
 
-    /**
-     * Gets PsiElement.
-     *
-     * @return the PsiElement
-     */
     public PsiElement getPsiElement() {
         return psiElement;
     }
 
-    /**
-     * Sets PsiElement.
-     *
-     * @param element the PsiElement
-     */
     public void setPsiElement(PsiElement element) {
         psiElement = element;
     }
 
-    /**
-     * Gets Project.
-     *
-     * @return the Project
-     */
     public Project getProject() {
         return project;
     }
 
-    /**
-     * Sets Project.
-     *
-     * @param project the Project
-     */
     public void setProject(Project project) {
         this.project = project;
     }
 
-    /**
-     * Visit package.
-     *
-     * @param pack the PsiPackage
-     */
     protected abstract void visitPackageMetric(PsiPackage pack);
 
-    /**
-     * Visit class.
-     *
-     * @param aClass the PsiClass
-     */
     protected abstract void visitClassMetric(PsiClass aClass);
 
-    /**
-     * Visit method.
-     *
-     * @param method the PsiMethod
-     */
     protected abstract void visitMethodMetric(PsiMethod method);
 
-    /**
-     * Visit field.
-     *
-     * @param field the PsiField
-     */
     protected abstract void visitFieldMetric(PsiField field);
 
-    /**
-     * Visit branch.
-     *
-     * @param expr the PsiConditionalExpression
-     */
     protected abstract void visitBranchMetric(PsiConditionalExpression expr);
 
-    /**
-     * Visit assert statement.
-     *
-     * @param statement the PsiAssertStatement
-     */
     protected abstract void visitAssertStatementMetric(PsiAssertStatement statement);
 
-    /**
-     * Visit block statement.
-     *
-     * @param statement the PsiBlockStatement
-     */
     protected abstract void visitBlockStatementMetric(PsiBlockStatement statement);
 
-    /**
-     * Visit break statement.
-     *
-     * @param statement the PsiBreakStatement
-     */
     protected abstract void visitBreakStatementMetric(PsiBreakStatement statement);
 
-    /**
-     * Visit yield statement.
-     *
-     * @param statement the PsiYieldStatement
-     */
     protected abstract void visitYieldStatementMetric(PsiYieldStatement statement);
 
-    /**
-     * Visit continue statement.
-     *
-     * @param statement the PsiContinueStatement
-     */
     protected abstract void visitContinueStatementMetric(PsiContinueStatement statement);
 
-    /**
-     * Visit declaration statement.
-     *
-     * @param statement the PsiDeclarationStatement
-     */
     protected abstract void visitDeclarationStatementMetric(PsiDeclarationStatement statement);
 
-    /**
-     * Visit do while statement.
-     *
-     * @param statement the PsiDoWhileStatement
-     */
     protected abstract void visitDoWhileStatementMetric(PsiDoWhileStatement statement);
 
-    /**
-     * Visit empty statement.
-     *
-     * @param statement the PsiEmptyStatement
-     */
     protected abstract void visitEmptyStatementMetric(PsiEmptyStatement statement);
 
-    /**
-     * Visit expression list statement.
-     *
-     * @param statement the PsiExpressionListStatement
-     */
     protected abstract void visitExpressionListStatementMetric(PsiExpressionListStatement statement);
 
-    /**
-     * Visit expression statement.
-     *
-     * @param statement the PsiExpressionStatement
-     */
     protected abstract void visitExpressionStatementMetric(PsiExpressionStatement statement);
 
-    /**
-     * Visit for statement.
-     *
-     * @param statement the PsiForStatement
-     */
     protected abstract void visitForStatementMetric(PsiForStatement statement);
 
-    /**
-     * Visit foreach statement.
-     *
-     * @param statement the PsiForeachStatement
-     */
     protected abstract void visitForeachStatementMetric(PsiForeachStatement statement);
 
-    /**
-     * Visit if statement.
-     *
-     * @param statement the PsiIfStatement
-     */
     protected abstract void visitIfStatementMetric(PsiIfStatement statement);
 
-    /**
-     * Visit import statement.
-     *
-     * @param statement the PsiImportStatement
-     */
     protected abstract void visitImportStatementMetric(PsiImportStatement statement);
 
-    /**
-     * Visit import static statement.
-     *
-     * @param statement the PsiImportStaticStatement
-     */
     protected abstract void visitImportStaticStatementMetric(PsiImportStaticStatement statement);
 
-    /**
-     * Visit labeled statement.
-     *
-     * @param statement the PsiLabeledStatement
-     */
     protected abstract void visitLabeledStatementMetric(PsiLabeledStatement statement);
 
-    /**
-     * Visit package statement.
-     *
-     * @param statement the PsiPackageStatement
-     */
     protected abstract void visitPackageStatementMetric(PsiPackageStatement statement);
 
-    /**
-     * Visit return statement.
-     *
-     * @param statement the PsiReturnStatement
-     */
     protected abstract void visitReturnStatementMetric(PsiReturnStatement statement);
 
-    /**
-     * Visit statement.
-     *
-     * @param statement the PsiStatement
-     */
     protected abstract void visitStatementMetric(PsiStatement statement);
 
-    /**
-     * Visit switch label statement.
-     *
-     * @param statement the PsiSwitchLabelStatement
-     */
     protected abstract void visitSwitchLabelStatementMetric(PsiSwitchLabelStatement statement);
 
-    /**
-     * Visit switch labeled rule statement.
-     *
-     * @param statement the PsiSwitchLabeledRuleStatement
-     */
     protected abstract void visitSwitchLabeledRuleStatementMetric(PsiSwitchLabeledRuleStatement statement);
 
-    /**
-     * Visit switch statement.
-     *
-     * @param statement the PsiSwitchStatement
-     */
     protected abstract void visitSwitchStatementMetric(PsiSwitchStatement statement);
 
-    /**
-     * Visit synchronized statement.
-     *
-     * @param statement the PsiSynchronizedStatement
-     */
     protected abstract void visitSynchronizedStatementMetric(PsiSynchronizedStatement statement);
 
-    /**
-     * Visit throw statement.
-     *
-     * @param statement the PsiThrowStatement
-     */
     protected abstract void visitThrowStatementMetric(PsiThrowStatement statement);
 
-    /**
-     * Visit try statement.
-     *
-     * @param statement the PsiTryStatement
-     */
     protected abstract void visitTryStatementMetric(PsiTryStatement statement);
 
-    /**
-     * Visit while statement.
-     *
-     * @param statement the PsiWhileStatement
-     */
     protected abstract void visitWhileStatementMetric(PsiWhileStatement statement);
 
-    /**
-     * Visit module statement.
-     *
-     * @param statement the PsiStatement
-     */
     protected abstract void visitModuleStatementMetric(PsiStatement statement);
 
-    /**
-     * Visit requires statement.
-     *
-     * @param statement the PsiRequiresStatement
-     */
     protected abstract void visitRequiresStatementMetric(PsiRequiresStatement statement);
 
-    /**
-     * Visit package accessibility statement.
-     *
-     * @param statement the PsiPackageAccessibilityStatement
-     */
     protected abstract void visitPackageAccessibilityStatementMetric(PsiPackageAccessibilityStatement statement);
 
-    /**
-     * Visit uses statement.
-     *
-     * @param statement the PsiUsesStatement
-     */
     protected abstract void visitUsesStatementMetric(PsiUsesStatement statement);
 
-    /**
-     * Visit provides statement.
-     *
-     * @param statement the PsiProvidesStatement
-     */
     protected abstract void visitProvidesStatementMetric(PsiProvidesStatement statement);
 
-    /**
-     * Visit local variable.
-     *
-     * @param variable the PsiLocalVariable
-     */
     protected abstract void visitLocalVariableMetric(PsiLocalVariable variable);
 
-    /**
-     * Visit assignment expression.
-     *
-     * @param expr the PsiAssignmentExpression
-     */
     protected abstract void visitAssignmentExpressionMetric(PsiAssignmentExpression expr);
 
-    /**
-     * Visit parenthesized expression.
-     *
-     * @param expr the PsiParenthesizedExpression
-     */
     protected abstract void visitParenthesizedExpressionMetric(PsiParenthesizedExpression expr);
 
-    /**
-     * Visit polyadic expression.
-     *
-     * @param expr the PsiPolyadicExpression
-     */
     protected abstract void visitPolyadicExpressionMetric(PsiPolyadicExpression expr);
 
-    /**
-     * Visit unary expression.
-     *
-     * @param expr the PsiUnaryExpression
-     */
     protected abstract void visitUnaryExpressionMetric(PsiUnaryExpression expr);
 
-    /**
-     * Gets visit result.
-     *
-     * @return the visit result
-     */
     protected double getVisitResult() {
         return visitResult;
     }
 
-    /**
-     * Sets visit result.
-     *
-     * @param result the result
-     */
     protected void setVisitResult(double result) {
         visitResult = result;
     }
 
-    /**
-     * Visit PsiElement.
-     *
-     * @param psiElement the PsiElement
-     * @return the result
-     */
     protected double visit(PsiElement psiElement) {
         psiElement.accept(visitor);
         return getVisitResult();
     }
 
-    /**
-     * Visit Project.
-     *
-     * @param project the Project
-     * @return the result
-     */
     protected double visit(Project project) {
         var rootManager = ProjectRootManager.getInstance(project);
         var psiManager = PsiManager.getInstance(project);
