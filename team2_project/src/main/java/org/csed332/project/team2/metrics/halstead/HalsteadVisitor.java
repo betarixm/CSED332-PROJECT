@@ -4,25 +4,47 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.util.HashMap;
 
+/**
+ * ASTVisitor for Halstead metric.
+ * Counts each operand and operator in code.
+ */
 public class HalsteadVisitor extends ASTVisitor {
     private HashMap<String, Integer> operands = new HashMap<>();
     private HashMap<String, Integer> operators = new HashMap<>();
 
+    /**
+     * Gets number of total operators.
+     *
+     * @return the number of total operators
+     */
     public int getNumberOfTotalOperators() {
         return operators.values().stream().reduce(0, (a, b) -> a + b);
     }
 
+    /**
+     * Gets number of unique operators.
+     *
+     * @return the number of unique operators
+     */
     public int getNumberOfUniqueOperators() {
         return operators.size();
     }
 
+    /**
+     * Gets number of total operands.
+     *
+     * @return the number of total operands
+     */
     public int getNumberOfTotalOperands() {
-        // TODO: substract -2? because fakeClassName and methodName should not be counted
         return operands.values().stream().reduce(0, (a, b) -> a + b);
     }
 
+    /**
+     * Gets number of unique operands.
+     *
+     * @return the number of unique operands
+     */
     public int getNumberOfUniqueOperands() {
-        // TODO: substract -2? because fakeClassName and methodName should not be counted
         return operands.size();
     }
 
@@ -105,12 +127,22 @@ public class HalsteadVisitor extends ASTVisitor {
         return true;
     }
 
+    /**
+     * Add operator to map to count.
+     *
+     * @param operator the operator
+     */
     public void addOperator(String operator) {
         if (!operators.containsKey(operator))
             operators.put(operator, 0);
         operators.put(operator, operators.get(operator) + 1);
     }
 
+    /**
+     * Add operand to map to count.
+     *
+     * @param operand the operand
+     */
     public void addOperand(String operand) {
         if (!operands.containsKey(operand))
             operands.put(operand, 0);

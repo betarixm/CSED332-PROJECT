@@ -1,15 +1,22 @@
 package org.csed332.project.team2.metrics.codeline;
 
 import com.intellij.psi.PsiClass;
-import org.csed332.project.team2.metrics.codeline.CodeLineMetric;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.service.MetricModelService;
+import org.csed332.project.team2.utils.WarningCondition;
 
+/**
+ * Class for code line metric on a class.
+ */
 public class ClassCodeLineMetric extends CodeLineMetric {
 
     private final PsiClass psiClass;
     private WarningCondition cond;
 
+    /**
+     * Instantiates a new ClassCodeLineMetric.
+     *
+     * @param psiClass PsiClass object
+     */
     public ClassCodeLineMetric(PsiClass psiClass) {
         this.psiClass = psiClass;
         this.cond = new WarningCondition(WarningCondition.Mode.MORE_THAN, 100);

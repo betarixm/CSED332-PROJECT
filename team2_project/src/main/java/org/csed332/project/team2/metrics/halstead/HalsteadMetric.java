@@ -2,13 +2,16 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.csed332.project.team2.utils.WarningCondition;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
 import java.util.Map;
 
+/**
+ * Class for Cyclomatic metric.
+ */
 public class HalsteadMetric extends VisitingMetric {
     HalsteadType type;
     private static final Map<HalsteadType, Double> thresholds = Map.of(
@@ -21,6 +24,12 @@ public class HalsteadMetric extends VisitingMetric {
     private static final double volumThreshold = 200;
     private static final double difficultyThreshold = 0.25;
 
+    /**
+     * Instantiates a new HalsteadMetric.
+     *
+     * @param element the PsiElement object
+     * @param type    the HalsteadType
+     */
     public HalsteadMetric(PsiElement element, HalsteadType type) {
         super(element);
         setID(Type.HALSTEAD.toString());
@@ -33,6 +42,12 @@ public class HalsteadMetric extends VisitingMetric {
 
     }
 
+    /**
+     * Instantiates a new HalsteadMetric.
+     *
+     * @param project the Project object
+     * @param type    the HalsteadType
+     */
     public HalsteadMetric(Project project, HalsteadType type) {
         super(project);
         setID(Type.HALSTEAD.toString());
@@ -44,6 +59,11 @@ public class HalsteadMetric extends VisitingMetric {
         }
     }
 
+    /**
+     * Gets Halstead type.
+     *
+     * @return the Halstead type
+     */
     public String getType() {
         return type.toString();
     }
@@ -299,5 +319,8 @@ public class HalsteadMetric extends VisitingMetric {
 
     }
 
+    /**
+     * The enum Halstead type.
+     */
     public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
 }

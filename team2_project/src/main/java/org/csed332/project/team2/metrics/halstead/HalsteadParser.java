@@ -8,18 +8,26 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.util.Map;
 
-// TODO: parse method... with ASTParser
-//  then visit all nodes to count the number of total operators
+/**
+ * Parser for Halstead metric.
+ */
 public class HalsteadParser {
     private HalsteadVisitor halsteadVisitor;
 
+    /**
+     * Instantiates a new HalsteadParser.
+     */
     public HalsteadParser() {
         this.halsteadVisitor = new HalsteadVisitor();
     }
 
+    /**
+     * Parse given method code by using HalsteadVisitor.
+     *
+     * @param method the PsiMethod object
+     */
     public void parse(PsiMethod method) {
         ASTParser parser = ASTParser.newParser(AST.JLS14);
-        // TODO: use another "unique" className that's hopefully not used, e.g. methodName + randomId
         String fakeClassName = "A";
         String fakeClassString = "public class " + fakeClassName + " {" + method.getText() + "}";
 
@@ -36,6 +44,11 @@ public class HalsteadParser {
     }
 
 
+    /**
+     * Gets HalsteadVisitor.
+     *
+     * @return the HalsteadVisitor object
+     */
     public HalsteadVisitor getHalsteadVisitor() {
         return halsteadVisitor;
     }
