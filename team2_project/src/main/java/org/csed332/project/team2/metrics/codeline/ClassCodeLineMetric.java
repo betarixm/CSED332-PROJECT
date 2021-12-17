@@ -1,23 +1,22 @@
-package org.csed332.project.team2.metrics;
+package org.csed332.project.team2.metrics.codeline;
 
-import org.apache.tools.ant.taskdefs.War;
-import org.csed332.project.team2.db.model.MetricModel;
+import com.intellij.psi.PsiClass;
 import org.csed332.project.team2.db.service.MetricModelService;
-import org.csed332.project.team2.WarningCondition;
+import org.csed332.project.team2.utils.WarningCondition;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileReader;
-import java.util.List;
-
-import com.intellij.psi.*;
-
+/**
+ * Class for code line metric on a class.
+ */
 public class ClassCodeLineMetric extends CodeLineMetric {
 
     private final PsiClass psiClass;
     private WarningCondition cond;
 
+    /**
+     * Instantiates a new ClassCodeLineMetric.
+     *
+     * @param psiClass PsiClass object
+     */
     public ClassCodeLineMetric(PsiClass psiClass) {
         this.psiClass = psiClass;
         this.cond = new WarningCondition(WarningCondition.Mode.MORE_THAN, 100);

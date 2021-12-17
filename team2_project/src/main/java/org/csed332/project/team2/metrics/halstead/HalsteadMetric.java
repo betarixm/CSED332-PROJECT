@@ -2,28 +2,81 @@ package org.csed332.project.team2.metrics.halstead;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import org.csed332.project.team2.db.model.CalcHistoryModel;
+import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.metrics.VisitingMetric;
+import org.csed332.project.team2.utils.WarningCondition;
 
-public class HalsteadTotalOperatorsMetric extends VisitingMetric {
-    public enum Type{ TOTAL_OPERATORS, UNIQUE_OPERATORS, TOTAL_OPERANDS, UNIQUE_OPERANDS }
-    Type type;
+import java.util.Map;
 
-    public HalsteadTotalOperatorsMetric(PsiElement element, Type type) {
+/**
+ * Class for Cyclomatic metric.
+ */
+public class HalsteadMetric extends VisitingMetric {
+    HalsteadType type;
+    private static final Map<HalsteadType, Double> thresholds = Map.of(
+            HalsteadType.DIFFICULTY, 0.25,
+            HalsteadType.EFFORT, 100.0,
+            HalsteadType.VOLUME, 200.0
+    );
+
+    private static final double effortThreshold = 100;
+    private static final double volumThreshold = 200;
+    private static final double difficultyThreshold = 0.25;
+
+    /**
+     * Instantiates a new HalsteadMetric.
+     *
+     * @param element the PsiElement object
+     * @param type    the HalsteadType
+     */
+    public HalsteadMetric(PsiElement element, HalsteadType type) {
         super(element);
-        setID(type.toString());
+        setID(Type.HALSTEAD.toString());
         this.type = type;
+
+        if (thresholds.containsKey(type)) {
+            Double threshold = thresholds.get(type);
+            setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
+        }
+
     }
 
-    public HalsteadTotalOperatorsMetric(Project project, Type type) {
+    /**
+     * Instantiates a new HalsteadMetric.
+     *
+     * @param project the Project object
+     * @param type    the HalsteadType
+     */
+    public HalsteadMetric(Project project, HalsteadType type) {
         super(project);
-        setID(type.toString());
+        setID(Type.HALSTEAD.toString());
         this.type = type;
+
+        if (thresholds.containsKey(type)) {
+            Double threshold = thresholds.get(type);
+            setCondition(new WarningCondition(WarningCondition.Mode.MORE_THAN, threshold));
+        }
+    }
+
+    /**
+     * Gets Halstead type.
+     *
+     * @return the Halstead type
+     */
+    public String getType() {
+        return type.toString();
     }
 
     @Override
-    public boolean checkDegradation() {
-        //TODO: make this method return true if value of Halstead Metric degraded.
-        return false;
+    public void save(CalcHistoryModel calc) {
+        Map<String, Map<PsiMethod, Double>> metrics = getMetrics();
+        for (String _class : metrics.keySet()) {
+            for (PsiMethod _method : metrics.get(_class).keySet()) {
+                Double _figure = metrics.get(_class).get(_method);
+                MetricService.addMetric(getID(), _class, _method.getName(), type.toString(), _figure, calc);
+            }
+        }
     }
 
     @Override
@@ -50,21 +103,28 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
     protected void visitMethodMetric(PsiMethod method) {
         HalsteadParser halsteadParser = new HalsteadParser();
         halsteadParser.parse(method);
-        switch (type){
-            case TOTAL_OPERANDS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands());
+        HalsteadMetricCalculator calc = new HalsteadMetricCalculator(
+                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
+                halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators(),
+                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
+                halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands()
+        );
+
+        switch (type) {
+            case VOCABULARY:
+                setVisitResult(getVisitResult() + calc.getVocabulary());
                 break;
 
-            case TOTAL_OPERATORS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators());
+            case VOLUME:
+                setVisitResult(getVisitResult() + calc.getVolume());
                 break;
 
-            case UNIQUE_OPERANDS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands());
+            case DIFFICULTY:
+                setVisitResult(getVisitResult() + calc.getDifficulty());
                 break;
 
-            case UNIQUE_OPERATORS:
-                setVisitResult(getVisitResult() + halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators());
+            case EFFORT:
+                setVisitResult(getVisitResult() + calc.getEfforts());
                 break;
         }
     }
@@ -258,4 +318,9 @@ public class HalsteadTotalOperatorsMetric extends VisitingMetric {
     protected void visitUnaryExpressionMetric(PsiUnaryExpression expr) {
 
     }
+
+    /**
+     * The enum Halstead type.
+     */
+    public enum HalsteadType {VOCABULARY, VOLUME, DIFFICULTY, EFFORT}
 }
