@@ -63,7 +63,7 @@ public class MaintainabilityMetric extends VisitingMetric {
         double maintainabilityIndex = 171 - 5.2 * Math.log(halsteadMetric.calculate())
                 - 0.23 * (cyclomaticMetric.calculate())
                 - 16.2 * Math.log(codeLine) * 100 / 171;
-        setVisitResult(Math.max(0, maintainabilityIndex));
+        setVisitResult(getVisitResult() + Math.max(0, maintainabilityIndex));
     }
 
     @Override

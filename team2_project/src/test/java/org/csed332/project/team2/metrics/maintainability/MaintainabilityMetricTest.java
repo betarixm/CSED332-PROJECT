@@ -51,7 +51,9 @@ public class MaintainabilityMetricTest {
                             Map<PsiMethod, Double> metrics = maintainabilityMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(1.0, metrics.get(methods.get("simpleAddition")));
+                            Assertions.assertEquals(154.4741, metrics.get(methods.get("main")), 0.00005);
+                            Assertions.assertEquals(151.9495, metrics.get(methods.get("simpleAddition")), 0.00005);
+                            Assertions.assertEquals(154.8192, metrics.get(methods.get("simpleInt")), 0.00005);
                         });
     }
 
