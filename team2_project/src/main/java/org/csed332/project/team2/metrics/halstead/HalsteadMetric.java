@@ -84,7 +84,7 @@ public class HalsteadMetric extends VisitingMetric {
         HalsteadParser halsteadParser = new HalsteadParser();
         halsteadParser.parse(method);
         HalsteadMetricCalculator calc = new HalsteadMetricCalculator(
-                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
+                halsteadParser.getHalsteadVisitor().getNumberOfTotalOperators(),
                 halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperators(),
                 halsteadParser.getHalsteadVisitor().getNumberOfTotalOperands(),
                 halsteadParser.getHalsteadVisitor().getNumberOfUniqueOperands()
