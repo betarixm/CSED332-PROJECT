@@ -5,6 +5,7 @@ public class WarningCondition {
     private double threshold;
     private double teta;
     private Mode mode;
+
     public WarningCondition(Mode mode) {
         setMode(mode);
         teta = 0;
