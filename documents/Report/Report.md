@@ -530,7 +530,7 @@ The plugin side panel is represented by the class `ProjectToolWindow`. An instan
 
 `ProjectToolWindow` is composed of multiple nested graphical elements. In particular, the `MetricWindow` contains multiple MetricPanels set in a vertical layout. `BaseMetricPanel`. `ProjectToolWindow` also contains the warning popup.
 
-![diagram 2.3.a](documents/Report/img/S140chYcF.png)
+![diagram 2.3.a](img/S140chYcF.png)
 
 
 ##### Calculate, save metric values
@@ -541,7 +541,7 @@ The calculated values are then displayed in the respective `MetricPanel` and `Ba
 
 ##### Hovering description
 
-![](documents/Report/img/Hyife6q5Y.png)
+![](img/Hyife6q5Y.png)
 
 When the user puts its mouse over the name of a metric, a short description will be shown. The descriptions are stored inside the class `MetricDescription` and can be obtained by calling ` MetricDescription.get(Metric.Type type)`. The hovering is implemented by calling the following function in the constructor of `MetricPanel`.
 
@@ -813,7 +813,7 @@ Our CI automatically performs tests, but this doesn't mean our code always passe
 
 #### 3.2.4. Visualize Artifact
 
-![](documents/Report/img/HkjzA4Y9K.png)
+![](img/HkjzA4Y9K.png)
 ```yaml
 coverage:
   stage: visualize
@@ -1109,14 +1109,14 @@ For running manual test cases, consider the system requirements stated in 3.1.
 
 ##### Expected Results:
 1. plugin panel "Metrics" is visible as in the following screenshot on the right:
-   ![](documents/Report/img/rkszcJo9K.png)
+   ![](img/rkszcJo9K.png)
 
 2. Toolbar with Buttons is visible; Metric Panels are shown (not necessarily with values)
-   ![](documents/Report/img/BkE7cys5t.png)
+   ![](img/BkE7cys5t.png)
 
 
 3. Tooltip shows with description of metrics
-   ![](documents/Report/img/S1e491ocK.png)
+   ![](img/S1e491ocK.png)
 
 #### 3.4.2. Compare Metrics & Send Warning
 ##### Preconditions:
@@ -1137,11 +1137,11 @@ For running manual test cases, consider the system requirements stated in 3.1.
 ##### Expected Results:
 
 1. After the first calculation (step 2), the total number of line displayed should be 2.
-   ![](documents/Report/img/Hys3rMj9F.png)
+   ![](img/Hys3rMj9F.png)
 
 
 2. After the second calculation (step 4), the total number of line displayed should be 100. Moreover the title of the total code line should switch from no warning to indicating that the metric has worsen (yellow title, warning sign)
-   ![](documents/Report/img/ry_pBMj5F.png)
+   ![](img/ry_pBMj5F.png)
 
 
 
@@ -1160,7 +1160,7 @@ For running manual test cases, consider the system requirements stated in 3.1.
 ##### Expected Results:
 1. panel opens and shows section for lines of code, halstead metrics & cyclomatic complexity
 2. All metrics are calculated (halstead metrics & cyclomatic complexity is displayed per class and method)
-   ![](documents/Report/img/BkojUzscK.png)
+   ![](img/BkojUzscK.png)
 
 
 
@@ -1188,11 +1188,11 @@ For running manual test cases, consider the system requirements stated in 3.1.
 ##### Expected Result:
 1. After 2, one entry should exists for the Cyclometric Metric. It's value should be of 1.0. It should be written in white. See image.
 
-   ![](documents/Report/img/H1U7Pfj9K.png)
+   ![](img/H1U7Pfj9K.png)
 
 2. After 4. one entry should exists for the Cyclometric Metric. It's value should be 16.0. It should be written in yellow font. See image.
 
-   ![](documents/Report/img/B1WVPzo9t.png)
+   ![](img/B1WVPzo9t.png)
 
 
 
@@ -1225,7 +1225,9 @@ For running manual test cases, consider the system requirements stated in 3.1.
 
 #### Expected Result:
 1. After 2, one entry should exists for the Halstread Metric.The values should be identical to the ones in the image. It should be written in white. See image.
-   ![](documents/Report/img/rJqVpGjqK.png)
+   ![](img/rJqVpGjqK.png)
 
 2. After 4. one entry should exists for the Halstread Metric.The values should be identical to the ones in the image. The difficulty and effort of that entry should be written in yellow font. See image.
-   ![](documents/Report/img/rylHpGo5Y.png)
+   ![](img/rylHpGo5Y.png)
+
+
