@@ -7,6 +7,7 @@ import org.csed332.project.team2.FixtureHelper;
 import org.csed332.project.team2.db.model.CalcHistoryModel;
 import org.csed332.project.team2.db.service.MetricService;
 import org.csed332.project.team2.db.util.HibernateUtil;
+import org.csed332.project.team2.metrics.cyclomatic.CyclomaticMetric;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +48,7 @@ public class CyclomaticMetricTest {
 
                             final PsiClass psiClass = helperMainClass.getPsiClass("EmptyClass");
                             CyclomaticMetric cyclomaticMetric = new CyclomaticMetric(psiClass);
-                            Assertions.assertEquals(1.0, cyclomaticMetric.calculate());
+                            Assertions.assertEquals(0.0, cyclomaticMetric.calculate());
                         });
     }
 
@@ -70,7 +71,7 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleAssert")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleAssert")));
                         });
     }
 
@@ -93,10 +94,10 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("declareExpr")));
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("returnExpr")));
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("blockExpr")));
-                            Assertions.assertEquals(3.0, metrics.get(methods.get("nestedExpr")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("declareExpr")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("returnExpr")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("blockExpr")));
+                            Assertions.assertEquals(2.0, metrics.get(methods.get("nestedExpr")));
                         });
     }
 
@@ -118,9 +119,9 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleFor")));
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleForEach")));
-                            Assertions.assertEquals(3.0, metrics.get(methods.get("nestedFor")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleFor")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleForEach")));
+                            Assertions.assertEquals(2.0, metrics.get(methods.get("nestedFor")));
                         });
     }
 
@@ -142,10 +143,10 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleIF")));
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleIfElse")));
-                            Assertions.assertEquals(4.0, metrics.get(methods.get("nestedIF")));
-                            Assertions.assertEquals(4.0, metrics.get(methods.get("multiElseIf")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleIF")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleIfElse")));
+                            Assertions.assertEquals(3.0, metrics.get(methods.get("nestedIF")));
+                            Assertions.assertEquals(3.0, metrics.get(methods.get("multiElseIf")));
                         });
     }
 
@@ -167,10 +168,10 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleSwitch")));
-                            Assertions.assertEquals(1.0, metrics.get(methods.get("defaultSwitch")));
-                            Assertions.assertEquals(3.0, metrics.get(methods.get("multiCaseSwitch")));
-                            Assertions.assertEquals(3.0, metrics.get(methods.get("nestedSwitch")));
+                            Assertions.assertEquals(0.0, metrics.get(methods.get("singleSwitch")));
+                            Assertions.assertEquals(0.0, metrics.get(methods.get("defaultSwitch")));
+                            Assertions.assertEquals(2.0, metrics.get(methods.get("multiCaseSwitch")));
+                            Assertions.assertEquals(2.0, metrics.get(methods.get("nestedSwitch")));
                         });
     }
 
@@ -192,8 +193,8 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleTry")));
-                            Assertions.assertEquals(3.0, metrics.get(methods.get("nestedTry")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleTry")));
+                            Assertions.assertEquals(2.0, metrics.get(methods.get("nestedTry")));
                         });
     }
 
@@ -215,9 +216,9 @@ public class CyclomaticMetricTest {
                             Map<PsiMethod, Double> metrics = cyclomaticMetric.getMetrics().get(psiClass.getName());
                             Map<String, PsiMethod> methods = getMethods(psiClass);
 
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleWhile")));
-                            Assertions.assertEquals(2.0, metrics.get(methods.get("singleDoWhile")));
-                            Assertions.assertEquals(5.0, metrics.get(methods.get("nestedWhile")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleWhile")));
+                            Assertions.assertEquals(1.0, metrics.get(methods.get("singleDoWhile")));
+                            Assertions.assertEquals(4.0, metrics.get(methods.get("nestedWhile")));
                         });
     }
 
